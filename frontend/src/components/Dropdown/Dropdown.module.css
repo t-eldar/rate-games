@@ -1,0 +1,32 @@
+@import '../../index.css';
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-header,
+.dropdown-menu {
+  background-color: var(--primary-bg-color);
+  border-radius: var(--border-radius);
+  width: fit-content;
+  height: fit-content;
+  padding: 1rem;
+  border: var(--primary-border);
+}
+.items-divider {
+  border: 1px solid var(--secondary-bg-color);
+}
+.dropdown-header {
+  cursor: pointer;
+}
+.dropdown-menu {
+  margin: 0.5rem 0;
+  position: absolute;
+}
+ul.dropdown-menu {
+  list-style-type: none;
+}
+.dropdown-item {
+  color: var(--secondary-bg-color);
+}
