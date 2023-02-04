@@ -15,7 +15,7 @@ export const Dropdown = ({ children, header }: DropdownProps) => {
   const toggle = () => setIsOpen((prev) => !prev);
 
   return (
-    <div>
+    <>
       <button className={styles['dropdown-header']} onClick={toggle}>
         {header}
       </button>
@@ -31,6 +31,6 @@ export const Dropdown = ({ children, header }: DropdownProps) => {
           ))}
         </ul>
       ) : null}
-    </div>
+    </>
   );
 };
