@@ -2,7 +2,7 @@
 
 namespace Apicalypse.Core.Interfaces;
 
-internal interface IQueryParser<TEntity>
+public interface IQueryParser
 {
 	/// <summary>
 	/// Parses <paramref name="expression"/> into query string.
@@ -10,5 +10,5 @@ internal interface IQueryParser<TEntity>
 	/// <typeparam name="TProp"></typeparam>
 	/// <param name="expression"></param>
 	/// <returns></returns>
-	string Parse<TProp>(Expression<Func<TEntity, TProp>> expression);
+	string Parse<TEntity, TProp>(Expression<Func<TEntity, TProp>> expression);
 }

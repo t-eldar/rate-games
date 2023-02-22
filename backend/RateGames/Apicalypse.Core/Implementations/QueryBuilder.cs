@@ -8,15 +8,15 @@ using Apicalypse.Core.Interfaces.QueryBuilderStages;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations;
-public class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
+internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 {
-	private readonly IQueryParser<TEntity> _parser;
+	private readonly IQueryParser _parser;
 	private readonly StringBuilder _stringBuilder = new();
 
-	internal QueryBuilder(IQueryParser<TEntity> parser) => _parser = parser;
+	internal QueryBuilder(IQueryParser parser) => _parser = parser;
 	public QueryBuilder()
 	{
-		_parser = new QueryParser<TEntity>(new MethodPerformer());
+		_parser = new QueryParser(new MethodPerformer());
 	}
 
 	/// <summary>

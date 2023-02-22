@@ -2,7 +2,7 @@
 
 namespace Apicalypse.Core.Interfaces;
 
-internal interface IMethodPerformer
+public interface IMethodPerformer
 {
 	/// <summary>
 	/// Allowed string methods for using in build queries.

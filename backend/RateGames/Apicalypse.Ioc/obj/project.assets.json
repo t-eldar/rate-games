@@ -17,6 +17,16 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
+      },
+      "Apicalypse.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Apicalypse.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Apicalypse.Core.dll": {}
+        }
       }
     }
   },
@@ -49,10 +59,16 @@
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Apicalypse.Core/1.0.0": {
+      "type": "project",
+      "path": "../Apicalypse.Core/Apicalypse.Core.csproj",
+      "msbuildProject": "../Apicalypse.Core/Apicalypse.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "Apicalypse.Core >= 1.0.0",
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 7.0.0"
     ]
   },
@@ -88,7 +104,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\Apicalypse.Core\\Apicalypse.Core.csproj": {
+              "projectPath": "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\Apicalypse.Core\\Apicalypse.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

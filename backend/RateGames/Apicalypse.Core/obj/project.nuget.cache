@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "f92Jbmb0pRmJS3yN09zX2XVQCILkxe9/E/zhrR3l0qbcdHvKGjckRoGlMnGKxOh8d7FCeVwbKYEVZGJpUZ16PQ==",
+  "dgSpecHash": "aoA/avCaXfbWO2WbyLbnzlRgt9nZO4+qMZBRvBvp5mSsIJq3aYpTwhEmxdeBYzJc3flreVYZr8cmBpUlfADLkA==",
   "success": true,
   "projectFilePath": "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\Apicalypse.Core\\Apicalypse.Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\urc0m\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

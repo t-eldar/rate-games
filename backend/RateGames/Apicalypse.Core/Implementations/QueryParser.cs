@@ -5,7 +5,7 @@ using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations;
-internal class QueryParser<TEntity> : IQueryParser<TEntity>
+internal class QueryParser : IQueryParser
 {
     public QueryParser(IMethodPerformer methodPerformer)
     {
@@ -26,7 +26,7 @@ internal class QueryParser<TEntity> : IQueryParser<TEntity>
     /// <typeparam name="TProp"></typeparam>
     /// <param name="expression"></param>
     /// <returns></returns>
-    public string Parse<TProp>(Expression<Func<TEntity, TProp>> expression)
+    public string Parse<TEntity, TProp>(Expression<Func<TEntity, TProp>> expression)
         => FirstParse(expression.Body);
     private string FirstParse(Expression expression) => expression switch
     {
