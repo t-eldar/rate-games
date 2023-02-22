@@ -13,11 +13,12 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	private readonly IQueryParser _parser;
 	private readonly StringBuilder _stringBuilder = new();
 
-	internal QueryBuilder(IQueryParser parser) => _parser = parser;
-	public QueryBuilder()
-	{
-		_parser = new QueryParser(new MethodPerformer());
-	}
+	public QueryBuilder(IQueryParser parser) => _parser = parser;
+
+	/// <summary>
+	/// Use this constructor when DI is not needed.
+	/// </summary>
+	public QueryBuilder() => _parser = new QueryParser(new MethodPerformer());
 
 	/// <summary>
 	/// Selects all properties of object.

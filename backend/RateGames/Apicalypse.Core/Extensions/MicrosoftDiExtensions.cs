@@ -11,7 +11,7 @@ public static class MicrosoftDiExtensions
 	/// </summary>
 	/// <param name="services"></param>
 	/// <returns></returns>
-	public static IServiceCollection AddQueryBuilderCreator(this IServiceCollection services)
+	public static IServiceCollection AddApicalypseQueryBuilderCreator(this IServiceCollection services)
 	{
 		services.AddTransient<IMethodPerformer, MethodPerformer>();
 		services.AddTransient<IQueryParser, QueryParser>();
