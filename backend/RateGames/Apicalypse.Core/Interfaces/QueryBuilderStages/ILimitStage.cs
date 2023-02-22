@@ -1,6 +1,6 @@
 ﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface ILimitStage<TEntity> : IBuildStage<TEntity>
+public interface ILimitBuilder<TEntity> : IStringBuilder<TEntity>
 {
-    IBuildStage<TEntity> Take(int count);
+    IStringBuilder<TEntity> Take(int count);
 }

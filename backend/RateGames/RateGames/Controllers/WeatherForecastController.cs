@@ -30,7 +30,7 @@ public class WeatherForecastController : ControllerBase
 			.Find("Hello world")
 			.Skip(2)
 			.Take(3)
-			.Build();
+			.Build()!;
 	}
 	public record Person(string Name, int Age);
 }

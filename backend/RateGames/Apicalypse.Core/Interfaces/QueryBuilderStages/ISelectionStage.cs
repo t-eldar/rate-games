@@ -4,10 +4,10 @@ using Apicalypse.Core.Enums;
 
 namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface ISelectionStage<TEntity> : IFilterStage<TEntity>
+public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
 {
-	IFilterStage<TEntity> Select(IncludeType includeType);
-	IFilterStage<TEntity> Select<TProp>(
+	IFilterBuilder<TEntity> Select(IncludeType includeType);
+	IFilterBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
-		SelectionMode selectionMode);
+		SelectionMode selectionMode = SelectionMode.Include);
 }

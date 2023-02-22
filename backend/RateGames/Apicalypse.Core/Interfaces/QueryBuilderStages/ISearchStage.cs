@@ -1,6 +1,6 @@
 ﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface ISearchStage<TEntity> : IOffsetStage<TEntity>
+public interface ISearchBuilder<TEntity> : IOffsetBuilder<TEntity>
 {
-    IOffsetStage<TEntity> Find(string search);
+    IOffsetBuilder<TEntity> Find(string search);
 }

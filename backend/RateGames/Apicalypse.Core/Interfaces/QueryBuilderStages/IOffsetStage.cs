@@ -1,6 +1,6 @@
 ﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface IOffsetStage<TEntity> : ILimitStage<TEntity>
+public interface IOffsetBuilder<TEntity> : ILimitBuilder<TEntity>
 {
-    ILimitStage<TEntity> Skip(int count);
+    ILimitBuilder<TEntity> Skip(int count);
 }

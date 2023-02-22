@@ -6,4 +6,4 @@ namespace Apicalypse.Core.Interfaces;
 /// Query builder for <typeparamref name="TEntity"/>.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-public interface IQueryBuilder<TEntity> : ISelectionStage<TEntity> { }
+public interface IQueryBuilder<TEntity> : ISelectionBuilder<TEntity> { }

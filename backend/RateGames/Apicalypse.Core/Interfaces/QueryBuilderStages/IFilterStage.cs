@@ -2,7 +2,7 @@
 
 namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface IFilterStage<TEntity> : ISortStage<TEntity>
+public interface IFilterBuilder<TEntity> : ISortBuilder<TEntity>
 {
-    ISortStage<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
+    ISortBuilder<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
 }

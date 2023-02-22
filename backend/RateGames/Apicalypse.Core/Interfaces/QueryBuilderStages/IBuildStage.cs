@@ -1,6 +1,7 @@
 ﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface IBuildStage<TEntity>
+public interface IStringBuilder<TEntity>
 {
-    string? Build();
+	string? Build();
 }
+

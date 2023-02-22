@@ -26,7 +26,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// <param name="includeType"></param>
 	/// <returns></returns>
 	/// <exception cref="NotImplementedException"></exception>
-	public IFilterStage<TEntity> Select(IncludeType includeType)
+	public IFilterBuilder<TEntity> Select(IncludeType includeType)
 	{
 		switch (includeType)
 		{
@@ -65,7 +65,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// <param name="selectionMode"></param>
 	/// <returns></returns>
 	/// <exception cref="NotImplementedException"></exception>
-	public IFilterStage<TEntity> Select<TProp>(
+	public IFilterBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
 		SelectionMode selectionMode = SelectionMode.Include)
 	{
@@ -98,7 +98,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// </summary>
 	/// <param name="predicate"></param>
 	/// <returns></returns>
-	public ISortStage<TEntity> Where(
+	public ISortBuilder<TEntity> Where(
 		Expression<Func<TEntity, bool>> predicate)
 	{
 		var parsed = _parser.Parse(predicate);
@@ -111,7 +111,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// <typeparam name="TProp"></typeparam>
 	/// <param name="propSelector"></param>
 	/// <returns></returns>
-	public ISearchStage<TEntity> OrderBy<TProp>(
+	public ISearchBuilder<TEntity> OrderBy<TProp>(
 		Expression<Func<TEntity, TProp>> propSelector)
 	{
 		var parsed = _parser.Parse(propSelector);
@@ -124,7 +124,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// <typeparam name="TProp"></typeparam>
 	/// <param name="propSelector"></param>
 	/// <returns></returns>
-	public ISearchStage<TEntity> OrderByDescending<TProp>(
+	public ISearchBuilder<TEntity> OrderByDescending<TProp>(
 		Expression<Func<TEntity, TProp>> propSelector)
 	{
 		var parsed = _parser.Parse(propSelector);
@@ -136,7 +136,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// </summary>
 	/// <param name="count"></param>
 	/// <returns></returns>
-	public ILimitStage<TEntity> Skip(int count)
+	public ILimitBuilder<TEntity> Skip(int count)
 	{
 		GenerateLine(QueryKeywords.Offset, count);
 		return this;
@@ -146,7 +146,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// </summary>
 	/// <param name="count"></param>
 	/// <returns></returns>
-	public IBuildStage<TEntity> Take(int count)
+	public IStringBuilder<TEntity> Take(int count)
 	{
 		GenerateLine(QueryKeywords.Limit, count);
 		return this;
@@ -156,7 +156,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	/// </summary>
 	/// <param name="searchString"></param>
 	/// <returns></returns>
-	public IOffsetStage<TEntity> Find(string searchString)
+	public IOffsetBuilder<TEntity> Find(string searchString)
 	{
 		GenerateSearchLine(searchString);
 		return this;
