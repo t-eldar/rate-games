@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using Apicalypse.Core.Enums;
@@ -7,6 +8,7 @@ using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.Interfaces.QueryBuilderStages;
 using Apicalypse.Core.StringEnums;
 
+[assembly: InternalsVisibleTo("Apicalypse.Tests")]
 namespace Apicalypse.Core.Implementations;
 
 /// <inheritdoc cref="IQueryBuilder{TEntity}" />
