@@ -1,6 +1,8 @@
 ﻿using Apicalypse.Core.Interfaces;
 
 namespace Apicalypse.Core.Implementations;
+
+/// <inheritdoc cref="IQueryBuilderCreator" />
 public class QueryBuilderCreator : IQueryBuilderCreator
 {
 	private readonly IQueryParser _parser;

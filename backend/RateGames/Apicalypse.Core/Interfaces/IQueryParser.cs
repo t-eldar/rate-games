@@ -2,6 +2,9 @@
 
 namespace Apicalypse.Core.Interfaces;
 
+/// <summary>
+/// Parser of <see cref="Expression"/> into Apicalypse queries.
+/// </summary>
 public interface IQueryParser
 {
 	/// <summary>

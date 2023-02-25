@@ -6,20 +6,11 @@ using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations;
 
+/// <inheritdoc cref="IQueryBuilder{TEntity}"/>
 internal class MethodPerformer : IMethodPerformer
 {
-	/// <summary>
-	/// Allowed string methods for using in build queries.
-	/// </summary>
 	public IReadOnlyCollection<string> StringMethods { get; private set; }
-	/// <summary>
-	/// Allowed enumerable methods for using in build queries.
-	/// </summary>
 	public IReadOnlyCollection<string> EnumerableMethods { get; private set; }
-
-	/// <summary>
-	/// All allowed methods for using in build queries.
-	/// </summary>
 	public IReadOnlyCollection<string> Methods { get; private set; }
 
 	public MethodPerformer()
@@ -44,11 +35,6 @@ internal class MethodPerformer : IMethodPerformer
 		nameof(EnumerableExtensions.ContainsAll),
 		nameof(EnumerableExtensions.ContainsAny),
 	};
-	/// <summary>
-	/// Performs method from expression into string for query.
-	/// </summary>
-	/// <param name="methodCallExpression"></param>
-	/// <exception cref="ArgumentException"></exception>
 	public string Perform(MethodCallExpression methodCallExpression)
 	{
 		var methodName = methodCallExpression.Method.Name;

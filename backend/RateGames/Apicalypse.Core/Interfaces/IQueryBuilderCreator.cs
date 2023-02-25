@@ -1,4 +1,8 @@
 ﻿namespace Apicalypse.Core.Interfaces;
+
+/// <summary>
+/// Creator of <see cref="IQueryBuilder{TEntity}"/> for different entities.
+/// </summary>
 public interface IQueryBuilderCreator
 {
 	/// <summary>

@@ -8,6 +8,5 @@ internal static class ObjectExtensions
 	/// <typeparam name="T">Entity type</typeparam>
 	/// <param name="entity"></param>
 	/// <returns>Unchanged entity</returns>
-	public static T IncludeProperties<T>(this T entity) where T : new()
-		=> entity;
+	public static T IncludeProperties<T>(this T entity) => entity;
 }

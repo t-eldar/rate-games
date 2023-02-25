@@ -4,6 +4,7 @@ using Apicalypse.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RateGames.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
@@ -34,3 +35,4 @@ public class WeatherForecastController : ControllerBase
 	}
 	public record Person(string Name, int Age);
 }
+	
