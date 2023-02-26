@@ -5,7 +5,7 @@ namespace Apicalypse.Core.Interfaces;
 /// <summary>
 /// Parser of <see cref="Expression"/> into Apicalypse queries.
 /// </summary>
-public interface IQueryParser
+public interface IExpressionParser
 {
 	/// <summary>
 	/// Parses <paramref name="expression"/> into query string.

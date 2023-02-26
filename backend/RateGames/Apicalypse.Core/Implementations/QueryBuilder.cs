@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 using Apicalypse.Core.Enums;
@@ -8,17 +7,16 @@ using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.Interfaces.QueryBuilderStages;
 using Apicalypse.Core.StringEnums;
 
-[assembly: InternalsVisibleTo("Apicalypse.Tests")]
 namespace Apicalypse.Core.Implementations;
 
 /// <inheritdoc cref="IQueryBuilder{TEntity}" />
 internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 {
-	private readonly IQueryParser _parser;
+	private readonly IExpressionParser _parser;
 	private readonly StringBuilder _stringBuilder = new();
 
-	public QueryBuilder(IQueryParser parser) => _parser = parser;
-	public QueryBuilder() => _parser = new QueryParser(new MethodPerformer());
+	public QueryBuilder(IExpressionParser parser) => _parser = parser;
+	public QueryBuilder() => _parser = new ExpressionParser(new MethodPerformer());
 
 	public IFilterBuilder<TEntity> Select(IncludeType includeType)
 	{
@@ -77,8 +75,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			}
 		}
 	}
-	public ISortBuilder<TEntity> Where(
-		Expression<Func<TEntity, bool>> predicate)
+	public ISortBuilder<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
 	{
 		var parsed = _parser.Parse(predicate);
 		GenerateLine(QueryKeywords.Where, parsed);

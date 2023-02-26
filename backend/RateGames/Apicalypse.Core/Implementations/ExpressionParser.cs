@@ -7,10 +7,10 @@ using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations;
 
-/// <inheritdoc />
-internal class QueryParser : IQueryParser
+/// <inheritdoc cref="IExpressionParser"/>
+internal class ExpressionParser : IExpressionParser
 {
-	public QueryParser(IMethodPerformer methodPerformer)
+	public ExpressionParser(IMethodPerformer methodPerformer)
 	{
 		_newObjectStringBuilder = new StringBuilder();
 		_memberStringBuilder = new StringBuilder();
@@ -25,8 +25,8 @@ internal class QueryParser : IQueryParser
 	private readonly StringBuilder _binaryStringBuilder;
 
 	public string Parse<TEntity, TProp>(Expression<Func<TEntity, TProp>> expression)
-		=> FirstParse(expression.Body);
-	private string FirstParse(Expression expression) => expression switch
+		=> FilterParse(expression.Body);
+	private string FilterParse(Expression expression) => expression switch
 	{
 		ConstantExpression => throw new ArgumentException("First expression should not contain constants"),
 		_ => Parse(expression),
@@ -37,10 +37,29 @@ internal class QueryParser : IQueryParser
 		MethodCallExpression methodCallExpression => ParseMethodCall(methodCallExpression),
 		NewExpression newExpression => ParseNewObject(newExpression),
 		BinaryExpression binaryExpression => ParseBinary(binaryExpression),
-		ConstantExpression constantExpression => constantExpression.Value?.ToString()
-			?? throw new ArgumentException("Constant should not be null"),
+		ConstantExpression constantExpression => ParseConstant(constantExpression),
 		_ => throw new NotImplementedException(),
 	};
+	private string ParseConstant(ConstantExpression constantExpression)
+	{
+		if (constantExpression.Value is string stringValue)
+		{
+			var length = stringValue.Length + 2;
+			return string.Create(length, stringValue, (span, state) =>
+			{
+				var index = 0;
+				span[index++] = QueryChars.QuoteChar;
+				
+				for (var i = 0; i < state.Length; i++)
+				{
+					span[index++] = state[i];
+				}
+				span[index] = QueryChars.QuoteChar;
+			});
+		}
+		return constantExpression.Value?.ToString() ?? "null";
+	}
+
 	private string ParseMethodCall(MethodCallExpression methodCallExpression)
 	{
 		var performed = _methodPerformer.Perform(methodCallExpression);

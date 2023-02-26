@@ -52,14 +52,14 @@ internal class MethodPerformer : IMethodPerformer
 		}
 		throw new ArgumentException($"Method named {methodName} is not available to perform");
 	}
-	private string PerformIncludeProperties()
+	public string PerformIncludeProperties()
 		=> QueryChars.AccessSeparator + QueryChars.AllProperies;
-	private string PerformStringComparison(MethodCallExpression methodCallExpression)
+	public string PerformStringComparison(MethodCallExpression methodCallExpression)
 	{
 		var methodName = methodCallExpression.Method.Name;
 
 		var comparisonChar = string.Empty;
-		(var startChar, var endChar) = methodName switch
+		var (startChar, endChar) = methodName switch
 		{
 			nameof(string.StartsWith) => (string.Empty, QueryChars.StringMatcher),
 			nameof(string.EndsWith) => (QueryChars.StringMatcher, string.Empty),
@@ -113,10 +113,6 @@ internal class MethodPerformer : IMethodPerformer
 				comparisonChar = QueryChars.EqualSpaced;
 			}
 		}
-		if (constantExpression.Value is not string or char)
-		{
-			throw new ArgumentException($"Wrong argument {constantExpression.Value}, should be sting or char");
-		}
 
 		var stringValue = string.Empty;
 		if (constantExpression.Value is char character)
@@ -130,7 +126,7 @@ internal class MethodPerformer : IMethodPerformer
 		return CreateStringComparisonString(comparisonChar, startChar, endChar, stringValue!);
 	}
 
-	private string PerformArrayComparison(MethodCallExpression methodCallExpression)
+	public string PerformArrayComparison(MethodCallExpression methodCallExpression)
 	{
 		var methodName = methodCallExpression.Method.Name;
 		var (leftBrace, rightBrace) = methodName switch
@@ -142,7 +138,7 @@ internal class MethodPerformer : IMethodPerformer
 		};
 		if (methodCallExpression.Arguments[1] is not NewArrayExpression newArrayExpression)
 		{
-			throw new ArgumentException("Only new arrays parseable, ");
+			throw new ArgumentException("Only new arrays are able to parse.");
 		}
 		if (newArrayExpression.NodeType == ExpressionType.NewArrayInit)
 		{
@@ -158,7 +154,7 @@ internal class MethodPerformer : IMethodPerformer
 			}
 			return CreateArrayComparisonString(leftBrace, rightBrace, values);
 		}
-		throw new ArgumentException("Array should be initialized in expression");
+		throw new ArgumentException("Array should be initialized in the expression");
 	}
 
 	private string CreateArrayComparisonString(string leftBrace, string rightBrace, IList<string> values)

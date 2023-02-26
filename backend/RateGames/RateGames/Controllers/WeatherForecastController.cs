@@ -1,4 +1,5 @@
 using Apicalypse.Core.Enums;
+using Apicalypse.Core.Extensions;
 using Apicalypse.Core.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -27,12 +28,12 @@ public class WeatherForecastController : ControllerBase
 	{
 		return _builderCreator.CreateFor<Person>()
 			.Select(p => p.Name, SelectionMode.Include)
-			.Where(p => p.Age > 20)
+			.Where(p => p.Ints.ContainsAll(new[] { 1, 3, 5, 6, 7 }))
 			.Find("Hello world")
 			.Skip(2)
 			.Take(3)
 			.Build()!;
 	}
-	public record Person(string Name, int Age);
+	public record Person(string Name, int Age, int[] Ints);
 }
 	
