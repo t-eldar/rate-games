@@ -1,105 +1,76 @@
 ﻿using System.Linq.Expressions;
-using System.Reflection;
 
 using Apicalypse.Core.Extensions;
 using Apicalypse.Core.Implementations;
 using Apicalypse.Core.Interfaces;
+using Apicalypse.Core.Interfaces.ExpressionParsers;
+using Apicalypse.Tests.TestModels;
 
 using NSubstitute;
 
 namespace Apicalypse.Tests;
 public class ExpressionParserTests
 {
-	private readonly IMethodPerformer _methodPerformer;
-	private readonly IExpressionParser _sut;
+	private readonly QueryParser _sut;
+
+	private readonly IConstantExpressionParser _constantParser;
+	private readonly IMemberExpressionParser _memberParser;
+	private readonly IBinaryExpressionParser _binaryParser;
+	private readonly INewExpressionParser _newParser;
+	private readonly IMethodCallExpressionParser _methodCallParser;
+
 	public ExpressionParserTests()
 	{
-		_methodPerformer = Substitute.For<IMethodPerformer>();
-		_sut = new ExpressionParser(_methodPerformer);
+		_constantParser = Substitute.For<IConstantExpressionParser>();
+		_memberParser = Substitute.For<IMemberExpressionParser>();
+		_binaryParser = Substitute.For<IBinaryExpressionParser>();
+		_newParser = Substitute.For<INewExpressionParser>();
+		_methodCallParser = Substitute.For<IMethodCallExpressionParser>();
+
+		_sut = new QueryParser(_memberParser, _newParser, _binaryParser, _constantParser, _methodCallParser);
 	}
 
 	[Fact]
 	public void Parse_ReturnsParsed_WhenMemberAccesChainPassed()
 	{
 		// Arrange
-		Expression<Func<TestMain, string>> expression = (main) => main.Dependence.Name;
-		var expected = "Dependence.Name";
-
+		Expression<Func<Person, string>> expression = (main) => main.Country.Name;
+		var expected = "Country.Name";
+		_memberParser.Parse(null!, null!).ReturnsForAnyArgs(expected);
 		// Act
 		var result = _sut.Parse(expression);
 		// Assert
 		Assert.Equal(expected, result);
 	}
 
-	[Theory]
-	[MemberData(nameof(ConditionalTestData))]
-	public void Parse_ReturnsParsed_WhenConditionalPassed(Expression<Func<TestMain, bool>> expression, string expected)
+	[Fact]
+	public void Parse_ReturnsParsed_WhenConditionalPassed()
 	{
-		_methodPerformer.Perform(null!).ReturnsForAnyArgs(" = \"Hello\"");
+		// Arrange
+		Expression<Func<Person, bool>> expression = (p) => p.Id == 2 || p.Country.Name == "ff";
+		var expected = "Id = 2 | Country.Name = \"ff\"";
+		_binaryParser.Parse(null!, null!).ReturnsForAnyArgs(expected);
+		// Act
 		var result = _sut.Parse(expression);
+		// Assert
 		Assert.Equal(expected, result);
 	}
 
-	[Theory]
-	[MemberData(nameof(NewObjectTestData))]
-	public void Parse_ReturnsParsed_WhenNewObjectPassed(Expression<Func<TestMain, object>> expression, string expected)
+	[Fact]
+	public void Parse_ReturnsParsed_WhenNewObjectPassed()
 	{
-		_methodPerformer.Perform(null!).ReturnsForAnyArgs(".*");
+		// Arrange
+		Expression<Func<Person, object>> expression = (p) => new
+		{
+			p.Id,
+			p.Array,
+			Dependence = p.Country.IncludeAllProperties()
+		};
+		var expected = "Id,Array,Country.*";
+		_newParser.Parse(null!, null!).ReturnsForAnyArgs(expected);
+		// Act
 		var result = _sut.Parse(expression);
+		// Assert
 		Assert.Equal(expected, result);
-	}
-
-	public static IEnumerable<object[]> NewObjectTestData()
-	{
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, object>>)((TestMain main) => new { main.Id, main.Dependence, main.Dependence.Name }),
-			"Id,Dependence,Dependence.Name",
-		};
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, object>>)((TestMain main) => new
-			{
-				All = main.Dependence.IncludeProperties(),
-				main.Id
-			}),
-			"Dependence.*,Id",
-		};
-	}
-
-	public static IEnumerable<object[]> ConditionalTestData()
-	{
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, bool>>)((TestMain main) => main.Id == 25 || main.Dependence.Name == "Hello"),
-			"Id = 25 | Dependence.Name = \"Hello\""
-		};
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, bool>>)((TestMain main) => main.Id != 10 && main.Dependence.Id > 12),
-			"Id != 10 & Dependence.Id > 12"
-		};
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, bool>>)((TestMain main) => main.Id < 12 && main.Id >= 12 && main.Id <= 12),
-			"Id < 12 & Id >= 12 & Id <= 12"
-		};
-		yield return new object[]
-		{
-			(Expression<Func<TestMain, bool>>)((TestMain main) => main.Dependence.Name.StartsWith("Hello")),
-			"Dependence.Name = \"Hello\""
-		};
-	}
-
-	public class TestMain
-	{
-		public int Id { get; set; }
-		public TestDependence Dependence { get; set; } = null!;
-		public int[] Array { get; set; } = null!;
-	}
-	public class TestDependence
-	{
-		public int Id { get; set; }
-		public string Name { get; set; } = null!;
 	}
 }

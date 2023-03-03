@@ -1,4 +1,6 @@
-﻿namespace Apicalypse.Core.Extensions;
+﻿using System.Linq.Expressions;
+
+namespace Apicalypse.Core.Extensions;
 
 public static class EnumerableExtensions
 {

@@ -12,11 +12,10 @@ namespace Apicalypse.Core.Implementations;
 /// <inheritdoc cref="IQueryBuilder{TEntity}" />
 internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 {
-	private readonly IExpressionParser _parser;
+	private readonly IQueryParser _parser;
 	private readonly StringBuilder _stringBuilder = new();
 
-	public QueryBuilder(IExpressionParser parser) => _parser = parser;
-	public QueryBuilder() => _parser = new ExpressionParser(new MethodPerformer());
+	public QueryBuilder(IQueryParser parser) => _parser = parser;
 
 	public IFilterBuilder<TEntity> Select(IncludeType includeType)
 	{
@@ -30,7 +29,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 				foreach (var prop in props)
 				{
 					_stringBuilder.Append(prop.Name);
-					_stringBuilder.Append(QueryChars.ValueSeparator);
+					_stringBuilder.Append(QueryChars.ValueSeparatorChar);
 				}
 				_stringBuilder.Remove(_stringBuilder.Length - 1, 1);
 				_stringBuilder.AppendLine(QueryChars.LineSeparator);
@@ -59,7 +58,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			{
 				_stringBuilder.Append(QueryKeywords.Fields);
 				_stringBuilder.Append(QueryChars.SpaceChar);
-				_stringBuilder.Append(QueryChars.AllProperies);
+				_stringBuilder.Append(QueryChars.AllProperiesChar);
 				_stringBuilder.AppendLine(QueryChars.LineSeparator);
 				GenerateLine(QueryKeywords.Exclude, parsed);
 				return this;

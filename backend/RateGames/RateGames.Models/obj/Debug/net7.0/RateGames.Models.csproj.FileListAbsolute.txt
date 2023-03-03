@@ -1,0 +1,12 @@
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\bin\Debug\net7.0\RateGames.Models.deps.json
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\bin\Debug\net7.0\RateGames.Models.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\bin\Debug\net7.0\RateGames.Models.pdb
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.csproj.AssemblyReference.cache
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.AssemblyInfoInputs.cache
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.AssemblyInfo.cs
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.csproj.CoreCompileInputs.cache
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\refint\RateGames.Models.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.pdb
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\ref\RateGames.Models.dll
