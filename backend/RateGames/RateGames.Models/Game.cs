@@ -9,7 +9,8 @@ public class Game
 	public int? FirstReleaseDate { get; set; }
 	public double? AggregatedRating { get; set; }
 	public double? Rating { get; set; }
-	public Category? Category { get; set; }
+	public GameCategory? Category { get; set; }
+	public IEnumerable<GameMode>? GameModes { get; set; }
 	public IEnumerable<Image>? Screenshots { get; set; }
 	public IEnumerable<InvolvedCompany>? InvolvedCompanies { get; set; }
 	public IEnumerable<Genre>? Genres { get; set; }

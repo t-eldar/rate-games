@@ -1,6 +1,6 @@
 ﻿namespace RateGames.Models.Enums;
 
-public enum Category
+public enum GameCategory
 {
 	MainGame = 0,
 	DlcAddon = 1,

@@ -10,6 +10,7 @@ public class Company
 	/// </summary>
 	public int? Country { get; set; }
 	public int? StartDate { get; set; }
+	public Image? Logo { get; set; }
 	public IEnumerable<Game>? Published { get; set; }
 	public IEnumerable<Game>? Developed { get; set; }
 }
