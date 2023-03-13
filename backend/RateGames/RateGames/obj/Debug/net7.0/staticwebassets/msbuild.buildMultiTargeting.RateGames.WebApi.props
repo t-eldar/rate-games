@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\RateGames.WebApi.props" />
+</Project>

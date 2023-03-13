@@ -47,8 +47,9 @@ internal class NewExpressionParser : INewExpressionParser
 
         return result[..^1];
     }
-    public string Parse(NewExpression expression, StringBuilder _newObjectStringBuilder)
+    public string Parse(NewExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         var arguments = expression.Arguments;
         foreach (var argument in arguments)
         {
@@ -58,8 +59,8 @@ internal class NewExpressionParser : INewExpressionParser
                 case MethodCallExpression:
                 {
                     var parsed = ParsePart(argument);
-                    _newObjectStringBuilder.Append(parsed);
-                    _newObjectStringBuilder.Append(QueryChars.ValueSeparatorChar);
+                    stringBuilder.Append(parsed);
+                    stringBuilder.Append(QueryChars.ValueSeparatorChar);
                     break;
                 }
                 default:
@@ -68,8 +69,8 @@ internal class NewExpressionParser : INewExpressionParser
                 }
             }
         }
-        var result = _newObjectStringBuilder.ToString().AsSpan();
-        _newObjectStringBuilder.Clear();
+        var result = stringBuilder.ToString().AsSpan();
+        stringBuilder.Clear();
 
         return result[..^1].ToString();
     }
@@ -78,6 +79,6 @@ internal class NewExpressionParser : INewExpressionParser
     {
         MemberExpression member => _memberParser.Parse(member, _stringBuilder),
         MethodCallExpression methodCall => _methodCallParser.Parse(methodCall, _stringBuilder),
-        _ => throw new ArgumentException($"Expression {expression} cannot be part of new object")
+        _ => throw new ArgumentException($"Expression {expression} with {expression.NodeType} cannot be part of new object")
     };
 }

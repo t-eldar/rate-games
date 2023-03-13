@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "BQAzW5WYoNfuD+v3I9OS7/MIt4LuQg51jDKQ2kgnBksGmrM/iBrCMBlEuGJ67BBkPRHNy+dNTVShlsgEBg19nA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\RateGames.Core\\RateGames.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\urc0m\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\urc0m\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\urc0m\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

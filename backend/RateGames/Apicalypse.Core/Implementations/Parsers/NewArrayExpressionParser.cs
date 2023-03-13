@@ -2,12 +2,18 @@
 using System.Text;
 
 using Apicalypse.Core.Interfaces.ExpressionParsers;
+using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 internal class NewArrayExpressionParser : INewArrayExpressionParser
 {
     private readonly IConstantExpressionParser _constantParser;
-    public NewArrayExpressionParser(IConstantExpressionParser constantParser) => _constantParser = constantParser;
+    private readonly IMemberExpressionParser _memberParser;
+    public NewArrayExpressionParser(IConstantExpressionParser constantParser, IMemberExpressionParser memberParser)
+    {
+        _constantParser = constantParser;
+        _memberParser = memberParser;
+    }
 
     public string Parse(NewArrayExpression expression)
     {
@@ -19,11 +25,19 @@ internal class NewArrayExpressionParser : INewArrayExpressionParser
 
         foreach (var exp in expression.Expressions)
         {
-            if (exp is not ConstantExpression constantExpression)
+            if (exp is ConstantExpression constantExpression)
             {
-                throw new ArgumentException("Array should be initializd by not null constants");
+                result += _constantParser.Parse(constantExpression);
+                result += QueryChars.ValueSeparatorChar;
+                continue;
             }
-            result += _constantParser.Parse(constantExpression) + ",";
+            else if (exp is MemberExpression memberExpression)
+            {
+                result += _memberParser.Parse(memberExpression);
+                result += QueryChars.ValueSeparatorChar;
+                continue;
+            }
+            throw new ArgumentException("Array should be initializd by not null constants");
         }
 
         return result[..^1];
@@ -31,6 +45,8 @@ internal class NewArrayExpressionParser : INewArrayExpressionParser
 
     public string Parse(NewArrayExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
+        var innerStringBuilder = new StringBuilder();
         if (expression.NodeType == ExpressionType.NewArrayBounds)
         {
             throw new ArgumentException("Array should be initialized in the expression");
@@ -38,12 +54,19 @@ internal class NewArrayExpressionParser : INewArrayExpressionParser
 
         foreach (var exp in expression.Expressions)
         {
-            if (exp is not ConstantExpression constantExpression)
+            if (exp is ConstantExpression constantExpression)
             {
-                throw new ArgumentException("Array should be initializd by not null constants");
+                stringBuilder.Append(_constantParser.Parse(constantExpression, innerStringBuilder));
+                stringBuilder.Append(QueryChars.ValueSeparatorChar);
+                continue;
             }
-            stringBuilder.Append(_constantParser.Parse(constantExpression));
-            stringBuilder.Append(',');
+            else if (exp is MemberExpression memberExpression)
+            {
+                stringBuilder.Append(_memberParser.Parse(memberExpression, innerStringBuilder));
+                stringBuilder.Append(QueryChars.ValueSeparatorChar);
+                continue;
+            }
+            throw new ArgumentException("Array should be initializd by not null constants");
         }
         var result = stringBuilder.ToString();
         stringBuilder.Clear();

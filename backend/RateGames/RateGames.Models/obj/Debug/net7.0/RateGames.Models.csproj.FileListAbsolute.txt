@@ -10,3 +10,6 @@ C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Mode
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\refint\RateGames.Models.dll
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.pdb
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\ref\RateGames.Models.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\bin\Debug\net7.0\RateGames.Common.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\bin\Debug\net7.0\RateGames.Common.pdb
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames.Models\obj\Debug\net7.0\RateGames.Models.csproj.CopyComplete

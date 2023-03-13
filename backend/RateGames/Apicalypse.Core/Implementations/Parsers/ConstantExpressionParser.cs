@@ -58,6 +58,7 @@ internal class ConstantExpressionParser : IConstantExpressionParser
     }
     public string Parse(ConstantExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         if (expression.Value is string or char)
         {
             stringBuilder.Append(QueryChars.QuoteChar);
@@ -81,6 +82,6 @@ internal class ConstantExpressionParser : IConstantExpressionParser
             return floatValue.ToString("G", CultureInfo.InvariantCulture);
         }
 
-        return expression.Value?.ToString() ?? "null";
+        return expression.Value?.ToString() ?? QueryKeywords.Null;
     }
 }

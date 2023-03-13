@@ -1,8 +1,7 @@
-﻿using System.Text;
-
-using Apicalypse.Core.Extensions;
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces.ExpressionParsers;
 using Apicalypse.Core.StringEnums;
+
+using RateGames.Common.Extensions;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
@@ -29,6 +28,7 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
         nameof(IncludeMarkerExtensions.IncludeProperty),
         nameof(IncludeMarkerExtensions.IncludeAllProperties)
     };
+
     public MethodCallExpressionParser(
         IMemberExpressionParser memberParser,
         IConstantExpressionParser constantParser,
@@ -67,6 +67,7 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
     };
     private string ParseEnumerableMethod(MethodCallExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         var methodName = expression.Method.Name;
         var (leftBound, rightBound) = methodName switch
         {
@@ -75,7 +76,7 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
             nameof(EnumerableExtensions.ContainsAll) => (QueryChars.ParenthesisLeftChar, QueryChars.ParenthesisRightChar),
             _ => throw new ArgumentException("Method is not available to perform"),
         };
-        
+
         if (expression.Arguments[1] is not NewArrayExpression newArrayExpression)
         {
             throw new ArgumentException("Only new arrays are able to parse.");
@@ -95,6 +96,7 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
     }
     private string ParseStringMethod(MethodCallExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         var methodName = expression.Method.Name;
         var (startChar, endChar) = methodName switch
         {
@@ -143,13 +145,16 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
         var caller = ParsePart(expression.Arguments[0], stringBuilder);
         var including = ParsePart(expression.Arguments[1], stringBuilder);
         stringBuilder.Append(caller);
+        stringBuilder.Append(QueryChars.AccessSeparatorChar);
         stringBuilder.Append(including);
         var result = stringBuilder.ToString();
+        stringBuilder.Clear();
 
         return result;
     }
     private string ParseIncludeAllProperties(MethodCallExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         var caller = ParsePart(expression.Arguments[0]);
         stringBuilder.Append(caller);
         stringBuilder.Append(QueryChars.AccessSeparatorChar);
@@ -210,8 +215,20 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
         MethodCallExpression methodCall => Parse(methodCall, stringBuilder),
         ConstantExpression constant => _constantParser.Parse(constant, stringBuilder),
         NewArrayExpression newArray => _newArrayParser.Parse(newArray, stringBuilder),
-        _ => throw new ArgumentException($"Expression {expression} cannot be part of new object")
+        UnaryExpression unary => ParseUnary(unary),
+        _ => throw new ArgumentException($"Expression {expression} with {expression.NodeType} cannot be part of new object")
     };
+    private string ParseUnary(UnaryExpression expression)
+    {
+        if (expression.NodeType != ExpressionType.Quote)
+        {
+            throw new ArgumentException("Unary expression may only be with node type Quote");
+        }
+        var lambda = expression.Operand as LambdaExpression 
+            ?? throw new ArgumentException("Only lambda expression could be passed");
+
+        return ParsePart(lambda.Body);
+    }
     private string ParsePart(Expression expression) => expression switch
     {
         MemberExpression member => _memberParser.Parse(member),

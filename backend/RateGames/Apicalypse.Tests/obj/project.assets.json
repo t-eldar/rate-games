@@ -1791,13 +1791,24 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "RateGames.Common": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Apicalypse.Core.dll": {}
         },
         "runtime": {
           "bin/placeholder/Apicalypse.Core.dll": {}
+        }
+      },
+      "RateGames.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/RateGames.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RateGames.Common.dll": {}
         }
       }
     }
@@ -5700,6 +5711,11 @@
       "type": "project",
       "path": "../Apicalypse.Core/Apicalypse.Core.csproj",
       "msbuildProject": "../Apicalypse.Core/Apicalypse.Core.csproj"
+    },
+    "RateGames.Common/1.0.0": {
+      "type": "project",
+      "path": "../RateGames.Common/RateGames.Common.csproj",
+      "msbuildProject": "../RateGames.Common/RateGames.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {

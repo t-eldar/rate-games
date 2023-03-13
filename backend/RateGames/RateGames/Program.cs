@@ -1,4 +1,8 @@
 using Apicalypse.Core.Extensions;
+using RateGames.Core.Services.Implementations;
+using RateGames.Core.Services.Interfaces;
+using RateGames.Core.Storages.Implementations;
+using RateGames.Core.Storages.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +13,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApicalypseQueryBuilderCreator();
-
+builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
+builder.Services.AddHttpClient<ITwitchTokenService, TwitchTokenService>();
+builder.Services.AddHttpClient<IIgdbService, IgdbService>();
+builder.Services.AddTransient<IGameService, GameService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

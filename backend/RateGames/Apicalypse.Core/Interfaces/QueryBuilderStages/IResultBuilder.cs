@@ -10,6 +10,6 @@ public interface IResultBuilder<TEntity>
 	/// Builds query into string.
 	/// </summary>
 	/// <returns></returns>
-	string? Build();
+	string Build();
 }
 

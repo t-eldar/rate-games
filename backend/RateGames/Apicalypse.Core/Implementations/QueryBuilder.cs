@@ -1,11 +1,9 @@
-﻿using System.Linq.Expressions;
-using System.Text;
-
-using Apicalypse.Core.Enums;
-using Apicalypse.Core.Extensions;
+﻿using Apicalypse.Core.Enums;
 using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.Interfaces.QueryBuilderStages;
 using Apicalypse.Core.StringEnums;
+
+using RateGames.Common.Extensions;
 
 namespace Apicalypse.Core.Implementations;
 
@@ -109,7 +107,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 		GenerateSearchLine(searchString);
 		return this;
 	}
-	public string? Build()
+	public string Build()
 	{
 		var result = _stringBuilder.ToString();
 		_stringBuilder.Clear();

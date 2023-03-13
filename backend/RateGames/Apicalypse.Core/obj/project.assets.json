@@ -17,6 +17,16 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
+      },
+      "RateGames.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/RateGames.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RateGames.Common.dll": {}
+        }
       }
     }
   },
@@ -49,11 +59,17 @@
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "RateGames.Common/1.0.0": {
+      "type": "project",
+      "path": "../RateGames.Common/RateGames.Common.csproj",
+      "msbuildProject": "../RateGames.Common/RateGames.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "Microsoft.Extensions.DependencyInjection.Abstractions >= 7.0.0"
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 7.0.0",
+      "RateGames.Common >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -88,7 +104,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\RateGames.Common\\RateGames.Common.csproj": {
+              "projectPath": "C:\\Users\\urc0m\\source\\repos\\web-apps\\rate-games\\backend\\RateGames\\RateGames.Common\\RateGames.Common.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

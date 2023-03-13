@@ -33,6 +33,7 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
     }
     public string Parse(BinaryExpression expression, StringBuilder stringBuilder)
     {
+        stringBuilder.Clear();
         var binary = expression;
         var left = ParsePart(binary.Left, stringBuilder);
         var right = ParsePart(binary.Right, stringBuilder);

@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v7.0": {
       "RateGames.Models/1.0.0": {
+        "dependencies": {
+          "RateGames.Common": "1.0.0"
+        },
         "runtime": {
           "RateGames.Models.dll": {}
+        }
+      },
+      "RateGames.Common/1.0.0": {
+        "runtime": {
+          "RateGames.Common.dll": {}
         }
       }
     }
   },
   "libraries": {
     "RateGames.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RateGames.Common/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

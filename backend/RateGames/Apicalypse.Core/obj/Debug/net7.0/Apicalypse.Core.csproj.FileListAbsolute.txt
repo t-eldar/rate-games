@@ -10,3 +10,6 @@ C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Cor
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\obj\Debug\net7.0\refint\Apicalypse.Core.dll
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\obj\Debug\net7.0\Apicalypse.Core.pdb
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\obj\Debug\net7.0\ref\Apicalypse.Core.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\bin\Debug\net7.0\RateGames.Common.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\bin\Debug\net7.0\RateGames.Common.pdb
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\Apicalypse.Core\obj\Debug\net7.0\Apicalypse.Core.csproj.CopyComplete

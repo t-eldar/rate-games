@@ -11,4 +11,5 @@ internal static class QueryKeywords
     public const string Ascendging = "asc";
     public const string Descending = "desc";
     public const string Search = "search";
+    public const string Null = "null";
 }

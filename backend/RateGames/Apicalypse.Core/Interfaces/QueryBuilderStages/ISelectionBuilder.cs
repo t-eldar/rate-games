@@ -12,7 +12,7 @@ public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
 	/// </summary>
 	/// <param name="includeType"></param>
 	/// <returns></returns>
-	IFilterBuilder<TEntity> Select(IncludeType includeType);
+	IFilterBuilder<TEntity> Select(IncludeType includeType = IncludeType.EveryFromModel);
 
 	/// <summary>
 	/// Selects properties passed via <paramref name="selector"/> expression. 
