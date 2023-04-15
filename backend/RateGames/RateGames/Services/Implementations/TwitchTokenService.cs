@@ -1,8 +1,11 @@
 ﻿using System.Text.Json;
 
+using Microsoft.Extensions.Options;
+
 using RateGames.Common.Utils;
 using RateGames.Models.Dtos;
 using RateGames.Models.Tokens;
+using RateGames.Options;
 using RateGames.Services.Interfaces;
 using RateGames.Storages.Interfaces;
 
@@ -13,21 +16,21 @@ namespace RateGames.Services.Implementations;
 public class TwitchTokenService : ITwitchTokenService
 {
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
     private readonly ITokenStorage _tokenStorage;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly TwitchOptions _options;
 
     private const string TokenKey = "TwitchToken";
     public TwitchTokenService(
         HttpClient httpClient,
-        IConfiguration configuration,
         ITokenStorage tokenStorage,
-        IDateTimeProvider dateTimeProvider)
+        IDateTimeProvider dateTimeProvider,
+        IOptions<TwitchOptions> options)
     {
         _httpClient = httpClient;
-        _configuration = configuration;
         _tokenStorage = tokenStorage;
         _dateTimeProvider = dateTimeProvider;
+        _options = options.Value;
     }
 
     public async Task<string> GetTokenAsync()
@@ -40,21 +43,14 @@ public class TwitchTokenService : ITwitchTokenService
             return tokenDto.Value.AccessToken;
         }
 
-        var clientId = _configuration.GetRequiredSection("Twitch:ClientId").Value
-            ?? throw new Exception("ClientId is missing in configuration");
-        var clientSecret = _configuration.GetRequiredSection("Twitch:ClientSecret").Value
-            ?? throw new Exception("ClientSecret is missing in configuration");
-        var tokenAddress = _configuration.GetRequiredSection("Twitch:TokenAddress").Value
-            ?? throw new Exception("TokenAddress is missing in configuration");
-
         var parameters = new Dictionary<string, string>
         {
-            ["client_id"] = clientId,
-            ["client_secret"] = clientSecret,
+            ["client_id"] = _options.ClientId,
+            ["client_secret"] = _options.ClientSecret,
             ["grant_type"] = "client_credentials",
         };
         var encodedParams = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(tokenAddress, encodedParams);
+        var response = await _httpClient.PostAsync(_options.TokenAddress, encodedParams);
         response.EnsureSuccessStatusCode();
         var twitchToken = await response.Content.ReadFromJsonAsync<TwitchToken>(new JsonSerializerOptions()
         {
@@ -64,7 +60,7 @@ public class TwitchTokenService : ITwitchTokenService
         tokenDto = new TwitchTokenDto
         {
             Value = twitchToken,
-            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            CreatedAt = _dateTimeProvider.CurrentDateTimeOffset,
         };
 
         _tokenStorage.SetToken(TokenKey, tokenDto);

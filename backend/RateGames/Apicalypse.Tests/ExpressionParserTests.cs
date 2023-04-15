@@ -8,6 +8,8 @@ using Apicalypse.Tests.TestModels;
 
 using NSubstitute;
 
+using RateGames.Common.Extensions;
+
 namespace Apicalypse.Tests;
 public class ExpressionParserTests
 {

@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "PeAFw+fp53bCiVrg3nCAsHR9eXIHYznq00IFbCi3aik=",
-  "Source": "RateGames.WebApi",
-  "BasePath": "_content/RateGames.WebApi",
+  "Hash": "OYtB3tisKBz9nVuUYhrbCAEzW/fakOpT6HDezEsyKQE=",
+  "Source": "RateGames",
+  "BasePath": "_content/RateGames",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

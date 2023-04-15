@@ -4,15 +4,20 @@ using Apicalypse.Core.Interfaces.ExpressionParsers;
 using NSubstitute;
 
 namespace Apicalypse.Tests;
+
 public class NewArrayExpressionParserTests
 {
     private readonly NewArrayExpressionParser _sut;
     private readonly IConstantExpressionParser _constantExpressionParser;
+    private readonly IMemberExpressionParser _memberExpressionParser;
+
     public NewArrayExpressionParserTests()
     {
         _constantExpressionParser = Substitute.For<IConstantExpressionParser>();
-        _sut = new NewArrayExpressionParser(_constantExpressionParser);
+        _memberExpressionParser = Substitute.For<IMemberExpressionParser>();
+        _sut = new NewArrayExpressionParser(_constantExpressionParser, _memberExpressionParser);
     }
+
     [Fact]
     public void Parse_ReturnsString_WhenCorrectIntsPassed()
     {
@@ -20,7 +25,12 @@ public class NewArrayExpressionParserTests
         ConstantExpression constantOne = Expression.Constant(1);
         ConstantExpression constantTwo = Expression.Constant(2);
         ConstantExpression constantThree = Expression.Constant(3);
-        NewArrayExpression expression = Expression.NewArrayInit(typeof(int), constantOne, constantTwo, constantThree);
+        NewArrayExpression expression = Expression.NewArrayInit(
+            typeof(int),
+            constantOne,
+            constantTwo,
+            constantThree
+        );
 
         _constantExpressionParser.Parse(constantOne).Returns("1");
         _constantExpressionParser.Parse(constantTwo).Returns("2");
@@ -32,6 +42,7 @@ public class NewArrayExpressionParserTests
         // Assert
         Assert.Equal(expected, result);
     }
+
     [Fact]
     public void Parse_Throws_WhenNewArrayBounds()
     {
