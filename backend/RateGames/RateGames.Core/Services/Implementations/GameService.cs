@@ -1,6 +1,7 @@
 ﻿using Apicalypse.Core.Interfaces;
 
 using RateGames.Common.Extensions;
+using RateGames.Common.Utils;
 using RateGames.Core.Services.Interfaces;
 using RateGames.Models.Enums;
 using RateGames.Models.Igdb;
@@ -58,7 +59,7 @@ public class GameService : IGameService
             .Take(limit)
             .Build();
         var response = await _igdbService.GetAsync<IEnumerable<Game>>(query, Endpoints.Games);
-       
+
         return response;
     }
     public Task<IEnumerable<Game>?> GetBySearch(string searchQuery, int limit = 10, int offset = 0) => throw new NotImplementedException();

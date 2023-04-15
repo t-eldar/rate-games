@@ -77,12 +77,8 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
             _ => throw new ArgumentException("Method is not available to perform"),
         };
 
-        if (expression.Arguments[1] is not NewArrayExpression newArrayExpression)
-        {
-            throw new ArgumentException("Only new arrays are able to parse.");
-        }
         var caller = ParsePart(expression.Arguments[0]);
-        var array = ParsePart(newArrayExpression, stringBuilder);
+        var array = ParsePart(expression.Arguments[1], stringBuilder);
         stringBuilder.Append(caller);
         stringBuilder.Append(QueryChars.EqualSpaced);
         stringBuilder.Append(leftBound);

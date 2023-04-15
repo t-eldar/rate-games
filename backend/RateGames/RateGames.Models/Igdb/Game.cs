@@ -1,4 +1,5 @@
 ﻿using RateGames.Common.Contracts;
+using RateGames.Common.Utils;
 using RateGames.Models.Enums;
 
 namespace RateGames.Models.Igdb;
@@ -11,11 +12,11 @@ public class Game : IEntity
     public double? AggregatedRating { get; set; }
     public double? Rating { get; set; }
     public GameCategory? Category { get; set; }
-    public IEnumerable<GameMode>? GameModes { get; set; }
-    public IEnumerable<Image>? Screenshots { get; set; }
-    public IEnumerable<InvolvedCompany>? InvolvedCompanies { get; set; }
-    public IEnumerable<Genre>? Genres { get; set; }
-    public IEnumerable<GameEngine>? GameEngines {  get; set; }
-    public IEnumerable<Game>? SimilarGames { get; set; }
-    public IEnumerable<Platform>? Platforms { get; set; }
+    public IEnumerable<IdOr<GameMode>>? GameModes { get; set; }
+    public IEnumerable<IdOr<Image>>? Screenshots { get; set; }
+    public IEnumerable<IdOr<InvolvedCompany>>? InvolvedCompanies { get; set; }
+    public IEnumerable<IdOr<Genre>>? Genres { get; set; }
+    public IEnumerable<IdOr<GameEngine>>? GameEngines {  get; set; }
+    public IEnumerable<IdOr<Game>>? SimilarGames { get; set; }
+    public IEnumerable<IdOr<Platform>>? Platforms { get; set; }
 }

@@ -40,7 +40,7 @@ public class IgdbService : IIgdbService
         var result = await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions()
         {
             PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
-            Converters = { new EntityConverter() }
+            Converters = { new IdOrConverterFactory() }
         });
 
         return result;

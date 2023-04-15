@@ -1,13 +1,10 @@
 using Apicalypse.Core.Enums;
-using Apicalypse.Core.Extensions;
 using Apicalypse.Core.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
 using RateGames.Common.Extensions;
-using RateGames.Core.Services.Implementations;
-using RateGames.Core.Services.Interfaces;
-using RateGames.Models.Igdb;
+using RateGames.Services.Interfaces;
 
 namespace RateGames.Controllers;
 
@@ -64,6 +61,13 @@ public class WeatherForecastController : ControllerBase
     public async Task<IActionResult> GetGameByGenreAsync(int genreId)
     {
         var result = await _gameService.GetByGenre(genreId);
+        return Ok(result);
+    }
+
+    [HttpGet(Name = "GetGameByPlatform")]
+    public async Task<IActionResult> GetGameByPlatformAsync(int platformId)
+    {
+        var result = await _gameService.GetByPlatforms(new[] { platformId });
         return Ok(result);
     }
 

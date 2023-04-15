@@ -3,11 +3,11 @@ using System.Text.Json;
 
 using Microsoft.Extensions.Configuration;
 
+using RateGames.Common.Utils;
 using RateGames.Core.Dtos;
 using RateGames.Core.Models;
 using RateGames.Core.Services.Interfaces;
 using RateGames.Core.Storages.Interfaces;
-using RateGames.Core.Utils;
 
 namespace RateGames.Core.Services.Implementations;
 
@@ -17,16 +17,19 @@ public class TwitchTokenService : ITwitchTokenService
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly ITokenStorage _tokenStorage;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     private const string TokenKey = "TwitchToken";
     public TwitchTokenService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ITokenStorage tokenStorage)
+        ITokenStorage tokenStorage,
+        IDateTimeProvider dateTimeProvider)
     {
         _httpClient = httpClient;
         _configuration = configuration;
         _tokenStorage = tokenStorage;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<string> GetTokenAsync()
@@ -52,8 +55,8 @@ public class TwitchTokenService : ITwitchTokenService
             ["client_secret"] = clientSecret,
             ["grant_type"] = "client_credentials",
         };
-        var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(tokenAddress, encodedContent);
+        var encodedParams = new FormUrlEncodedContent(parameters);
+        var response = await _httpClient.PostAsync(tokenAddress, encodedParams);
         response.EnsureSuccessStatusCode();
         var twitchToken = await response.Content.ReadFromJsonAsync<TwitchToken>(new JsonSerializerOptions()
         {

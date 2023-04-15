@@ -1,7 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 
 using Apicalypse.Core.Interfaces.ExpressionParsers;
 using Apicalypse.Core.StringEnums;
+
+using RateGames.Common.Contracts;
+using RateGames.Common.Utils;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
@@ -16,7 +20,13 @@ internal class MemberExpressionParser : IMemberExpressionParser
         {
             var prop = memberExpression.Member as PropertyInfo
                 ?? throw new ArgumentException("Expression should contain only property member access!");
-
+            if (prop.DeclaringType!.IsGenericType
+                && prop.DeclaringType.GetGenericTypeDefinition() == typeof(IdOr<>)
+                && prop.Name != nameof(IEntity.Id))
+            {
+                callerExpression = memberExpression.Expression;
+                continue;
+            }
             result = result.Insert(0, prop.Name);
             result = result.Insert(0, QueryChars.AccessSeparator);
             callerExpression = memberExpression.Expression;
@@ -31,14 +41,20 @@ internal class MemberExpressionParser : IMemberExpressionParser
 
         if (expression.Expression?.NodeType == ExpressionType.Constant)
         {
-            return ParseConstantMemberAccess(expression);
+            return ParseConstantMemberAccess(expression, stringBuilder);
         }
 
         while (callerExpression is MemberExpression memberExpression)
         {
             var prop = memberExpression.Member as PropertyInfo
                 ?? throw new ArgumentException("Expression should contain only property member access!");
-
+            if (prop.DeclaringType!.IsGenericType
+                && prop.DeclaringType.GetGenericTypeDefinition() == typeof(IdOr<>)
+                && prop.Name != nameof(IEntity.Id))
+            {
+                callerExpression = memberExpression.Expression;
+                continue;
+            }
             stringBuilder.Insert(0, prop.Name);
             stringBuilder.Insert(0, QueryChars.AccessSeparatorChar);
 
@@ -50,11 +66,24 @@ internal class MemberExpressionParser : IMemberExpressionParser
         return result[1..].ToString();
     }
 
-    private string ParseConstantMemberAccess(MemberExpression expression)
+    private string ParseConstantMemberAccess(MemberExpression expression, StringBuilder stringBuilder)
     {
         var objectMember = Expression.Convert(expression, typeof(object));
-        var result = Expression.Lambda<Func<object>>(objectMember).Compile().Invoke();
+        var constant = Expression.Lambda<Func<object>>(objectMember).Compile().Invoke();
 
-        return result?.ToString() ?? QueryKeywords.Null;
+        if (constant is not IEnumerable enumerable)
+        {
+            return constant?.ToString() ?? QueryKeywords.Null;
+        }
+
+        foreach (var item in enumerable)
+        {
+            stringBuilder.Append(item.ToString());
+            stringBuilder.Append(QueryChars.ValueSeparatorChar);
+        }
+        var result = stringBuilder.ToString();
+        stringBuilder.Clear();
+
+        return result[..^1];
     }
 }

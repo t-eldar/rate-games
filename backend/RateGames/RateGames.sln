@@ -3,17 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.WebApi", "RateGames\RateGames.WebApi.csproj", "{822F71C4-AFA4-45C3-AA70-F51F50EBB459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames", "RateGames\RateGames.csproj", "{822F71C4-AFA4-45C3-AA70-F51F50EBB459}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Core", "Apicalypse.Core\Apicalypse.Core.csproj", "{575EB3A7-0523-45FD-B472-DD928D51B956}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Tests", "Apicalypse.Tests\Apicalypse.Tests.csproj", "{72FDA97A-3884-4C79-9F62-0F93B6F899A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Models", "RateGames.Models\RateGames.Models.csproj", "{FE4759D1-AA17-46C8-9C15-A6FC1CE50C00}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Core", "RateGames.Core\RateGames.Core.csproj", "{75C9E7FF-60A9-42F5-BDAD-C9D0DFAC32AD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateGames.Common", "RateGames.Common\RateGames.Common.csproj", "{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Common", "RateGames.Common\RateGames.Common.csproj", "{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +29,6 @@ Global
 		{72FDA97A-3884-4C79-9F62-0F93B6F899A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72FDA97A-3884-4C79-9F62-0F93B6F899A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72FDA97A-3884-4C79-9F62-0F93B6F899A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE4759D1-AA17-46C8-9C15-A6FC1CE50C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE4759D1-AA17-46C8-9C15-A6FC1CE50C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE4759D1-AA17-46C8-9C15-A6FC1CE50C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE4759D1-AA17-46C8-9C15-A6FC1CE50C00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75C9E7FF-60A9-42F5-BDAD-C9D0DFAC32AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75C9E7FF-60A9-42F5-BDAD-C9D0DFAC32AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75C9E7FF-60A9-42F5-BDAD-C9D0DFAC32AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75C9E7FF-60A9-42F5-BDAD-C9D0DFAC32AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}.Release|Any CPU.ActiveCfg = Release|Any CPU

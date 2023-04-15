@@ -3,6 +3,10 @@ using RateGames.Core.Services.Implementations;
 using RateGames.Core.Services.Interfaces;
 using RateGames.Core.Storages.Implementations;
 using RateGames.Core.Storages.Interfaces;
+using RateGames.Services.Implementations;
+using RateGames.Services.Interfaces;
+using RateGames.Storages.Implementations;
+using RateGames.Storages.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
