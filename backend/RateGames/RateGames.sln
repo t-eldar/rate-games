@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames", "RateGames\RateGames.csproj", "{822F71C4-AFA4-45C3-AA70-F51F50EBB459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames", "src\RateGames\RateGames.csproj", "{822F71C4-AFA4-45C3-AA70-F51F50EBB459}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Core", "Apicalypse.Core\Apicalypse.Core.csproj", "{575EB3A7-0523-45FD-B472-DD928D51B956}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Core", "src\Apicalypse.Core\Apicalypse.Core.csproj", "{575EB3A7-0523-45FD-B472-DD928D51B956}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Tests", "Apicalypse.Tests\Apicalypse.Tests.csproj", "{72FDA97A-3884-4C79-9F62-0F93B6F899A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Tests", "src\Apicalypse.Tests\Apicalypse.Tests.csproj", "{72FDA97A-3884-4C79-9F62-0F93B6F899A2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Common", "RateGames.Common\RateGames.Common.csproj", "{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Common", "src\RateGames.Common\RateGames.Common.csproj", "{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{31BFE3C9-89DA-47ED-9334-4B51DD91E729}"
 	ProjectSection(SolutionItems) = preProject
 		.csharpierrc.json = .csharpierrc.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{208290B5-BC1A-438A-A945-C59D5FC706D9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{208290B5-BC1A-438A-A945-C59D5FC706D9}"
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

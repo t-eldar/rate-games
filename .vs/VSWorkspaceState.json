@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\backend",
+    "\\backend\\RateGames",
+    "\\backend\\RateGames\\RateGames"
   ],
-  "SelectedNode": "\\RateGames.sln",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
