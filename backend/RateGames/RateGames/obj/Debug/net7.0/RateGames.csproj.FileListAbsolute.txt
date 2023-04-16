@@ -84,3 +84,4 @@ C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames\bin\
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames\bin\Debug\net7.0\Mono.TextTemplating.dll
 C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\urc0m\source\repos\web-apps\rate-games\backend\RateGames\RateGames\bin\Debug\net7.0\FluentValidation.dll
