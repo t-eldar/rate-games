@@ -11,6 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apicalypse.Tests", "Apicaly
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RateGames.Common", "RateGames.Common\RateGames.Common.csproj", "{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{31BFE3C9-89DA-47ED-9334-4B51DD91E729}"
+	ProjectSection(SolutionItems) = preProject
+		.csharpierrc.json = .csharpierrc.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{208290B5-BC1A-438A-A945-C59D5FC706D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +43,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{822F71C4-AFA4-45C3-AA70-F51F50EBB459} = {208290B5-BC1A-438A-A945-C59D5FC706D9}
+		{575EB3A7-0523-45FD-B472-DD928D51B956} = {208290B5-BC1A-438A-A945-C59D5FC706D9}
+		{72FDA97A-3884-4C79-9F62-0F93B6F899A2} = {208290B5-BC1A-438A-A945-C59D5FC706D9}
+		{60F5C69C-C67C-4F61-9A9A-A5EE3EB15883} = {208290B5-BC1A-438A-A945-C59D5FC706D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {170B5953-C534-424F-973A-2644FEB434BA}
