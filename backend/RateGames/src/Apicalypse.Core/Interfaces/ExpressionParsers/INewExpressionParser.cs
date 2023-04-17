@@ -2,6 +2,6 @@
 
 public interface INewExpressionParser
 {
-    string Parse(NewExpression expression);
-    string Parse(NewExpression expression, StringBuilder stringBuilder);
+	string Parse(NewExpression expression);
+	string Parse(NewExpression expression, StringBuilder stringBuilder);
 }

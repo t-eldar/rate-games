@@ -2,6 +2,6 @@
 
 public enum IncludeType
 {
-    EveryFromModel,
-    EveryFromDatabase
+	EveryFromModel,
+	EveryFromDatabase
 }

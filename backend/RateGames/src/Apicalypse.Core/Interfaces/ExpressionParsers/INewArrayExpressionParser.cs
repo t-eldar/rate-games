@@ -1,6 +1,6 @@
 ﻿namespace Apicalypse.Core.Interfaces.ExpressionParsers;
-public interface INewArrayExpressionParser 
+public interface INewArrayExpressionParser
 {
-    string Parse(NewArrayExpression expression);
-    string Parse(NewArrayExpression expression, StringBuilder stringBuilder);
+	string Parse(NewArrayExpression expression);
+	string Parse(NewArrayExpression expression, StringBuilder stringBuilder);
 }

@@ -2,7 +2,7 @@
 
 public interface IMethodCallExpressionParser
 {
-    string Parse(MethodCallExpression expression);  
-    string Parse(MethodCallExpression expression, StringBuilder stringBuilder);
+	string Parse(MethodCallExpression expression);
+	string Parse(MethodCallExpression expression, StringBuilder stringBuilder);
 }
 

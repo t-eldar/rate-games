@@ -2,6 +2,6 @@
 
 public enum SelectionMode
 {
-    Include,
-    Exclude,
+	Include,
+	Exclude,
 }

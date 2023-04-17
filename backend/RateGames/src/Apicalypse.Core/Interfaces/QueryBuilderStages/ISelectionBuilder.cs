@@ -24,5 +24,6 @@ public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
 	/// <returns></returns>
 	IFilterBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
-		SelectionMode selectionMode = SelectionMode.Include);
+		SelectionMode selectionMode = SelectionMode.Include
+	);
 }

@@ -11,9 +11,14 @@ namespace Apicalypse.Core.Implementations;
 internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 {
 	private readonly IQueryParser _parser;
+	private readonly IMemberInfoStorage _memberInfoStorage;
 	private readonly StringBuilder _stringBuilder = new();
 
-	public QueryBuilder(IQueryParser parser) => _parser = parser;
+	public QueryBuilder(IQueryParser parser, IMemberInfoStorage memberInfoStorage)
+	{
+		_parser = parser;
+		_memberInfoStorage = memberInfoStorage;
+	}
 
 	public IFilterBuilder<TEntity> Select(IncludeType includeType)
 	{
@@ -21,7 +26,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 		{
 			case IncludeType.EveryFromModel:
 			{
-				var props = typeof(TEntity).GetProperties();
+				var props = _memberInfoStorage.GetProperties<TEntity>();
 				_stringBuilder.Append(QueryKeywords.Fields);
 				_stringBuilder.Append(QueryChars.SpaceChar);
 				foreach (var prop in props)
@@ -46,7 +51,8 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 	}
 	public IFilterBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
-		SelectionMode selectionMode = SelectionMode.Include)
+		SelectionMode selectionMode = SelectionMode.Include
+	)
 	{
 		var parsed = _parser.Parse(selector);
 
