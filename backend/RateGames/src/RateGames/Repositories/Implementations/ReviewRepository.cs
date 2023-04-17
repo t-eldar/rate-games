@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using RateGames.DatabaseContext;
 using RateGames.Exceptions;
 using RateGames.Models.Entities;
-using RateGames.Models.Igdb;
 using RateGames.Models.Requests;
 using RateGames.Repositories.Interfaces;
 using RateGames.Services.Interfaces;
