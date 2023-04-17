@@ -1,5 +1,7 @@
 using Apicalypse.Core.Extensions;
 
+using FluentValidation;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,7 @@ using RateGames.Services.Implementations;
 using RateGames.Services.Interfaces;
 using RateGames.Storages.Implementations;
 using RateGames.Storages.Interfaces;
+using RateGames.Validators;
 
 var builder = WebApplication.CreateBuilder(args);	
 
@@ -61,6 +64,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 		return Task.CompletedTask;
 	};
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 
 builder.Services.AddControllers();
 

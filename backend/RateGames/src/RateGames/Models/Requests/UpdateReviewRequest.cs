@@ -1,4 +1,6 @@
-﻿using RateGames.Models.Entities;
+﻿using Azure.Core;
+
+using RateGames.Models.Entities;
 
 namespace RateGames.Models.Requests;
 
@@ -8,4 +10,11 @@ public record UpdateReviewRequest
 	public string? Title { get; set; }
 	public string? Description { get; set; }
 	public int? RatingId { get; set; }
+
+	public void UpdateReview(Review review)
+	{
+		review.Title = Title ?? review.Title;
+		review.Description = Description ?? review.Description;
+		review.RatingId = RatingId ?? review.RatingId;
+	}
 }

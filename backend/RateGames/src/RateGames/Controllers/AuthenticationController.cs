@@ -22,7 +22,7 @@ public class AuthenticationController : ControllerBase
 		_signInManager = signInManager;
 	}
 
-	[Route("/sign-up")]
+	[Route("sign-up")]
 	[HttpPost]
 	public async Task<IActionResult> SignUpAsync(SignUpRequest request)
 	{
@@ -43,7 +43,7 @@ public class AuthenticationController : ControllerBase
 		return signInResult.Succeeded ? Ok() : Unauthorized();
 	}
 
-	[Route("/sign-in")]
+	[Route("sign-in")]
 	[HttpPost]
 	public async Task<IActionResult> SignInAsync(SignInRequest request)
 	{

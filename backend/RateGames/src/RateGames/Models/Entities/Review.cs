@@ -7,6 +7,8 @@ public class Review
 	public required string Description { get; set; }
 	public required DateTime DateCreated { get; set; }
 
+	public required int GameId { get; set; }
+
 	public required string UserId { get; set; }
 	public User? User { get; set; }
 

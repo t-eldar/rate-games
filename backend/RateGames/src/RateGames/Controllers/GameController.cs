@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using RateGames.Models.Requests;
 using RateGames.Services.Interfaces;
 
 namespace RateGames.Controllers;
@@ -7,7 +8,7 @@ namespace RateGames.Controllers;
 /// <summary>
 /// Controller for getting games from <see href="igdb.com"/>
 /// </summary>
-[Route("/games")]
+[Route("games")]
 [ApiController]
 public class GameController : ControllerBase
 {
@@ -15,7 +16,7 @@ public class GameController : ControllerBase
 
 	public GameController(IGameService gameService) => _gameService = gameService;
 
-	[Route("/{id}")]
+	[Route("{id}")]
 	[HttpGet]
 	public async Task<IActionResult> GetByIdAsync(int id)
 	{
@@ -26,7 +27,7 @@ public class GameController : ControllerBase
 			: NotFound();
 	}
 
-	[Route("/by-genres")]
+	[Route("by-genres")]
 	[HttpGet]
 	public async Task<IActionResult> GetByGenresAsync(GetGamesByForeignIdsRequest request)
 	{

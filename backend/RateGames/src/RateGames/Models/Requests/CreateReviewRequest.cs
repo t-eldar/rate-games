@@ -4,18 +4,20 @@ namespace RateGames.Models.Requests;
 
 public record CreateReviewRequest
 {
-	public required string Title { get; set; }
-	public required string Description { get; set; }
-	public required string UserId { get; set; }
-	public required int RatingId { get; set; }
+	public required string Title { get; init; }
+	public required string Description { get; init; }
+	public required int RatingId { get; init; }
+	public required int GameId { get; init; }
+	public required string UserId { get; init; }
 
 	public Review ToReview(DateTime dateCreated) =>
 		new()
 		{
+			Title = Title,
 			Description = Description,
 			DateCreated = dateCreated,
 			RatingId = RatingId,
-			Title = Title,
+			GameId = GameId,
 			UserId = UserId
 		};
 }

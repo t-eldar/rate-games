@@ -3,7 +3,7 @@
 namespace RateGames.Controllers;
 
 [ApiController]
-[Route("/reviews")]
+[Route("reviews")]
 public class ReviewController
 {
 
