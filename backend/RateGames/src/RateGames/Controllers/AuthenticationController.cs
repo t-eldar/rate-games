@@ -24,7 +24,6 @@ public class AuthenticationController : ControllerBase
 
 	[Route("/sign-up")]
 	[HttpPost]
-	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> SignUpAsync(SignUpRequest request)
 	{
 		var user = new User 
@@ -46,7 +45,6 @@ public class AuthenticationController : ControllerBase
 
 	[Route("/sign-in")]
 	[HttpPost]
-	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> SignInAsync(SignInRequest request)
 	{
 		var user = await _userManager.FindByEmailAsync(request.UsernameOrEmail)
@@ -63,7 +61,6 @@ public class AuthenticationController : ControllerBase
 
 	[Route("/sign-out")]
 	[HttpGet]
-	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> SignOutAsync(HttpContext context)
 	{
 		if (context.User is null)

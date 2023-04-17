@@ -44,6 +44,24 @@ builder.Services
 	})
 	.AddEntityFrameworkStores<ApplicationContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.Cookie.SameSite = SameSiteMode.None;
+	options.LoginPath = string.Empty;
+	options.AccessDeniedPath = string.Empty;
+
+	options.Events.OnRedirectToAccessDenied = context =>
+	{
+		context.Response.StatusCode = StatusCodes.Status403Forbidden;
+		return Task.CompletedTask;
+	};
+	options.Events.OnRedirectToLogin = context =>
+	{
+		context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+		return Task.CompletedTask;
+	};
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();

@@ -10,5 +10,8 @@ public class ApplicationContext : IdentityDbContext<User>, IApplicationContext
 	public DbSet<Rating> Ratings { get; set; }
 	public DbSet<Review> Reviews { get; set; }
 	public ApplicationContext(DbContextOptions<ApplicationContext> options)
-		: base(options) { }
+		: base(options) 
+	{
+		Database.EnsureCreated();
+	}
 }
