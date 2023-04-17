@@ -30,7 +30,7 @@ public class IgdbService : IIgdbService
 
 	public async Task<T?> GetAsync<T>(string query, string endpoint)
 	{
-		_logger.Log(LogLevel.Information, "Apicalypse query", query);
+		_logger.LogInformation($"Apicalypse query \n {query}");
 
 		var token = await _twitchTokenService.GetTokenAsync();
 

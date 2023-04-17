@@ -7,17 +7,11 @@ namespace RateGames.Services.Interfaces;
 /// </summary>
 public interface IGameService
 {
-    Task<Game?> GetById(int id);
+	Task<Game?> GetByIdAsync(int id);
 
-    Task<IEnumerable<Game>?> GetByPlatforms(
-        IEnumerable<int> platformIds,
-        int limit = 10,
-        int offset = 0
-    );
+	Task<IEnumerable<Game>?> GetBySearchAsync(string searchQuery, int limit = 10, int offset = 0);
 
-    Task<IEnumerable<Game>?> GetBySearch(string searchQuery, int limit = 10, int offset = 0);
-
-    Task<IEnumerable<Game>?> GetByGenre(int genreId, int limit = 10, int offset = 0);
-
-    Task<IEnumerable<Game>?> GetByGameMode(int gamemodeId, int limit = 10, int offset = 0);
+	Task<IEnumerable<Game>?> GetByAllPlatformsAsync(IEnumerable<int> platformIds, int limit = 10, int offset = 0);
+	Task<IEnumerable<Game>?> GetByAllGenresAsync(IEnumerable<int> genreIds, int limit = 10, int offset = 0);
+	Task<IEnumerable<Game>?> GetByAllGameModesAsync(IEnumerable<int> gamemodeIds, int limit = 10, int offset = 0);
 }
