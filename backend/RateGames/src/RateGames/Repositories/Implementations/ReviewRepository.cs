@@ -78,35 +78,28 @@ public class ReviewRepository : IReviewRepository
 		await _applicationContext.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<Review>?> GetAllAsync(
-		int limit = IReviewRepository.Limit, int offset = 0
-	) => await _applicationContext.Reviews
+	public async Task<IEnumerable<Review>?> GetAllAsync(int limit, int offset) => 
+		await _applicationContext.Reviews
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
-	public async Task<IEnumerable<Review>?> GetByGameAsync(
-		int gameId,
-		int limit = IReviewRepository.Limit,
-		int offset = 0
-	) => await _applicationContext.Reviews
+	public async Task<IEnumerable<Review>?> GetByGameAsync(int gameId,int limit,int offset) => 
+		await _applicationContext.Reviews
 			.Where(r => r.GameId == gameId)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
 
-	public async Task<IEnumerable<Review>?> GetByUserAsync(
-		string userId, 
-		int limit = IReviewRepository.Limit, 
-		int offset = 0
-	) => await _applicationContext.Reviews
+	public async Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit, int offset) => 
+		await _applicationContext.Reviews
 			.Where(r => r.UserId == userId)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
 
-	public async Task<Review?> GetByIdAsync(int id) => await _applicationContext.Reviews
-		.FirstOrDefaultAsync(r => r.Id == id);
+	public async Task<Review?> GetByIdAsync(int id) => 
+		await _applicationContext.Reviews.FirstOrDefaultAsync(r => r.Id == id);
 }

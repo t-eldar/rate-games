@@ -8,10 +8,9 @@ namespace RateGames.Repositories.Interfaces;
 /// </summary>
 public interface IReviewRepository
 {
-	const int Limit = 100;
-	Task<IEnumerable<Review>?> GetAllAsync(int limit = Limit, int offset = 0);
-	Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit = Limit, int offset = 0);
-	Task<IEnumerable<Review>?> GetByGameAsync(int gameId, int limit = Limit, int offset = 0);
+	Task<IEnumerable<Review>?> GetAllAsync(int limit, int offset);
+	Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit, int offset);
+	Task<IEnumerable<Review>?> GetByGameAsync(int gameId, int limit, int offset);
 	Task<Review?> GetByIdAsync(int id);
 
 	Task<Review> CreateAsync(CreateReviewRequest request);

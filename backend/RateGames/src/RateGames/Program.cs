@@ -2,36 +2,33 @@ using Apicalypse.Core.Extensions;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using RateGames.Authorization;
 using RateGames.DatabaseContext;
 using RateGames.Models.Entities;
 using RateGames.Options;
+using RateGames.Repositories.Implementations;
+using RateGames.Repositories.Interfaces;
 using RateGames.Services.Implementations;
 using RateGames.Services.Interfaces;
 using RateGames.Storages.Implementations;
 using RateGames.Storages.Interfaces;
 using RateGames.Validators;
 
-var builder = WebApplication.CreateBuilder(args);	
+var builder = WebApplication.CreateBuilder(args);
 
 var dbConnection = builder.Configuration.GetConnectionString("RateGamesDb");
 
-// Add services to the container.
-
-builder.Services.Configure<TwitchOptions>(
-	builder.Configuration.GetSection(TwitchOptions.Twitch));
+builder.Services.Configure<TwitchOptions>(builder.Configuration.GetSection(TwitchOptions.Twitch));
 
 builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(builder =>
 	{
-		builder
-			.WithOrigins("https://localhost:3000")
-			.AllowCredentials()
-			.AllowAnyMethod()
-			.AllowAnyHeader();
+		builder.WithOrigins("https://localhost:3000").AllowCredentials().AllowAnyMethod().AllowAnyHeader();
 	});
 });
 
@@ -40,13 +37,13 @@ builder.Services.AddDbContext<IApplicationContext, ApplicationContext>(options =
 	options.UseSqlServer(dbConnection);
 });
 
+// Identity.
 builder.Services
 	.AddIdentity<User, IdentityRole>(options =>
 	{
 		options.User.RequireUniqueEmail = true;
 	})
 	.AddEntityFrameworkStores<ApplicationContext>();
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
 	options.Cookie.SameSite = SameSiteMode.None;
@@ -64,6 +61,20 @@ builder.Services.ConfigureApplicationCookie(options =>
 		return Task.CompletedTask;
 	};
 });
+
+// Authorization
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy(AuthorizationPolicies.SameAuthor, policy =>
+	{
+		policy.Requirements.Add(new SameAuthorRequirement());
+		policy.RequireAuthenticatedUser();
+	});
+});
+builder.Services.AddSingleton<IAuthorizationHandler, SameAuthorAuthorizationHandler>();
+
+// Repositories.
+builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 
@@ -84,6 +95,15 @@ builder.Services.AddHttpClient<IIgdbService, IgdbService>();
 builder.Services.AddTransient<IGameService, GameService>();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+	app.UseExceptionHandler("/error-development");
+}
+else
+{
+	app.UseExceptionHandler("/error");
+}
 
 if (app.Environment.IsDevelopment())
 {
