@@ -1,6 +1,8 @@
-﻿namespace RateGames.Models.Entities;
+﻿using RateGames.Models.Contracts;
 
-public class Review
+namespace RateGames.Models.Entities;
+
+public class Review : IResource
 {
 	public int Id { get; set; }
 	public required string Title { get; set; }
