@@ -22,14 +22,14 @@ public class GameController : ControllerBase
 	{
 		var game = await _gameService.GetByIdAsync(id);
 
-		return game is not null
-			? Ok(game)
-			: NotFound();
+		return game is null
+			? NotFound()
+			: Ok(game);
 	}
 
 	[Route("by-genres")]
 	[HttpGet]
-	public async Task<IActionResult> GetByGenresAsync(GetGamesByForeignIdsRequest request)
+	public async Task<IActionResult> GetByGenresAsync(int[] genreIds)
 	{
 		return NotFound();
 	}

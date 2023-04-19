@@ -26,11 +26,7 @@ public class AuthenticationController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> SignUpAsync(SignUpRequest request)
 	{
-		var user = new User 
-		{ 
-			UserName = request.Username, 
-			Email = request.Email, 
-		};
+		var user = request.ToUser();
 
 		var registerResult = await _userManager.CreateAsync(user, request.Password);
 		if (!registerResult.Succeeded)
@@ -61,9 +57,9 @@ public class AuthenticationController : ControllerBase
 
 	[Route("/sign-out")]
 	[HttpGet]
-	public async Task<IActionResult> SignOutAsync(HttpContext context)
+	public async Task<IActionResult> SignOutAsync()
 	{
-		if (context.User is null)
+		if (HttpContext.User is null)
 		{
 			return Unauthorized();
 		}
