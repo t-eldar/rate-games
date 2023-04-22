@@ -1,4 +1,5 @@
-﻿using Apicalypse.Core.Interfaces;
+﻿using Apicalypse.Core.Enums;
+using Apicalypse.Core.Interfaces;
 
 using RateGames.Common.Extensions;
 using RateGames.Models.Igdb;
@@ -41,7 +42,7 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
 			.Find(searchQuery)
 			.Skip(offset)
 			.Take(limit)
@@ -59,7 +60,7 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
 			.Where(game => game.Platforms!.ContainsAll(platformIds))
 			.Skip(offset)
 			.Take(limit)
@@ -76,7 +77,7 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
 			.Where(g => g.GameModes!.ContainsAny(gamemodeIds))
 			.Skip(offset)
 			.Take(limit)
@@ -94,7 +95,7 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
 			.Where(g => g.Genres!.ContainsAny(genreIds))
 			.Skip(offset)
 			.Take(limit)
