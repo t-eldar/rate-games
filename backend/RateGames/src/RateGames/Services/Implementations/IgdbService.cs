@@ -20,7 +20,8 @@ public class IgdbService : IIgdbService
 		HttpClient httpClient,
 		ITwitchTokenService twitterTokenService,
 		IOptions<TwitchOptions> options,
-		ILogger<IgdbService> logger)
+		ILogger<IgdbService> logger
+	)
 	{
 		_httpClient = httpClient;
 		_twitchTokenService = twitterTokenService;

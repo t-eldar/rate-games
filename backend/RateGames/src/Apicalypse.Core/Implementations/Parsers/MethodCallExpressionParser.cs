@@ -25,8 +25,8 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 	};
 	private readonly string[] _includeMethods = new[]
 	{
-		nameof(IncludeMarkerExtensions.IncludeProperty),
-		nameof(IncludeMarkerExtensions.IncludeAllProperties)
+		nameof(EntityMarkerExtensions.IncludeProperty),
+		nameof(EntityMarkerExtensions.IncludeAllProperties)
 	};
 
 	public MethodCallExpressionParser(
@@ -62,8 +62,8 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 
 	private string ParseIncludeMethod(MethodCallExpression expression, StringBuilder stringBuilder) => expression.Method.Name switch
 	{
-		nameof(IncludeMarkerExtensions.IncludeAllProperties) => ParseIncludeAllProperties(expression, stringBuilder),
-		nameof(IncludeMarkerExtensions.IncludeProperty) => ParseIncludeOneProperty(expression, stringBuilder),
+		nameof(EntityMarkerExtensions.IncludeAllProperties) => ParseIncludeAllProperties(expression, stringBuilder),
+		nameof(EntityMarkerExtensions.IncludeProperty) => ParseIncludeOneProperty(expression, stringBuilder),
 		_ => throw new ArgumentException($"Method named {expression.Method.Name} is not available to perform"),
 	};
 	private string ParseEnumerableMethod(MethodCallExpression expression, StringBuilder stringBuilder)

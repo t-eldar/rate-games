@@ -46,6 +46,7 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 
 		var result = stringBuilder.ToString();
 		stringBuilder.Clear();
+
 		return result;
 	}
 

@@ -13,7 +13,7 @@ public class Company : IEntity
     /// </summary>
     public int? Country { get; set; }
     public int? StartDate { get; set; }
-    public Image? Logo { get; set; }
+    public IdOr<Image>? Logo { get; set; }
     public IEnumerable<IdOr<Game>>? Published { get; set; }
     public IEnumerable<IdOr<Game>>? Developed { get; set; }
 }

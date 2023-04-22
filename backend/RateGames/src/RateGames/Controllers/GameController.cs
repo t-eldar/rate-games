@@ -30,7 +30,7 @@ public class GameController : ControllerBase
 
 	[Route("by-genres")]
 	[HttpGet]
-	public async Task<IActionResult> GetByGenresAsync(int[] genreIds)
+	public async Task<IActionResult> GetByGenresAsync([FromQuery] int[] genreIds)
 	{
 		var games = await _gameService.GetByAllGenresAsync(genreIds);
 		
@@ -41,7 +41,7 @@ public class GameController : ControllerBase
 
 	[Route("by-game-modes")]
 	[HttpGet]
-	public async Task<IActionResult> GetByGameModesAsync(int[] gameModeIds)
+	public async Task<IActionResult> GetByGameModesAsync([FromQuery] int[] gameModeIds)
 	{
 		var games = await _gameService.GetByAllGameModesAsync(gameModeIds);
 
@@ -52,7 +52,7 @@ public class GameController : ControllerBase
 
 	[Route("by-platforms")]
 	[HttpGet]
-	public async Task<IActionResult> GetByPlatformsAsync(int[] platformIds)
+	public async Task<IActionResult> GetByPlatformsAsync([FromQuery] int[] platformIds)
 	{
 		var games = await _gameService.GetByAllPlatformsAsync(platformIds);
 
@@ -66,6 +66,17 @@ public class GameController : ControllerBase
 	public async Task<IActionResult> GetBySearchAsync(string search)
 	{
 		var games = await _gameService.GetBySearchAsync(search);
+
+		return games is null
+			? NotFound()
+			: Ok(games);
+	}
+
+	[Route("by-ids")]
+	[HttpGet]
+	public async Task<IActionResult> GetByIdsAsync([FromQuery] int[] ids)
+	{
+		var games = await _gameService.GetByIdsAsync(ids);
 
 		return games is null
 			? NotFound()

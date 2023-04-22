@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using RateGames.Authorization;
 using RateGames.DatabaseContext;
+using RateGames.Extensions;
 using RateGames.Models.Entities;
 using RateGames.Options;
 using RateGames.Repositories.Implementations;
@@ -22,13 +23,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dbConnection = builder.Configuration.GetConnectionString("RateGamesDb");
 
-builder.Services.Configure<TwitchOptions>(builder.Configuration.GetSection(TwitchOptions.Twitch));
+builder.Services.Configure<TwitchOptions>(
+	builder.Configuration.GetSection(TwitchOptions.Twitch));
 
 builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(builder =>
 	{
-		builder.WithOrigins("https://localhost:3000").AllowCredentials().AllowAnyMethod().AllowAnyHeader();
+		builder
+			.WithOrigins("https://localhost:3000")
+			.AllowCredentials()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
 	});
 });
 
@@ -62,7 +68,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 	};
 });
 
-// Authorization
+// Authorization.
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy(AuthorizationPolicies.SameAuthor, policy =>
@@ -76,6 +82,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, SameAuthorAuthorizationHand
 // Repositories.
 builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 
+// Other.
 builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 
 builder.Services.AddControllers();
@@ -86,29 +93,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
 builder.Services.AddApicalypseQueryBuilderCreator();
-
 builder.Services.AddSingleton<ITokenStorage, TokenStorage>();
-
-builder.Services.AddHttpClient<ITwitchTokenService, TwitchTokenService>();
-builder.Services.AddHttpClient<IIgdbService, IgdbService>();
-
-builder.Services.AddTransient<IGameService, GameService>();
+builder.Services.AddIgdbServices();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+	app.UseSwagger();
+	app.UseSwaggerUI();
 	app.UseExceptionHandler("/error-development");
 }
 else
 {
 	app.UseExceptionHandler("/error");
-}
-
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

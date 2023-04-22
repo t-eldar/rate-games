@@ -1,4 +1,5 @@
 ﻿using RateGames.Common.Contracts;
+using RateGames.Common.Utils;
 
 namespace RateGames.Models.Igdb;
 
@@ -9,5 +10,5 @@ public class Platform : IEntity
     public string? Name { get; set; }
     public int? Generation { get; set; }
     public string? Summary { get; set; }
-    public Image? PlatformLogo { get; set; }
+    public IdOr<Image>? PlatformLogo { get; set; }
 }

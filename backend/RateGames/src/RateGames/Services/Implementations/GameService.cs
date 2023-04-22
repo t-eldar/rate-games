@@ -105,4 +105,22 @@ public class GameService : IGameService
 
 		return response;
 	}
+
+	public async Task<IEnumerable<Game>?> GetByIdsAsync(
+		IEnumerable<int> ids,
+		int limit = 10,
+		int offset = 0
+	)
+	{
+		var query = _queryBuilderCreator.CreateFor<Game>()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Where(g => g.Id.ContainsAny<Game>(ids))
+			.Skip(offset)
+			.Take(limit)
+			.Build();
+
+		var response = await _igdbService.GetAsync<IEnumerable<Game>>(query, Endpoint);
+
+		return response;
+	}
 }
