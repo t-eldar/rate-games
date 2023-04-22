@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
+using RateGames.Exceptions;
+
 namespace RateGames.Controllers;
 
 /// <summary>
@@ -29,6 +31,7 @@ public class ErrorController : ControllerBase
 		var result = exception switch
 		{
 			ValidationException => ValidationProblem(),
+			EntityNotFoundException => NotFound(),
 			_ => Problem(),
 		};
 
