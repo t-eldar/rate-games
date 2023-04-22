@@ -21,7 +21,7 @@ public class PlatformService : IPlatformService
 		_queryBuilderCreator = queryBuilderCreator;
 	}
 
-	public async Task<Platform?> GetById(int id)
+	public async Task<Platform?> GetByIdAsync(int id)
 	{
 		var query = _queryBuilderCreator.CreateFor<Platform>()
 			.Select()

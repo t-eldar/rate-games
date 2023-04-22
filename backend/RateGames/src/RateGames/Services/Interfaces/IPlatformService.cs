@@ -7,5 +7,5 @@ namespace RateGames.Services.Interfaces;
 /// </summary>
 public interface IPlatformService
 {
-	Task<Platform?> GetById(int id);
+	Task<Platform?> GetByIdAsync(int id);
 }

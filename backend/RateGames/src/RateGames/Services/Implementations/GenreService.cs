@@ -8,7 +8,6 @@ namespace RateGames.Services.Implementations;
 /// <inheritdoc cref="IGenreService"/>
 public class GenreService : IGenreService
 {
-
 	private const string Endpoint = Endpoints.Genres;
 
 	private readonly IIgdbService _igdbService;
