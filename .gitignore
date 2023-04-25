@@ -1,5 +1,7 @@
 ###Frontend###
 
+*.pem
+
 # Logs
 logs
 *.log
