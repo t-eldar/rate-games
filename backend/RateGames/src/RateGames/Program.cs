@@ -83,6 +83,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, SameAuthorAuthorizationHand
 builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 
 // Other.
+builder.Services.AddTransient<IUserInfoResolver, UserInfoResolver>();
 builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 
 builder.Services.AddControllers();

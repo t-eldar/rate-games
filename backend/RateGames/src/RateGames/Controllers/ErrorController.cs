@@ -32,6 +32,7 @@ public class ErrorController : ControllerBase
 		{
 			ValidationException => ValidationProblem(),
 			EntityNotFoundException => NotFound(),
+			InvalidClaimsException => Forbid(),
 			_ => Problem(),
 		};
 

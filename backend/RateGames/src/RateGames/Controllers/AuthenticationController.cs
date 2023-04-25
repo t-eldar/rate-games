@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using RateGames.Models.Entities;
 using RateGames.Models.Requests;
+using RateGames.Services.Interfaces;
 
 namespace RateGames.Controllers;
 
@@ -15,11 +17,17 @@ public class AuthenticationController : ControllerBase
 {
 	private readonly UserManager<User> _userManager;
 	private readonly SignInManager<User> _signInManager;
+	private readonly IUserInfoResolver _userInfoResolver;
 
-	public AuthenticationController(UserManager<User> userManager, SignInManager<User> signInManager)
+	public AuthenticationController(
+		UserManager<User> userManager, 
+		SignInManager<User> signInManager, 
+		IUserInfoResolver userInfoResolver
+	)
 	{
 		_userManager = userManager;
 		_signInManager = signInManager;
+		_userInfoResolver = userInfoResolver;
 	}
 
 	[Route("sign-up")]
@@ -67,5 +75,20 @@ public class AuthenticationController : ControllerBase
 		await _signInManager.SignOutAsync();
 
 		return Ok();
+	}
+
+	[Route("/user-info")]
+	[Authorize]
+	[HttpGet]
+	public async Task<IActionResult> GetUserInfoAsync()
+	{
+		var principal = HttpContext.User;
+		if (principal?.Claims is null || (!principal?.Identity?.IsAuthenticated ?? true))
+		{
+			return Unauthorized();
+		}
+		var userInfo = await _userInfoResolver.ResolveAsync(principal!.Claims);
+
+		return Ok(userInfo);
 	}
 }
