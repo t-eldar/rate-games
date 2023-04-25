@@ -17,6 +17,10 @@
       "version": "detect"
     },
     "import/resolver": {
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".ts", ".js", ".jsx", ".json", "tsx"]
+      },
       "node": {
         "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
@@ -29,7 +33,7 @@
       {
         "arrays": "only-multiline",
         "objects": "only-multiline",
-        "imports": "never",
+        "imports": "only-multiline",
         "exports": "never",
         "functions": "never"
       }
