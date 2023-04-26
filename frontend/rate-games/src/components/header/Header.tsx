@@ -31,9 +31,9 @@ export const Header = ({ onOpen, avatarUrl, ...rest }: HeaderProps) => {
       px={{ base: 4, md: 4 }}
       height='20'
       alignItems='center'
-      bg={useColorModeValue('purple.200', 'purple.900')}
+      bg={useColorModeValue('major.200', 'major.800')}
       borderBottomWidth='1px'
-      borderBottomColor={useColorModeValue('purple.200', 'purple.700')}
+      borderBottomColor={useColorModeValue('minor.200', 'minor.700')}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
     >
@@ -69,7 +69,7 @@ type HeaderMenuProps = ThemingProps<'Menu'> & {
 const HeaderMenu = ({ avatarUrl }: HeaderMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuButtonRotation, setMenuButtonRotation] = useState(0);
-  
+
   useEffect(() => {
     const rotation = isOpen ? 90 : 0;
     setMenuButtonRotation(rotation);

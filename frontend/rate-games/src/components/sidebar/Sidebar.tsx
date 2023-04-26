@@ -29,7 +29,7 @@ export const Sidebar = ({ children, linkItems }: SidebarProps) => {
   const avatarUrl =
     'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9';
   return (
-    <Box minH='100vh' bg={useColorModeValue('purple.100', 'purple.800')}>
+    <Box minH='100vh' bg={useColorModeValue('major.100', 'major.900')}>
       <SidebarContent
         linkItems={linkItems}
         onClose={() => onClose}
@@ -69,9 +69,9 @@ const SidebarContent = ({
   return (
     <Box
       transition='3s ease'
-      bg={useColorModeValue('purple.200', 'purple.900')}
+      bg={useColorModeValue('major.200', 'major.800')}
       borderRight='1px'
-      borderRightColor={useColorModeValue('purple.300', 'purple.700')}
+      borderRightColor={useColorModeValue('minor.200', 'minor.700')}
       w={{ base: 'full', md: 60 }}
       pos='fixed'
       h='full'
@@ -111,8 +111,9 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
         borderRadius='lg'
         cursor='pointer'
         _hover={{
-          bg: 'purple.400',
+          bg: useColorModeValue('major.400', 'major.600'),
           color: 'white',
+          fontWeight: 'semibold',
         }}
         {...rest}
       >

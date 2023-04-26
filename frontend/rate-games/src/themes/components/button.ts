@@ -4,11 +4,19 @@ import { mode } from '@chakra-ui/theme-tools';
 export const buttonTheme = defineStyleConfig({
   variants: {
     primary: (props: StyleFunctionProps) => ({
-      colorScheme: 'main',
-      bg: mode('main.200', 'main.900')(props),
-      color: mode('main.900', 'main.200')(props),
+      colorScheme: 'major',
+      bg: mode('major.200', 'major.800')(props),
+      color: mode('major.900', 'major.200')(props),
       _hover: {
-        bg: mode('main.300', 'main.800')(props),
+        bg: mode('major.300', 'major.700')(props),
+      },
+    }),
+    secondary: (props: StyleFunctionProps) => ({
+      colorScheme: 'minor',
+      bg: mode('minor.600', 'minor.500')(props),
+      color: mode('white', 'black')(props),
+      _hover: {
+        bg: mode('minor.700', 'minor.300')(props),
       },
     }),
   },

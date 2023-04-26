@@ -10,9 +10,9 @@ const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(
 );
 
 const defaultColors = (props: StyleFunctionProps) => ({
-  colorScheme: 'main',
-  bg: mode('main.200', 'main.900')(props),
-  color: mode('main.900', 'main.200')(props),
+  colorScheme: 'major',
+  bg: mode('major.200', 'major.800')(props),
+  color: mode('major.900', 'major.200')(props),
 });
 
 const variants = {
@@ -22,13 +22,13 @@ const variants = {
       px: 2,
       borderRadius: 'md',
       _hover: {
-        bg: mode('main.300', 'main.800')(props),
+        bg: mode('major.300', 'major.700')(props),
       },
     },
     list: {
       // this will style the MenuList component
       ...defaultColors(props),
-      borderColor: mode('main.300', 'main.800')(props),
+      borderColor: mode('minor.300', 'minor.800')(props),
       py: '4',
       boxShadow: 'md',
       borderRadius: 'xl',
@@ -36,8 +36,8 @@ const variants = {
     item: {
       ...defaultColors(props),
       _hover: {
-        bg: mode('main.400', 'main.700')(props),
-        color: mode('main.100', 'main.900')(props),
+        bg: mode('major.400', 'major.700')(props),
+        color: "white",
         fontWeight: "semibold"
       },
     },
@@ -47,7 +47,7 @@ const variants = {
       },
     },
     divider: {
-      colorScheme: 'main',
+      colorScheme: 'minor',
     },
   }),
 };

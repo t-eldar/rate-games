@@ -4,13 +4,23 @@ import {
   Route,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { Layout } from '@/components/layout';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '@/themes';
+import { Layout } from '@/components/layout';
+import { SignInForm } from '@/components/forms/sign-in';
+import { SignUpForm } from '@/components/forms/sign-up-form';
 
 export const App = () => {
   const router = createBrowserRouter(
-    createRoutesFromElements(<Route path='/' element={<Layout />}></Route>)
+    createRoutesFromElements(
+      <>
+        <Route path='/' element={<Layout />}>
+          <Route path='/sign-in' element={<SignInForm />} />
+          <Route path='/sign-up' element={<SignUpForm />} />
+        </Route>
+        <Route path='/test' element={<SignInForm />} />
+      </>
+    )
   );
   return (
     <>
