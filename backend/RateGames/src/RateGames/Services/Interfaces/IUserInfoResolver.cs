@@ -9,5 +9,5 @@ namespace RateGames.Services.Interfaces;
 /// </summary>
 public interface IUserInfoResolver
 {
-	Task<UserInfo> ResolveAsync(IEnumerable<Claim> claims);
+	Task<UserInfoResponse> ResolveAsync(IEnumerable<Claim> claims);
 }

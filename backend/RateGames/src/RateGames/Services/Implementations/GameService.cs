@@ -11,7 +11,7 @@ namespace RateGames.Services.Implementations;
 public class GameService : IGameService
 {
 	private const string Endpoint = Endpoints.Games;
-	
+
 	private readonly IIgdbService _igdbService;
 	private readonly IQueryBuilderCreator _queryBuilderCreator;
 
@@ -27,6 +27,25 @@ public class GameService : IGameService
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
 			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				PlatformLogos = g.Platforms!.IncludeProperty(
+					p => p.Value!.PlatformLogo!.Value!.Url
+				),
+				Screenshots = g.Screenshots!.IncludeProperty(s => s.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				InvolvedCompanies = g.InvolvedCompanies!.IncludeAllProperties(),
+				CompanyNames = g.InvolvedCompanies!.IncludeProperty(
+					 g => g.Value!.Company!.Name
+				),
+				CompanyLogos = g.InvolvedCompanies!.IncludeProperty(
+					 g => g.Value!.Company!.Logo!.Value!.Url
+				),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineLogos = g.GameEngines!.IncludeProperty(ge => ge.Value!.Logo!.Value!.Url),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(g => g.Id == id)
 			.Build();
 
@@ -71,8 +90,8 @@ public class GameService : IGameService
 		return response;
 	}
 	public async Task<IEnumerable<Game>?> GetByAllGameModesAsync(
-		IEnumerable<int>  gamemodeIds, 
-		int limit = 10, 
+		IEnumerable<int> gamemodeIds,
+		int limit = 10,
 		int offset = 0
 	)
 	{
@@ -89,8 +108,8 @@ public class GameService : IGameService
 	}
 
 	public async Task<IEnumerable<Game>?> GetByAllGenresAsync(
-		IEnumerable<int> genreIds, 
-		int limit = 10, 
+		IEnumerable<int> genreIds,
+		int limit = 10,
 		int offset = 0
 	)
 	{

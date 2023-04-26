@@ -14,6 +14,9 @@ public static class EntityMarkerExtensions
 	/// <returns>Unchanged entity</returns>
 	public static T IncludeAllProperties<T>(this T entity)
 		where T : IEntity => entity;
+	/// <inheritdoc cref="IncludeAllProperties{T}(T)"/>
+	public static IEnumerable<T> IncludeAllProperties<T>(this IEnumerable<T> entity)
+		where T : IEntity => entity;
 
 	/// <summary>
 	/// Use for including selected properties in query.
@@ -21,11 +24,18 @@ public static class EntityMarkerExtensions
 	/// <typeparam name="T">Entity type</typeparam>
 	/// <param name="entity"></param>
 	/// <returns>Unchanged entity</returns>
+	public static TEntity IncludeProperty<TEntity, TProp>(
+		this TEntity source,
+		Expression<Func<TEntity, TProp>> selector
+	)
+		where TEntity : IEntity => source;
+	/// <inheritdoc cref="IncludeProperty{TEntity, TProp}(TEntity, Expression{Func{TEntity, TProp}})"/>
 	public static IEnumerable<TEntity> IncludeProperty<TEntity, TProp>(
 		this IEnumerable<TEntity> source,
 		Expression<Func<TEntity, TProp>> selector
 	)
 		where TEntity : IEntity => source;
+
 
 	/// <summary>
 	/// Use for making filter queries. Instead of writing Id == values.

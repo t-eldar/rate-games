@@ -4,7 +4,7 @@ using Apicalypse.Core.Enums;
 
 namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
 
-public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
+public interface ISelectionBuilder<TEntity> : IIncludingBuilder<TEntity>
 {
 	/// <summary>
 	/// Selects all properties of model if <paramref name="includeType"/> EveryFromModel.
@@ -12,7 +12,7 @@ public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
 	/// </summary>
 	/// <param name="includeType"></param>
 	/// <returns></returns>
-	IFilterBuilder<TEntity> Select(IncludeType includeType = IncludeType.EveryFromModel);
+	IIncludingBuilder<TEntity> Select(IncludeType includeType = IncludeType.EveryFromModel);
 
 	/// <summary>
 	/// Selects properties passed via <paramref name="selector"/> expression. 
@@ -22,7 +22,7 @@ public interface ISelectionBuilder<TEntity> : IFilterBuilder<TEntity>
 	/// <param name="selector"></param>
 	/// <param name="selectionMode"></param>
 	/// <returns></returns>
-	IFilterBuilder<TEntity> Select<TProp>(
+	IIncludingBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
 		SelectionMode selectionMode = SelectionMode.Include
 	);

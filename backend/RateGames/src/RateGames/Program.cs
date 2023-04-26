@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 using Apicalypse.Core.Extensions;
 
 using FluentValidation;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using RateGames.Authorization;
+using RateGames.Common.Converters;
 using RateGames.DatabaseContext;
 using RateGames.Extensions;
 using RateGames.Models.Entities;
@@ -86,7 +89,12 @@ builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
 builder.Services.AddTransient<IUserInfoResolver, UserInfoResolver>();
 builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 
-builder.Services.AddControllers();
+builder.Services
+	.AddControllers()
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.Converters.Add(new IdOrConverterFactory());
+	});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

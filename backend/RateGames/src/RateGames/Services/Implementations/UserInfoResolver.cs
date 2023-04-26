@@ -15,7 +15,7 @@ public class UserInfoResolver : IUserInfoResolver
 	private readonly UserManager<User> _userManager;
 	public UserInfoResolver(UserManager<User> userManager) => _userManager = userManager;
 
-	public async Task<UserInfo> ResolveAsync(IEnumerable<Claim> claims)
+	public async Task<UserInfoResponse> ResolveAsync(IEnumerable<Claim> claims)
 	{
 		ArgumentNullException.ThrowIfNull(claims);
 

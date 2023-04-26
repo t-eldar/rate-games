@@ -20,7 +20,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 		_memberInfoStorage = memberInfoStorage;
 	}
 
-	public IFilterBuilder<TEntity> Select(IncludeType includeType)
+	public IIncludingBuilder<TEntity> Select(IncludeType includeType)
 	{
 		switch (includeType)
 		{
@@ -49,12 +49,17 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			}
 		}
 	}
-	public IFilterBuilder<TEntity> Select<TProp>(
+	public IIncludingBuilder<TEntity> Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
 		SelectionMode selectionMode = SelectionMode.Include
 	)
 	{
 		var parsed = _parser.Parse(selector);
+
+		if (IsSelectionValid(parsed))
+		{
+			throw new ArgumentException("Selector is invalid");
+		}
 
 		switch (selectionMode)
 		{
@@ -78,6 +83,42 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			}
 		}
 	}
+	public IFilterBuilder<TEntity> Include<TProp>(Expression<Func<TEntity, TProp>> selector)
+	{
+		var parsed = _parser.Parse(selector);
+		if (IsSelectionValid(parsed))
+		{
+			throw new ArgumentException("Selector is invalid");
+		}
+
+		var expreressionParts = parsed.Split(',');
+		var newParts = new Dictionary<string, List<string>?>();
+		foreach (var part in expreressionParts)
+		{
+			var expressionSplitted = part.Split('.');
+			if (expressionSplitted.Length < 2)
+			{
+				continue;
+			}
+			var accessField = expressionSplitted[0];
+			if (!newParts.TryGetValue(accessField, out var _) || newParts[accessField] is null)
+			{
+				newParts[accessField] = new List<string>() { part };
+			}
+			else
+			{
+				newParts[accessField]!.Add(part);
+			}
+		}
+		foreach (var item in newParts)
+		{
+			var values = string.Join(',', item.Value!);
+			_stringBuilder.Replace(item.Key, values);
+		}
+
+		return this;
+	}
+
 	public ISortBuilder<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
 	{
 		var parsed = _parser.Parse(predicate);
@@ -146,4 +187,14 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 		_stringBuilder.Append(QueryChars.QuoteChar);
 		_stringBuilder.AppendLine(QueryChars.LineSeparator);
 	}
+	/// <summary>
+	/// Validate <see cref="Include{TProp}(Expression{Func{TEntity, TProp}})"/> 
+	/// and <see cref="Select{TProp}(Expression{Func{TEntity, TProp}}, SelectionMode)"/>
+	/// </summary>
+	/// <param name="parsedExpression"></param>
+	/// <returns></returns>
+	private bool IsSelectionValid(string parsedExpression) =>
+		!parsedExpression.Contains('>')
+		&& parsedExpression.Contains('<')
+		&& parsedExpression.Contains('=');
 }
