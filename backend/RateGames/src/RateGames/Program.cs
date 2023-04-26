@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using Apicalypse.Core.Extensions;
 
@@ -94,6 +95,7 @@ builder.Services
 	.AddJsonOptions(options =>
 	{
 		options.JsonSerializerOptions.Converters.Add(new IdOrConverterFactory());
+		options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 	});
 
 builder.Services.AddEndpointsApiExplorer();
