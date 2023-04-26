@@ -67,7 +67,7 @@ export type InvolvedCompany = {
 export type InvolvedCompanyResponse = Partial<InvolvedCompany>;
 
 export type Platform = {
-  int: number;
+  id: number;
   abbreviation: string;
   name: string;
   generation: number;
