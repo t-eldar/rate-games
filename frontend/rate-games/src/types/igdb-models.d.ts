@@ -6,6 +6,7 @@ export type Game = {
   aggregatedRating?: number;
   rating?: number;
   category?: GameCategory;
+  cover?: number | Image;
   gameModes?: (number | GameMode)[];
   screenshots?: (number | Image)[];
   involvedCompanies?: (number | InvolvedCompany)[];
