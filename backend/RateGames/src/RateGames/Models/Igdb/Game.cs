@@ -12,6 +12,7 @@ public class Game : IEntity
     public double? AggregatedRating { get; set; }
     public double? Rating { get; set; }
     public GameCategory? Category { get; set; }
+    public IdOr<Image>? Cover { get; set; }
     public IEnumerable<IdOr<GameMode>>? GameModes { get; set; }
     public IEnumerable<IdOr<Image>>? Screenshots { get; set; }
     public IEnumerable<IdOr<InvolvedCompany>>? InvolvedCompanies { get; set; }

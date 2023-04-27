@@ -33,6 +33,7 @@ public class GameService : IGameService
 				PlatformLogos = g.Platforms!.IncludeProperty(
 					p => p.Value!.PlatformLogo!.Value!.Url
 				),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
 				Screenshots = g.Screenshots!.IncludeProperty(s => s.Value!.Url),
 				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
 				InvolvedCompanies = g.InvolvedCompanies!.IncludeAllProperties(),
