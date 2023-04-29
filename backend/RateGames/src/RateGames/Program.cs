@@ -109,6 +109,8 @@ builder.Services.AddIgdbServices();
 
 var app = builder.Build();
 
+app.UseCors();
+
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
