@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import {
   Box,
   BoxProps,
@@ -21,18 +23,23 @@ type LinkItem = {
   icon: IconType;
 };
 type SidebarProps = BoxProps & {
+  headerMenuItems: ReactNode[];
   linkItems: LinkItem[];
 };
 
-export const Sidebar = ({ children, linkItems }: SidebarProps) => {
+export const Sidebar = ({
+  children,
+  linkItems,
+  headerMenuItems,
+  ...rest
+}: SidebarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const avatarUrl =
-    'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9';
   return (
     <Box
       minH='100vh'
       minW='xs'
       bg={useColorModeValue('major.100', 'major.900')}
+      {...rest}
     >
       <SidebarContent
         linkItems={linkItems}
@@ -52,7 +59,7 @@ export const Sidebar = ({ children, linkItems }: SidebarProps) => {
           <SidebarContent linkItems={linkItems} onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      <Header avatarUrl={avatarUrl} onOpen={onOpen} />
+      <Header menuItems={headerMenuItems} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }}>{children}</Box>
     </Box>
   );

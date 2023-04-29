@@ -1,7 +1,12 @@
-import { AuthenticatedUser } from '@/types/authentication';
-import type { SignInRequest, SignUpRequest } from '@/types/requests';
+import { User } from '@/types/authentication';
 
-const baseURL = 'https://localhost:7179';
+const baseURL = 'https://localhost:7082';
+
+export type SignInRequest = {
+  usernameOrEmail: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 export const signIn = async (request: SignInRequest) =>
   await fetch(`${baseURL}/sign-in`, {
@@ -13,6 +18,12 @@ export const signIn = async (request: SignInRequest) =>
     body: JSON.stringify(request),
   });
 
+export type SignUpRequest = {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+};
 export const signUp = async (request: SignUpRequest) =>
   await fetch(`${baseURL}/sign-up`, {
     method: 'POST',
@@ -35,13 +46,13 @@ export const getUserInfo = async () => {
     credentials: 'include',
   });
   const data = await response.json();
-  if (!isAuthenticatedUser(data)) {
-    throw new Error('Data has incorrect type')
+  if (!isUser(data)) {
+    throw new Error('Data has incorrect type');
   }
   return data;
 };
 
-const isAuthenticatedUser = (data: unknown): data is AuthenticatedUser => {
+const isUser = (data: unknown): data is User => {
   if (
     data &&
     typeof data === 'object' &&

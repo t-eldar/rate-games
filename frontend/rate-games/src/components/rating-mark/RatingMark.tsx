@@ -15,7 +15,7 @@ export const RatingMark = ({ value, ...rest }: RatingMarkProps) => {
     <Box
       as={motion.div}
       initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1, scale: 1.1 }}
+      whileInView={{ opacity: 1 }}
       rounded='md'
       p='2'
       bg={color}

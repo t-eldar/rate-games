@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { RatingMark } from '@/components/rating-mark';
 import {
   Game,
   Genre,
@@ -10,21 +11,15 @@ import {
   Box,
   Card,
   CardBody,
-  CardFooter,
   CardProps,
-  Divider,
   Flex,
   FlexProps,
-  HStack,
   Heading,
   Image,
   Stack,
   Text,
-  VStack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { RatingMark } from '@/components/rating-mark';
-import { motion } from 'framer-motion';
 
 type GameCardProps = CardProps & {
   game: Game;
@@ -42,7 +37,7 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
       rounded='xl'
       maxH='lg'
       maxW='xl'
-      minW='sm'
+      minW='3xs'
       _hover={{
         border: '2px solid',
         boxShadow: 'xl',
@@ -50,7 +45,7 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
       }}
       {...rest}
     >
-      <CardBody as={Flex} direction={{ base: 'column', sm: 'row' }}>
+      <CardBody display='flex' flexDirection={{ base: 'column', sm: 'row' }}>
         <RatingMark
           transition='1s ease'
           display={isRatingShown ? 'block' : 'none'}
@@ -64,16 +59,21 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
           alt={game.name}
           borderRadius='lg'
         />
-        <Stack maxW='xs' mt='3' px='3' justifyContent='space-between'>
+        <Stack
+          maxW={{ base: '3xs', lg: 'xs' }}
+          mt='3'
+          px='3'
+          justifyContent='space-between'
+        >
           <Stack>
             <Heading size='md'>{game.name}</Heading>
             <Text>{new Date(game.firstReleaseDate! * 1000).getFullYear()}</Text>
           </Stack>
           <Text noOfLines={{ base: 1, sm: 3 }}>{game.summary}</Text>
-          <Flex h='fit-content' display='column'>
+          <Box h='fit-content'>
             <GenreList genres={game.genres as Genre[]} />
             <PlatformList platforms={game.platforms as Platform[]} />
-          </Flex>
+          </Box>
         </Stack>
       </CardBody>
     </Card>

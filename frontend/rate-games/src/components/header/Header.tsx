@@ -1,4 +1,5 @@
 import { ThemeSwitcher } from '@/components/buttons/theme-switcher';
+import { useUser } from '@/hooks/use-user';
 import {
   Avatar,
   Box,
@@ -8,8 +9,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuDivider,
-  MenuItem,
   MenuList,
   Text,
   ThemingProps,
@@ -17,14 +16,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { FiChevronRight, FiMenu } from 'react-icons/fi';
 
 type HeaderProps = FlexProps & {
+  menuItems: ReactNode[];
   onOpen: () => void;
-  avatarUrl: string;
 };
-export const Header = ({ onOpen, avatarUrl, ...rest }: HeaderProps) => {
+export const Header = ({ onOpen, menuItems, ...rest }: HeaderProps) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -57,19 +56,20 @@ export const Header = ({ onOpen, avatarUrl, ...rest }: HeaderProps) => {
         <ThemeSwitcher />
         <Flex alignItems={'center'}></Flex>
       </HStack>
-      <HeaderMenu avatarUrl={avatarUrl} />
+      <HeaderMenu menuItems={menuItems} />
     </Flex>
   );
 };
 
 type HeaderMenuProps = ThemingProps<'Menu'> & {
-  avatarUrl: string;
+  menuItems: ReactNode[];
 };
 
-const HeaderMenu = ({ avatarUrl }: HeaderMenuProps) => {
+const HeaderMenu = ({ menuItems }: HeaderMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuButtonRotation, setMenuButtonRotation] = useState(0);
-
+  const { user } = useUser();
+  console.log(user);
   useEffect(() => {
     const rotation = isOpen ? 90 : 0;
     setMenuButtonRotation(rotation);
@@ -79,15 +79,14 @@ const HeaderMenu = ({ avatarUrl }: HeaderMenuProps) => {
     <Menu onOpen={() => setIsOpen(true)} onClose={() => setIsOpen(false)}>
       <MenuButton py={2} transition='all 0.3s'>
         <HStack>
-          <Avatar size={'sm'} src={avatarUrl} />
+          <Avatar size={'sm'} src={user?.avatarUrl ?? ''} />
           <VStack
             display={{ base: 'none', md: 'flex' }}
             alignItems='flex-start'
             spacing='1px'
             ml='2'
           >
-            <Text fontSize='sm'>Justina Clark</Text>
-            <Text fontSize='xs'>Admin</Text>
+            <Text fontSize='sm'>{user?.userName}</Text>
           </VStack>
           <Box
             as={motion.div}
@@ -98,13 +97,7 @@ const HeaderMenu = ({ avatarUrl }: HeaderMenuProps) => {
           </Box>
         </HStack>
       </MenuButton>
-      <MenuList>
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>Settings</MenuItem>
-        <MenuItem>Billing</MenuItem>
-        <MenuDivider />
-        <MenuItem>Sign out</MenuItem>
-      </MenuList>
+      <MenuList>{menuItems.map((item) => item)}</MenuList>
     </Menu>
   );
 };

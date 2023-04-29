@@ -1,17 +1,21 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  createRoutesFromElements,
-} from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
-import { theme } from '@/themes';
-import { Layout } from '@/components/layout';
 import { SignInForm } from '@/components/forms/sign-in';
 import { SignUpForm } from '@/components/forms/sign-up-form';
-import {GamesPage} from '@/pages/games-page';
+import { Layout } from '@/components/layout';
+import { UserContext } from '@/context/user-context';
+import { GamesPage } from '@/pages/games-page';
+import { theme } from '@/themes';
+import { User } from '@/types/authentication';
+import { ChakraProvider } from '@chakra-ui/react';
+import { useState } from 'react';
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from 'react-router-dom';
 
 export const App = () => {
+  const [user, setUser] = useState<User | null>(null);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
@@ -20,14 +24,19 @@ export const App = () => {
           <Route path='/sign-up' element={<SignUpForm />} />
           <Route path='/games' element={<GamesPage />} />
         </Route>
-        <Route path='/test' element={<SignInForm />} />
+        <Route
+          path='/test'
+          element={<SignInForm onSuccess={() => alert('ffffffffffffffff')} />}
+        />
       </>
     )
   );
   return (
     <>
       <ChakraProvider theme={theme}>
-        <RouterProvider router={router} />
+        <UserContext.Provider value={{ user, setUser }}>
+          <RouterProvider router={router} />
+        </UserContext.Provider>
       </ChakraProvider>
     </>
   );

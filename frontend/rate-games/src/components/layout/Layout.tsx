@@ -16,9 +16,10 @@ export const Layout = () => {
     { name: 'Favourites', icon: FiStar },
     { name: 'Settings', icon: FiSettings },
   ];
+  const headerMenuItems = [<FiStar key='1' />];
   return (
     <>
-      <Sidebar linkItems={linkItems}>
+      <Sidebar headerMenuItems={headerMenuItems} linkItems={linkItems}>
         <Outlet />
       </Sidebar>
     </>
