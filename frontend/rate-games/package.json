@@ -11,6 +11,8 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.5.5",
+    "@dicebear/collection": "^6.0.3",
+    "@dicebear/core": "^6.0.3",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@typescript-eslint/eslint-plugin": "^5.49.0",

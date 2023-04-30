@@ -1,0 +1,1 @@
+export { useLoreleiAvatar } from './useLoreleiAvatar';
