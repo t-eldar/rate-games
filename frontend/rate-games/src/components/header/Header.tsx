@@ -1,5 +1,5 @@
 import { ThemeSwitcher } from '@/components/buttons/theme-switcher';
-import { useUser } from '@/hooks/use-user';
+import { useAuth } from '@/hooks/use-auth';
 import {
   Avatar,
   Box,
@@ -68,8 +68,7 @@ type HeaderMenuProps = ThemingProps<'Menu'> & {
 const HeaderMenu = ({ menuItems }: HeaderMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuButtonRotation, setMenuButtonRotation] = useState(0);
-  const { user } = useUser();
-  console.log(user);
+  const { user } = useAuth();
   useEffect(() => {
     const rotation = isOpen ? 90 : 0;
     setMenuButtonRotation(rotation);
