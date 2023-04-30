@@ -9,6 +9,9 @@ import {
   signUp,
 } from '@/services/authentication-service';
 import { useEffect } from 'react';
+import { useAwait } from '@/hooks/use-await';
+
+type Status = 'success' | 'error';
 
 export const useAuth = () => {
   const userData = useUser();
@@ -18,36 +21,77 @@ export const useAuth = () => {
   const { user, addUser, removeUser } = userData;
   const { getItem } = useLocalStorage();
 
+  const {
+    promise: fetchLogin,
+    isLoading: isLoginLoading,
+    error: loginError,
+  } = useAwait<typeof signIn>(signIn);
+  const {
+    promise: fetchRegister,
+    isLoading: isRegisterLoading,
+    error: registerError,
+  } = useAwait<typeof signUp>(signUp);
+  const {
+    promise: fetchLogout,
+    isLoading: isLogoutLoading,
+    error: logoutError,
+  } = useAwait<typeof signOut>(signOut);
+
   useEffect(() => {
     const user = getItem('user');
+    console.log(user);
+    
     if (user) {
       addUser(JSON.parse(user));
     }
   }, []);
 
-  const login = async (request: SignInRequest) => {
-    const response = await signIn(request);
-    if (response.status === 200) {
-      const userInfo = await getUserInfo();
-      addUser(userInfo);
-    }
-    return response;
+  const login = {
+    invoke: async (request: SignInRequest) => {
+      let status: Status = 'error';
+      const response = await fetchLogin(request);
+      if (loginError || !response) {
+        status = 'error';
+      } else if (response.status === 200) {
+        status = 'success';
+        const userInfo = await getUserInfo();
+        addUser(userInfo);
+      }
+      return status;
+    },
+    isLoading: isLoginLoading,
+    error: loginError,
   };
-  const register = async (request: SignUpRequest) => {
-    const response = await signUp(request);
-    if (response.status === 200) {
-      const userInfo = await getUserInfo();
-      addUser(userInfo);
-    }
-    return response;
+  const register = {
+    invoke: async (request: SignUpRequest) => {
+      let status: Status = 'error';
+      const response = await fetchRegister(request);
+      if (registerError || !response) {
+        status = 'error';
+      } else if (response.status === 200) {
+        status = 'success';
+        const userInfo = await getUserInfo();
+        addUser(userInfo);
+      }
+      return status;
+    },
+    isLoading: isRegisterLoading,
+    error: registerError,
   };
-
-  const logout = async () => {
-    const response = await signOut();
-    if (response.status === 200) {
-      removeUser();
-    }
-    return response;
+  const logout = {
+    invoke: async () => {
+      let status: Status = 'error';
+      const response = await fetchLogout();
+      if (registerError || !response) {
+        status = 'error';
+      } else if (response.status === 200) {
+        status = 'success';
+        removeUser();
+      }
+      return status;
+    },
+    isLoading: isLogoutLoading,
+    error: logoutError,
   };
 
   return { user, login, register, logout };

@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/use-auth';
-import { signIn } from '@/services/authentication-service';
 import {
   Box,
   Button,
@@ -14,7 +13,6 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
-import { useQuery } from 'react-query';
 
 type SignInFormProps = FlexProps & {
   onSuccess?: () => void;
@@ -37,20 +35,19 @@ export const SignInForm = ({
     if (!login) {
       return;
     }
-    const response = await login({
+    const status = await login.invoke({
       usernameOrEmail,
       password,
       rememberMe,
     });
-    if (response.status === 200 && onSuccess) {
+    if (status === 'success' && onSuccess) {
       onSuccess();
     }
-    if (response.status !== 200 && onError) {
+    if (status === 'error' && onError) {
       onError();
       setIsInvalid(true);
     }
   };
-
   const handleRememberMeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
     setRememberMe(e.target.checked);
