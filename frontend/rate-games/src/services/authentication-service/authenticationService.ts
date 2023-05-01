@@ -19,10 +19,10 @@ export const signIn = async (request: SignInRequest) =>
   });
 
 export type SignUpRequest = {
-  name: string;
-  surname: string;
+  username: string;
   email: string;
   password: string;
+  avatarUrl: string;
 };
 export const signUp = async (request: SignUpRequest) =>
   await fetch(`${baseURL}/sign-up`, {

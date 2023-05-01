@@ -1,8 +1,10 @@
 import { ThemeSwitcher } from '@/components/buttons/theme-switcher';
 import { useAuth } from '@/hooks/use-auth';
+import { User } from '@/types/authentication';
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   FlexProps,
   HStack,
@@ -10,20 +12,37 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Text,
   ThemingProps,
   VStack,
+  useBoolean,
   useColorModeValue,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { ReactNode, useEffect, useState } from 'react';
-import { FiChevronRight, FiMenu } from 'react-icons/fi';
+import { FiChevronRight, FiLogIn, FiMenu } from 'react-icons/fi';
+import { SignInForm } from '@/components/forms/sign-in';
+import { SignUpForm } from '@/components/forms/sign-up-form';
 
 type HeaderProps = FlexProps & {
   menuItems: ReactNode[];
   onOpen: () => void;
 };
 export const Header = ({ onOpen, menuItems, ...rest }: HeaderProps) => {
+  const { user } = useAuth();
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -56,19 +75,62 @@ export const Header = ({ onOpen, menuItems, ...rest }: HeaderProps) => {
         <ThemeSwitcher />
         <Flex alignItems={'center'}></Flex>
       </HStack>
-      <HeaderMenu menuItems={menuItems} />
+      {!user ? (
+        <IconButton
+          onClick={onModalOpen}
+          aria-label='open sign in modal'
+          icon={<FiLogIn />}
+        />
+      ) : (
+        <HeaderMenu user={user} menuItems={menuItems} />
+      )}
+      <AuthModal isOpen={isModalOpen} onClose={onModalClose} />
     </Flex>
   );
 };
 
+type AuthModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
+  const [isSignIn, { on: onIsSignIn, off: offIsSignIn }] = useBoolean(true);
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent p='0'>
+        <ModalCloseButton />
+        <ModalBody p='0'>
+          {isSignIn ? (
+            <SignInForm
+              p='3'
+              boxShadow='none'
+              onRedirectToSignUp={offIsSignIn}
+              onSuccess={onClose}
+            />
+          ) : (
+            <SignUpForm
+              p='3'
+              boxShadow='none'
+              onRedirectToSignIn={onIsSignIn}
+              onSuccess={onClose}
+            />
+          )}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
 type HeaderMenuProps = ThemingProps<'Menu'> & {
+  user: User;
   menuItems: ReactNode[];
 };
 
-const HeaderMenu = ({ menuItems }: HeaderMenuProps) => {
+const HeaderMenu = ({ user, menuItems }: HeaderMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [menuButtonRotation, setMenuButtonRotation] = useState(0);
-  const { user } = useAuth();
   useEffect(() => {
     const rotation = isOpen ? 90 : 0;
     setMenuButtonRotation(rotation);
@@ -78,14 +140,14 @@ const HeaderMenu = ({ menuItems }: HeaderMenuProps) => {
     <Menu onOpen={() => setIsOpen(true)} onClose={() => setIsOpen(false)}>
       <MenuButton py={2} transition='all 0.3s'>
         <HStack>
-          <Avatar size={'sm'} src={user?.avatarUrl ?? ''} />
+          <Avatar size={'sm'} src={user.avatarUrl ?? ''} />
           <VStack
             display={{ base: 'none', md: 'flex' }}
             alignItems='flex-start'
             spacing='1px'
             ml='2'
           >
-            <Text fontSize='sm'>{user?.userName}</Text>
+            <Text fontSize='sm'>{user.userName}</Text>
           </VStack>
           <Box
             as={motion.div}

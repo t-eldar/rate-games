@@ -39,8 +39,6 @@ export const useAuth = () => {
 
   useEffect(() => {
     const user = getItem('user');
-    console.log(user);
-    
     if (user) {
       addUser(JSON.parse(user));
     }

@@ -3,6 +3,7 @@ import { SignUpForm } from '@/components/forms/sign-up-form';
 import { Layout } from '@/components/layout';
 import { UserContext } from '@/context/user-context';
 import { useAuth } from '@/hooks/use-auth';
+import { GamePage } from '@/pages/game-page';
 import { GamesPage } from '@/pages/games-page';
 import { theme } from '@/themes';
 import { User } from '@/types/authentication';
@@ -21,14 +22,9 @@ export const App = () => {
     createRoutesFromElements(
       <>
         <Route path='/' element={<Layout />}>
-          <Route path='/sign-in' element={<SignInForm />} />
-          <Route path='/sign-up' element={<SignUpForm />} />
           <Route path='/games' element={<GamesPage />} />
+          <Route path='/game' element={<GamePage />} />
         </Route>
-        <Route
-          path='/test'
-          element={<SignInForm onSuccess={() => alert('ffffffffffffffff')} />}
-        />
       </>
     )
   );

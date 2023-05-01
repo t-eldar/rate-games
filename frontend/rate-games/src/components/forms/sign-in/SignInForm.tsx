@@ -7,19 +7,24 @@ import {
   FlexProps,
   FormControl,
   FormLabel,
+  HStack,
   Heading,
   Input,
+  Link,
   Stack,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
 
 type SignInFormProps = FlexProps & {
+  onRedirectToSignUp: () => void;
   onSuccess?: () => void;
   onError?: () => void;
 };
 
 export const SignInForm = ({
+  onRedirectToSignUp,
   onSuccess,
   onError,
   ...rest
@@ -61,16 +66,14 @@ export const SignInForm = ({
     setPassword(e.target.value);
   };
   return (
-    <Flex minH={'100%'} align={'center'} justify={'center'} {...rest}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+    <Flex {...rest}>
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} p="8">
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
         </Stack>
         <Box
           rounded={'lg'}
           bg={useColorModeValue('major.200', 'major.800')}
-          boxShadow={'lg'}
-          p={8}
         >
           <Stack spacing={4}>
             <FormControl isInvalid={isInvalid}>
@@ -102,6 +105,14 @@ export const SignInForm = ({
                   Remember me
                 </Checkbox>
               </Stack>
+              <HStack>
+                <Text align={'center'} color='major.500'>
+                  New here?
+                </Text>
+                <Link color={'minor.600'} onClick={() => onRedirectToSignUp()}>
+                  Sign up
+                </Link>
+              </HStack>
               <Button onClick={handleSignIn} variant='secondary'>
                 Sign in
               </Button>

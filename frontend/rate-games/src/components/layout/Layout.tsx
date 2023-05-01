@@ -7,16 +7,23 @@ import {
   FiStar,
   FiTrendingUp,
 } from 'react-icons/fi';
+import { Button, MenuItem } from '@chakra-ui/react';
+import { useAuth } from '@/hooks/use-auth';
 
 export const Layout = () => {
+  const { logout } = useAuth();
   const linkItems = [
-    { name: 'Home', icon: FiHome },
-    { name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },
-    { name: 'Settings', icon: FiSettings },
+    { name: 'Home', icon: FiHome, href: '#' },
+    { name: 'Trending', icon: FiTrendingUp, href: '#' },
+    { name: 'Explore', icon: FiCompass, href: '#' },
+    { name: 'Favourites', icon: FiStar, href: '#' },
+    { name: 'Settings', icon: FiSettings, href: '#' },
   ];
-  const headerMenuItems = [<FiStar key='1' />];
+  const headerMenuItems = [
+    <MenuItem key='1' as={Button} onClick={() => logout?.invoke()}>
+      Sign out
+    </MenuItem>,
+  ];
   return (
     <>
       <Sidebar headerMenuItems={headerMenuItems} linkItems={linkItems}>

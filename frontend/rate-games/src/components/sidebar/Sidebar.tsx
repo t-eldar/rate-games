@@ -19,6 +19,7 @@ import { Header } from '@/components/header';
 import { Link as RouterLink } from 'react-router-dom';
 
 type LinkItem = {
+  href: string;
   name: string;
   icon: IconType;
 };
@@ -47,7 +48,6 @@ export const Sidebar = ({
         display={{ base: 'none', md: 'block' }}
       />
       <Drawer
-        //autoFocus={false}
         isOpen={isOpen}
         placement='left'
         onClose={onClose}
@@ -93,7 +93,7 @@ const SidebarContent = ({
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {linkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} href={link.href}>
           {link.name}
         </NavItem>
       ))}
@@ -102,14 +102,15 @@ const SidebarContent = ({
 };
 
 type NavItemProps = FlexProps & {
+  href: string;
   icon: IconType;
   children: string;
 };
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
   return (
     <Link
       as={RouterLink}
-      to='#'
+      to={href}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
     >
