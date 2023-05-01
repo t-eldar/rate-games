@@ -52,6 +52,12 @@ builder.Services
 	.AddIdentity<User, IdentityRole>(options =>
 	{
 		options.User.RequireUniqueEmail = true;
+		options.Password.RequireDigit = true;
+		options.Password.RequireNonAlphanumeric = false;
+		options.Password.RequireLowercase = true;
+		options.Password.RequireUppercase = true;
+		options.Password.RequiredLength = 6;
+		options.Password.RequiredUniqueChars = 0;
 	})
 	.AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.ConfigureApplicationCookie(options =>

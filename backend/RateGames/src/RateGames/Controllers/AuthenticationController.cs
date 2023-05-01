@@ -44,7 +44,9 @@ public class AuthenticationController : ControllerBase
 
 		var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
 
-		return signInResult.Succeeded ? Ok() : Unauthorized();
+		return signInResult.Succeeded 
+			? Ok() 
+			: Unauthorized();
 	}
 
 	[Route("sign-in")]
@@ -60,7 +62,9 @@ public class AuthenticationController : ControllerBase
 
 		var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, false);
 
-		return result.Succeeded ? Ok() : Unauthorized();
+		return result.Succeeded 
+			? Ok() 
+			: Unauthorized();
 	}
 
 	[Route("/sign-out")]
