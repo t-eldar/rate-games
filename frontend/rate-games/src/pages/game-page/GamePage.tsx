@@ -1,4 +1,4 @@
-import { Carousel } from '@/components/carousel';
+import { NukaCarousel } from '@/components/nuka-carousel';
 import { getMockedGame } from '@/services/game-service';
 import { Box, Image } from '@chakra-ui/react';
 
@@ -7,11 +7,19 @@ export const GamePage = () => {
 
   return (
     <Box p='3' w='100%'>
-      <Carousel gap={4}>
+      <NukaCarousel>
         {game.screenshots.map((s) => (
-          <Image borderRadius='lg' key={s.id} draggable='false' src={s.url} />
+          <Box
+            h='lg'
+            key={s.id}
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Image h='md' borderRadius='lg' draggable='false' src={s.url} />
+          </Box>
         ))}
-      </Carousel>
+      </NukaCarousel>
     </Box>
   );
 };

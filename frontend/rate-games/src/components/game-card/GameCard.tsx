@@ -16,6 +16,7 @@ import {
   FlexProps,
   Heading,
   Image,
+  SlideFade,
   Stack,
   Text,
   useColorModeValue,
@@ -46,13 +47,13 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
       {...rest}
     >
       <CardBody display='flex' flexDirection={{ base: 'column', sm: 'row' }}>
-        <RatingMark
-          transition='1s ease'
-          display={isRatingShown ? 'block' : 'none'}
-          position='absolute'
-          right='20px'
-          value={game.aggregatedRating}
-        />
+        <SlideFade
+          in={isRatingShown}
+          offsetY='20px'
+          style={{ position: 'absolute', right: '20px' }}
+        >
+          <RatingMark value={game.aggregatedRating} />
+        </SlideFade>
         <Image
           h='2xs'
           src={(game.cover as ImageModel).url}

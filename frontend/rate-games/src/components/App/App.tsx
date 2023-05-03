@@ -1,8 +1,5 @@
-import { SignInForm } from '@/components/forms/sign-in';
-import { SignUpForm } from '@/components/forms/sign-up-form';
 import { Layout } from '@/components/layout';
 import { UserContext } from '@/context/user-context';
-import { useAuth } from '@/hooks/use-auth';
 import { GamePage } from '@/pages/game-page';
 import { GamesPage } from '@/pages/games-page';
 import { theme } from '@/themes';
