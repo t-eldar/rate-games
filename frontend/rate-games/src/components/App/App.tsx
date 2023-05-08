@@ -20,7 +20,7 @@ export const App = () => {
       <>
         <Route path='/' element={<Layout />}>
           <Route path='/games' element={<GamesPage />} />
-          <Route path='/game' element={<GamePage />} />
+          <Route path='/games/:gameId' element={<GamePage />} />
         </Route>
       </>
     )

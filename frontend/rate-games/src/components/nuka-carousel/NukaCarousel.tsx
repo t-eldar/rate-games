@@ -1,22 +1,31 @@
-import { Icon, IconButton, List, ListItem } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+} from '@chakra-ui/react';
 import Carousel, { ControlProps } from 'nuka-carousel';
 import { FaCircle, FaRegCircle } from 'react-icons/fa';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
-type NukaCarouselProps = {
+type NukaCarouselProps = BoxProps & {
   children: JSX.Element[] | JSX.Element;
 };
 
-export const NukaCarousel = ({ children }: NukaCarouselProps) => {
+export const NukaCarousel = ({ children, ...rest }: NukaCarouselProps) => {
   return (
-    <Carousel
-      wrapAround
-      renderCenterLeftControls={PrevSlideButton}
-      renderCenterRightControls={NextSlideButton}
-      renderBottomCenterControls={PagingDots}
-    >
-      {children}
-    </Carousel>
+    <Box {...rest}>
+      <Carousel
+        wrapAround
+        renderCenterLeftControls={PrevSlideButton}
+        renderCenterRightControls={NextSlideButton}
+        renderBottomCenterControls={PagingDots}
+      >
+        {children}
+      </Carousel>
+    </Box>
   );
 };
 

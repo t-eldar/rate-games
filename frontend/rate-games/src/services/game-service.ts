@@ -1,4 +1,43 @@
-import { Game } from '@/types/igdb-models';
+import { MinGameInfo } from '@/types/entities';
+import {
+  isMaxNormalizableGame,
+  isMinNormalizableGames,
+} from '@/utils/assertion';
+import { normalizeMaxGame, normalizeGames } from '@/utils/entities';
+import { combineURLs } from '@/utils/url';
+
+const baseURL = 'https://localhost:7082/games';
+
+export const getGameById = async (id: number) => {
+  const url = new URL(combineURLs(baseURL, `/${id}`));
+  const response = await fetch(url, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  const result = await response.json();
+  if (!isMaxNormalizableGame(result)) {
+    throw new Error('Data is incorrect');
+  }
+  const game = normalizeMaxGame(result);
+
+  return game;
+};
+
+export const getLatestGames = async () => {
+  const url = new URL(combineURLs(baseURL, 'latest'));
+  const response = await fetch(url, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  const result = await response.json();
+  
+  if (!isMinNormalizableGames(result)) {
+    throw new Error('Data is incorrect');
+  }
+  const games = normalizeGames(result);
+
+  return games;
+};
 
 export const getMockedGame = () => {
   return {
@@ -168,7 +207,7 @@ export const getMockedGames = () => [
     name: 'Thief II: The Metal Age',
     summary:
       'The ultimate thief is back! Tread softly as you make your way through 15 new complex, non-linear levels full of loot to steal and guards to outsmart. Improved enemy AI, new gadgets and a riveting story will draw you into the world of Thief II: The Metal Age, a place of powerful new technologies, fanatical religions and corruption.',
-    firstReleaseDate: 953596800,
+    firstReleaseDate: new Date(953596800),
     aggregatedRating: 90,
     rating: 86.6902706277657,
     category: 0,
@@ -182,48 +221,7 @@ export const getMockedGames = () => [
         name: 'Single player',
       },
     ],
-    screenshots: [
-      {
-        id: 16867,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/puvydf5d6v0zirxfhzpg.jpg',
-      },
-      {
-        id: 16868,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/z0b9mqcqbtmnnxigekjc.jpg',
-      },
-      {
-        id: 40856,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/ja4t61c1ndvtzufbdrf4.jpg',
-      },
-      {
-        id: 40857,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/yf2hsfdd4fe9ev6wmpye.jpg',
-      },
-      {
-        id: 40858,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/h4eotdbgoo30v40jtus0.jpg',
-      },
-      {
-        id: 377572,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c4.jpg',
-      },
-      {
-        id: 377573,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c5.jpg',
-      },
-      {
-        id: 377574,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c6.jpg',
-      },
-      {
-        id: 377575,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c7.jpg',
-      },
-      {
-        id: 377576,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c8.jpg',
-      },
-    ],
+
     involvedCompanies: [
       {
         id: 2739,
@@ -311,7 +309,6 @@ export const getMockedGames = () => [
         name: 'Dark Engine',
       },
     ],
-    similarGames: [2, 3, 4, 41, 471, 564, 3025, 9377, 11118, 11171],
     platforms: [
       {
         id: 6,
@@ -322,13 +319,14 @@ export const getMockedGames = () => [
         },
       },
     ],
-  } satisfies Game,
+  } satisfies MinGameInfo,
   {
     id: 1945,
     name: 'Zork II: The Wizard of Frobozz',
     summary:
       "The AFGNCAAP begins in the Barrow from Zork I armed only with the trusty brass lantern and sword of elvish antiquity. The purpose of the game is not initially clear.\n\nThe Wizard of Frobozz is soon introduced. The wizard was once a respected enchanter, but when his powers began to fade he was exiled by Dimwit Flathead. Now bordering on senility, the wizard is still a force to be reckoned with. Your goal, as you venture into the wizard's realm, is to avoid his capricious tricks and learn to control his magic.\n\nLike its predecessor, Zork II is essentially a treasure hunt. Unlike the previous game, the ten treasures are tied together by a crude plot. Finding the treasures does not end the game, nor are all the treasures needed to finish the game. Instead, the adventurer must figure out a way to use the treasures in order to reach the game's finale.",
-    firstReleaseDate: 378604800,
+    firstReleaseDate: new Date(378604800),
+    aggregatedRating: 50,
     rating: 46.6832529195296,
     category: 0,
     cover: {
@@ -339,20 +337,6 @@ export const getMockedGames = () => [
       {
         id: 1,
         name: 'Single player',
-      },
-    ],
-    screenshots: [
-      {
-        id: 441862,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc9gxy.jpg',
-      },
-      {
-        id: 642521,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/scdrrt.jpg',
-      },
-      {
-        id: 642522,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/scdrru.jpg',
       },
     ],
     involvedCompanies: [
@@ -379,9 +363,6 @@ export const getMockedGames = () => [
         id: 71,
         name: 'Z-machine',
       },
-    ],
-    similarGames: [
-      1946, 1949, 1950, 17548, 22387, 24426, 62151, 96217, 106987, 115653,
     ],
     platforms: [
       {
@@ -493,13 +474,13 @@ export const getMockedGames = () => [
         },
       },
     ],
-  } satisfies Game,
+  } satisfies MinGameInfo,
   {
     id: 13,
     name: 'Thief II: The Metal Age',
     summary:
       'The ultimate thief is back! Tread softly as you make your way through 15 new complex, non-linear levels full of loot to steal and guards to outsmart. Improved enemy AI, new gadgets and a riveting story will draw you into the world of Thief II: The Metal Age, a place of powerful new technologies, fanatical religions and corruption.',
-    firstReleaseDate: 953596800,
+    firstReleaseDate: new Date(953596800),
     aggregatedRating: 90,
     rating: 86.6902706277657,
     category: 0,
@@ -513,48 +494,7 @@ export const getMockedGames = () => [
         name: 'Single player',
       },
     ],
-    screenshots: [
-      {
-        id: 16867,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/puvydf5d6v0zirxfhzpg.jpg',
-      },
-      {
-        id: 16868,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/z0b9mqcqbtmnnxigekjc.jpg',
-      },
-      {
-        id: 40856,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/ja4t61c1ndvtzufbdrf4.jpg',
-      },
-      {
-        id: 40857,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/yf2hsfdd4fe9ev6wmpye.jpg',
-      },
-      {
-        id: 40858,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/h4eotdbgoo30v40jtus0.jpg',
-      },
-      {
-        id: 377572,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c4.jpg',
-      },
-      {
-        id: 377573,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c5.jpg',
-      },
-      {
-        id: 377574,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c6.jpg',
-      },
-      {
-        id: 377575,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c7.jpg',
-      },
-      {
-        id: 377576,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc83c8.jpg',
-      },
-    ],
+
     involvedCompanies: [
       {
         id: 2739,
@@ -642,7 +582,6 @@ export const getMockedGames = () => [
         name: 'Dark Engine',
       },
     ],
-    similarGames: [2, 3, 4, 41, 471, 564, 3025, 9377, 11118, 11171],
     platforms: [
       {
         id: 6,
@@ -653,13 +592,14 @@ export const getMockedGames = () => [
         },
       },
     ],
-  } satisfies Game,
+  } satisfies MinGameInfo,
   {
     id: 12945,
     name: 'Zork II: The Wizard of Frobozz',
     summary:
       "The AFGNCAAP begins in the Barrow from Zork I armed only with the trusty brass lantern and sword of elvish antiquity. The purpose of the game is not initially clear.\n\nThe Wizard of Frobozz is soon introduced. The wizard was once a respected enchanter, but when his powers began to fade he was exiled by Dimwit Flathead. Now bordering on senility, the wizard is still a force to be reckoned with. Your goal, as you venture into the wizard's realm, is to avoid his capricious tricks and learn to control his magic.\n\nLike its predecessor, Zork II is essentially a treasure hunt. Unlike the previous game, the ten treasures are tied together by a crude plot. Finding the treasures does not end the game, nor are all the treasures needed to finish the game. Instead, the adventurer must figure out a way to use the treasures in order to reach the game's finale.",
-    firstReleaseDate: 378604800,
+    firstReleaseDate: new Date(378604800),
+    aggregatedRating: 50,
     rating: 46.6832529195296,
     category: 0,
     cover: {
@@ -672,20 +612,7 @@ export const getMockedGames = () => [
         name: 'Single player',
       },
     ],
-    screenshots: [
-      {
-        id: 441862,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/sc9gxy.jpg',
-      },
-      {
-        id: 642521,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/scdrrt.jpg',
-      },
-      {
-        id: 642522,
-        url: '//images.igdb.com/igdb/image/upload/t_thumb/scdrru.jpg',
-      },
-    ],
+
     involvedCompanies: [
       {
         id: 57510,
@@ -711,9 +638,7 @@ export const getMockedGames = () => [
         name: 'Z-machine',
       },
     ],
-    similarGames: [
-      1946, 1949, 1950, 17548, 22387, 24426, 62151, 96217, 106987, 115653,
-    ],
+
     platforms: [
       {
         id: 13,
@@ -824,5 +749,5 @@ export const getMockedGames = () => [
         },
       },
     ],
-  } satisfies Game,
+  } satisfies MinGameInfo,
 ];

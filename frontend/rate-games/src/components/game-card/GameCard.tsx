@@ -1,19 +1,14 @@
 import { useState } from 'react';
 
+import { GenreList } from '@/components/lists/genre-list';
+import { PlatformList } from '@/components/lists/platform-list';
 import { RatingMark } from '@/components/rating-mark';
-import {
-  Game,
-  Genre,
-  Image as ImageModel,
-  Platform,
-} from '@/types/igdb-models';
+import { MinGameInfo } from '@/types/entities';
 import {
   Box,
   Card,
   CardBody,
   CardProps,
-  Flex,
-  FlexProps,
   Heading,
   Image,
   SlideFade,
@@ -23,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 
 type GameCardProps = CardProps & {
-  game: Game;
+  game: MinGameInfo;
 };
 
 export const GameCard = ({ game, ...rest }: GameCardProps) => {
@@ -54,12 +49,7 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
         >
           <RatingMark value={game.aggregatedRating} />
         </SlideFade>
-        <Image
-          h='2xs'
-          src={(game.cover as ImageModel).url}
-          alt={game.name}
-          borderRadius='lg'
-        />
+        <Image h='2xs' src={game.cover.url} alt={game.name} borderRadius='lg' />
         <Stack
           maxW={{ base: '3xs', lg: 'xs' }}
           mt='3'
@@ -68,73 +58,27 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
         >
           <Stack>
             <Heading size='md'>{game.name}</Heading>
-            <Text>{new Date(game.firstReleaseDate! * 1000).getFullYear()}</Text>
+            <Text>{game.firstReleaseDate?.getFullYear().toString()}</Text>
           </Stack>
           <Text noOfLines={{ base: 1, sm: 3 }}>{game.summary}</Text>
           <Box h='fit-content'>
-            <GenreList genres={game.genres as Genre[]} />
-            <PlatformList platforms={game.platforms as Platform[]} />
+            {!game.genres ? null : (
+              <GenreList
+                css={{ '&::-webkit-scrollbar': { display: 'none' } }}
+                overflow='auto'
+                genres={game.genres}
+              />
+            )}
+            {!game.platforms ? null : (
+              <PlatformList
+                css={{ '&::-webkit-scrollbar': { display: 'none' } }}
+                overflow='auto'
+                platforms={game.platforms}
+              />
+            )}
           </Box>
         </Stack>
       </CardBody>
     </Card>
-  );
-};
-
-type GenreListProps = FlexProps & {
-  genres: Genre[];
-};
-const GenreList = ({ genres, ...rest }: GenreListProps) => {
-  return (
-    <Flex
-      css={{ '&::-webkit-scrollbar': { display: 'none' } }}
-      overflow='auto'
-      {...rest}
-    >
-      {genres.map((g) => (
-        <Box
-          h='fit-content'
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          bg={useColorModeValue('major.300', 'major.700')}
-          key={g.id}
-          rounded='md'
-          m='1'
-          px='2'
-        >
-          <Text>{g.name}</Text>
-        </Box>
-      ))}
-    </Flex>
-  );
-};
-
-type PlatformListProps = FlexProps & {
-  platforms: Platform[];
-};
-
-const PlatformList = ({ platforms, ...rest }: PlatformListProps) => {
-  return (
-    <Flex
-      css={{ '&::-webkit-scrollbar': { display: 'none' } }}
-      overflow='auto'
-      {...rest}
-    >
-      {platforms.map((p) => (
-        <Box
-          display='flex'
-          justifyContent='center'
-          alignItems='center'
-          bg={useColorModeValue('major.300', 'major.700')}
-          key={p.id}
-          rounded='md'
-          m='1'
-          px='2'
-        >
-          <Text>{p.name}</Text>
-        </Box>
-      ))}
-    </Flex>
   );
 };

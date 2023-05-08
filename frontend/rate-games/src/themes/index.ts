@@ -8,6 +8,7 @@ import { menuTheme } from './components/menu';
 import { inputTheme } from './components/input';
 import { checkboxTheme } from './components/checkbox';
 import { modalTheme } from './components/modal';
+import { textareaTheme } from './components/textarea';
 
 const defaultTheme = extendTheme({
   shadows: { outline: '0 0 0 2px var(--chakra-colors-green-500)' },
@@ -31,6 +32,7 @@ const defaultTheme = extendTheme({
     Input: inputTheme,
     Checkbox: checkboxTheme,
     Modal: modalTheme,
+    Textarea: textareaTheme,
   },
 });
 

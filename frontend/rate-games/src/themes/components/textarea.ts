@@ -1,23 +1,11 @@
-import { inputAnatomy } from '@chakra-ui/anatomy';
-import {
-  StyleFunctionProps,
-  createMultiStyleConfigHelpers,
-} from '@chakra-ui/react';
+import { defineStyleConfig } from '@chakra-ui/react';
+import type { StyleFunctionProps } from '@chakra-ui/styled-system';
 import { mode } from '@chakra-ui/theme-tools';
-
-const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(
-  inputAnatomy.keys
-);
-
-const defaultColors = (props: StyleFunctionProps) => ({
-  colorScheme: 'major',
-  bg: mode('major.100', 'major.700')(props),
-});
-
-const variants = {
-  primary: (props: StyleFunctionProps) => ({
-    field: {
-      ...defaultColors(props),
+export const textareaTheme = defineStyleConfig({
+  variants: {
+    primary: (props: StyleFunctionProps) => ({
+      colorScheme: 'major',
+      bg: mode('major.100', 'major.700')(props),
       border: '1px solid',
       borderColor: mode('major.300', 'major.600')(props),
       px: 2,
@@ -39,11 +27,9 @@ const variants = {
         border: '2px solid',
         borderColor: mode('red.400', 'red.800')(props),
       },
-    },
-  }),
-};
-
-export const inputTheme = defineMultiStyleConfig({
-  variants,
-  defaultProps: { variant: 'primary' },
+    }),
+  },
+  defaultProps: {
+    variant: 'primary',
+  },
 });
