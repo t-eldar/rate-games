@@ -19,6 +19,7 @@ public static class MicrosoftDiExtensions
 		services.AddSingleton<IMemberInfoStorage, MemberInfoStorage>();
 		services.AddTransient<IMemberExpressionParser, MemberExpressionParser>();
 		services.AddTransient<IConstantExpressionParser, ConstantExpressionParser>();
+		services.AddTransient<IUnaryExpressionParser, UnaryExpressionParser>();
 		services.AddTransient<INewArrayExpressionParser, NewArrayExpressionParser>();
 		services.AddTransient<INewExpressionParser, NewExpressionParser>();
 		services.AddTransient<IBinaryExpressionParser, BinaryExpressionParser>();

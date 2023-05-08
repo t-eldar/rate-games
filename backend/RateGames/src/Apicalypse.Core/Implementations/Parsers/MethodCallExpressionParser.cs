@@ -212,10 +212,10 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 		MethodCallExpression methodCall => Parse(methodCall, stringBuilder),
 		ConstantExpression constant => _constantParser.Parse(constant, stringBuilder),
 		NewArrayExpression newArray => _newArrayParser.Parse(newArray, stringBuilder),
-		UnaryExpression unary => ParseUnary(unary),
+		UnaryExpression unary => ParseQuoteUnary(unary),
 		_ => throw new ArgumentException($"Expression {expression} with {expression.NodeType} cannot be part of new object")
 	};
-	private string ParseUnary(UnaryExpression expression)
+	private string ParseQuoteUnary(UnaryExpression expression)
 	{
 		if (expression.NodeType != ExpressionType.Quote)
 		{

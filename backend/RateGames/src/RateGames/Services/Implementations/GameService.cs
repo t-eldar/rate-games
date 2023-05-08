@@ -3,6 +3,7 @@ using Apicalypse.Core.Interfaces;
 
 using RateGames.Common.Extensions;
 using RateGames.Models.Igdb;
+using RateGames.Models.Igdb.Enums;
 using RateGames.Services.Interfaces;
 
 namespace RateGames.Services.Implementations;
@@ -57,8 +58,8 @@ public class GameService : IGameService
 	}
 	public async Task<IEnumerable<Game>?> GetBySearchAsync(
 		string searchQuery,
-		int limit = 10,
-		int offset = 0
+		int limit,
+		int offset
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
@@ -75,8 +76,8 @@ public class GameService : IGameService
 
 	public async Task<IEnumerable<Game>?> GetByAllPlatformsAsync(
 		IEnumerable<int> platformIds,
-		int limit = 10,
-		int offset = 0
+		int limit,
+		int offset
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
@@ -92,8 +93,8 @@ public class GameService : IGameService
 	}
 	public async Task<IEnumerable<Game>?> GetByAllGameModesAsync(
 		IEnumerable<int> gamemodeIds,
-		int limit = 10,
-		int offset = 0
+		int limit,
+		int offset
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
@@ -110,8 +111,8 @@ public class GameService : IGameService
 
 	public async Task<IEnumerable<Game>?> GetByAllGenresAsync(
 		IEnumerable<int> genreIds,
-		int limit = 10,
-		int offset = 0
+		int limit,
+		int offset
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
@@ -128,8 +129,8 @@ public class GameService : IGameService
 
 	public async Task<IEnumerable<Game>?> GetByIdsAsync(
 		IEnumerable<int> ids,
-		int limit = 10,
-		int offset = 0
+		int limit,
+		int offset
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
@@ -139,6 +140,20 @@ public class GameService : IGameService
 			.Take(limit)
 			.Build();
 
+		var response = await _igdbService.GetAsync<IEnumerable<Game>>(query, Endpoint);
+
+		return response;
+	}
+
+	public async Task<IEnumerable<Game>?> GetLatestAsync(int limit, int offset)
+	{
+		var query = _queryBuilderCreator.CreateFor<Game>()
+			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Where(g => g.Category == (int)GameCategory.MainGame)
+			.OrderByDescending(g => g.FirstReleaseDate)
+			.Skip(offset)
+			.Take(limit)
+			.Build();
 		var response = await _igdbService.GetAsync<IEnumerable<Game>>(query, Endpoint);
 
 		return response;

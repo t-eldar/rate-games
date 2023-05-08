@@ -34,10 +34,9 @@ public class CompanyService : ICompanyService
 	}
 	public async Task<IEnumerable<Company>?> GetAllByCountryAsync(int code)
 	{
-		int? specCode = code;
 		var query = _queryBuilderCreator.CreateFor<Company>()
 			.Select()
-			.Where(c => c.Country == specCode)
+			.Where(c => c.Country == code)
 			.Build();
 
 		var response = await _igdbService.GetAsync<IEnumerable<Company>>(query, Endpoint);

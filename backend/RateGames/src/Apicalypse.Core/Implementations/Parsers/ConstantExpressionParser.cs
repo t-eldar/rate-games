@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
-using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.Interfaces.ExpressionParsers;
 using Apicalypse.Core.StringEnums;
 
@@ -54,7 +47,7 @@ internal class ConstantExpressionParser : IConstantExpressionParser
 		{
 			return floatValue.ToString("G", CultureInfo.InvariantCulture);
 		}
-		return expression.Value?.ToString() ?? "null";
+		return expression.Value?.ToString() ?? QueryKeywords.Null;
 	}
 	public string Parse(ConstantExpression expression, StringBuilder stringBuilder)
 	{
@@ -80,6 +73,10 @@ internal class ConstantExpressionParser : IConstantExpressionParser
 		else if (expression.Value is float floatValue)
 		{
 			return floatValue.ToString("G", CultureInfo.InvariantCulture);
+		}
+		else if (expression.Value?.GetType().IsEnum ?? false)
+		{
+			return ((int)expression.Value).ToString();
 		}
 
 		return expression.Value?.ToString() ?? QueryKeywords.Null;

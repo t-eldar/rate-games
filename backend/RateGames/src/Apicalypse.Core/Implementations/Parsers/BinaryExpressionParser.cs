@@ -11,16 +11,18 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 	private readonly IMemberExpressionParser _memberParser;
 	private readonly IConstantExpressionParser _constantParser;
 	private readonly IMethodCallExpressionParser _methodCallParser;
+	private readonly IUnaryExpressionParser _unaryParser;
 
 	public BinaryExpressionParser(
 		IMemberExpressionParser memberParser,
 		IConstantExpressionParser constantParser,
-		IMethodCallExpressionParser methodCallParser
-	)
+		IMethodCallExpressionParser methodCallParser,
+		IUnaryExpressionParser unaryParser)
 	{
 		_memberParser = memberParser;
 		_constantParser = constantParser;
 		_methodCallParser = methodCallParser;
+		_unaryParser = unaryParser;
 	}
 
 	public string Parse(BinaryExpression expression)
@@ -55,6 +57,7 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		MemberExpression member => _memberParser.Parse(member, stringBuilder),
 		ConstantExpression constant => _constantParser.Parse(constant, stringBuilder),
 		MethodCallExpression methodCall => _methodCallParser.Parse(methodCall, stringBuilder),
+		UnaryExpression unary => _unaryParser.Parse(unary, stringBuilder),
 		BinaryExpression binary => Parse(binary, stringBuilder),
 		_ => throw new ArgumentException($"Expression {expression} cannot be part of binary")
 	};
@@ -63,6 +66,7 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		MemberExpression member => _memberParser.Parse(member),
 		ConstantExpression constant => _constantParser.Parse(constant),
 		MethodCallExpression methodCall => _methodCallParser.Parse(methodCall),
+		UnaryExpression unary => _unaryParser.Parse(unary),
 		BinaryExpression binary => Parse(binary),
 		_ => throw new ArgumentException($"Expression {expression} cannot be part of binary")
 	};

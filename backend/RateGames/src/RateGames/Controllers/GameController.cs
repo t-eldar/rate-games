@@ -14,7 +14,8 @@ namespace RateGames.Controllers;
 public class GameController : ControllerBase
 {
 	private readonly IGameService _gameService;
-
+	private const int DefaultLimit = 10;
+	private const int DefaultOffset = 0;
 	public GameController(IGameService gameService) => _gameService = gameService;
 
 	[Route("{id}")]
@@ -30,10 +31,14 @@ public class GameController : ControllerBase
 
 	[Route("by-genres")]
 	[HttpGet]
-	public async Task<IActionResult> GetByGenresAsync([FromQuery] int[] genreIds)
+	public async Task<IActionResult> GetByGenresAsync(
+		[FromQuery] int[] genreIds,
+		int limit = DefaultLimit, int
+		offset = DefaultOffset
+	)
 	{
-		var games = await _gameService.GetByAllGenresAsync(genreIds);
-		
+		var games = await _gameService.GetByAllGenresAsync(genreIds, limit, offset);
+
 		return games is null
 			? NotFound()
 			: Ok(games);
@@ -41,9 +46,13 @@ public class GameController : ControllerBase
 
 	[Route("by-game-modes")]
 	[HttpGet]
-	public async Task<IActionResult> GetByGameModesAsync([FromQuery] int[] gameModeIds)
+	public async Task<IActionResult> GetByGameModesAsync(
+		[FromQuery] int[] gameModeIds,
+		int limit = DefaultLimit,
+		int offset = DefaultOffset
+	)
 	{
-		var games = await _gameService.GetByAllGameModesAsync(gameModeIds);
+		var games = await _gameService.GetByAllGameModesAsync(gameModeIds, limit, offset);
 
 		return games is null
 			? NotFound()
@@ -52,9 +61,13 @@ public class GameController : ControllerBase
 
 	[Route("by-platforms")]
 	[HttpGet]
-	public async Task<IActionResult> GetByPlatformsAsync([FromQuery] int[] platformIds)
+	public async Task<IActionResult> GetByPlatformsAsync(
+		[FromQuery] int[] platformIds,
+		int limit = DefaultLimit,
+		int offset = DefaultOffset
+	)
 	{
-		var games = await _gameService.GetByAllPlatformsAsync(platformIds);
+		var games = await _gameService.GetByAllPlatformsAsync(platformIds, limit, offset);
 
 		return games is null
 			? NotFound()
@@ -63,9 +76,13 @@ public class GameController : ControllerBase
 
 	[Route("by-search")]
 	[HttpGet]
-	public async Task<IActionResult> GetBySearchAsync(string search)
+	public async Task<IActionResult> GetBySearchAsync(
+		string search,
+		int limit = DefaultLimit,
+		int offset = DefaultOffset
+	)
 	{
-		var games = await _gameService.GetBySearchAsync(search);
+		var games = await _gameService.GetBySearchAsync(search, limit, offset);
 
 		return games is null
 			? NotFound()
@@ -74,9 +91,23 @@ public class GameController : ControllerBase
 
 	[Route("by-ids")]
 	[HttpGet]
-	public async Task<IActionResult> GetByIdsAsync([FromQuery] int[] ids)
+	public async Task<IActionResult> GetByIdsAsync(
+		[FromQuery] int[] ids,
+		int limit = DefaultLimit,
+		int offset = DefaultOffset
+	)
 	{
-		var games = await _gameService.GetByIdsAsync(ids);
+		var games = await _gameService.GetByIdsAsync(ids, limit, offset);
+		return games is null
+			? NotFound()
+			: Ok(games);
+	}
+
+	[Route("latest")]
+	[HttpGet]
+	public async Task<IActionResult> GetLatestAsync(int limit = DefaultLimit, int offset = DefaultOffset)
+	{
+		var games = await _gameService.GetLatestAsync(limit, offset);
 
 		return games is null
 			? NotFound()
