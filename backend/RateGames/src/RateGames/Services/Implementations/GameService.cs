@@ -148,7 +148,15 @@ public class GameService : IGameService
 	public async Task<IEnumerable<Game>?> GetLatestAsync(int limit, int offset)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(g => g.Category == (int)GameCategory.MainGame)
 			.OrderByDescending(g => g.FirstReleaseDate)
 			.Skip(offset)
