@@ -1,3 +1,4 @@
+import { User } from './authentication';
 import { Game } from './igdb-models';
 
 export type Rating = {
@@ -12,6 +13,7 @@ export type Review = {
   dateCreated: Date;
   gameId: number;
   userId: string;
+  user: User;
   ratingId: number;
 };
 

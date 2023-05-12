@@ -5,6 +5,7 @@ import {
   MinNormalizableGame,
 } from '@/types/entities';
 import { changeResolution } from './images';
+import { isGameDataCorrect } from './assertion';
 
 export const normalizeMaxGame = (game: MaxNormalizableGame): MaxGameInfo => {
   if (typeof game.cover === 'number' || !game.cover.url) {
@@ -22,7 +23,7 @@ export const normalizeMaxGame = (game: MaxNormalizableGame): MaxGameInfo => {
   }
   game.cover.url = changeResolution(game.cover.url, '1080p');
   if (game.firstReleaseDate) {
-    const firstReleaseDate = new Date(game.firstReleaseDate);
+    const firstReleaseDate = new Date(game.firstReleaseDate * 1000);
     return { ...game, firstReleaseDate };
   }
   return { ...game, firstReleaseDate: undefined };
@@ -34,7 +35,8 @@ export const normalizeMinGame = (game: MinNormalizableGame): MinGameInfo => {
   }
   game.cover.url = changeResolution(game.cover.url, '1080p');
   if (game.firstReleaseDate) {
-    const firstReleaseDate = new Date(game.firstReleaseDate);
+    const firstReleaseDate = new Date(game.firstReleaseDate * 1000);
+
     return { ...game, firstReleaseDate };
   }
   return { ...game, firstReleaseDate: undefined };
@@ -43,7 +45,9 @@ export const normalizeMinGame = (game: MinNormalizableGame): MinGameInfo => {
 export const normalizeGames = (games: MinNormalizableGame[]): MinGameInfo[] => {
   const result = new Array<MinGameInfo>();
   for (const game of games) {
-    result.push(normalizeMinGame(game));
+    if (isGameDataCorrect(game)) {
+      result.push(normalizeMinGame(game));
+    }
   }
 
   return result;

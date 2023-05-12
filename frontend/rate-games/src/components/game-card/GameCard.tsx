@@ -16,6 +16,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 type GameCardProps = CardProps & {
   game: MinGameInfo;
@@ -31,14 +32,13 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
       border='2px solid'
       borderColor={useColorModeValue('major.200', 'major.800')}
       rounded='xl'
-      maxH='lg'
-      maxW='xl'
-      minW='3xs'
       _hover={{
         border: '2px solid',
         boxShadow: 'xl',
         borderColor: useColorModeValue('minor.500', 'minor.400'),
       }}
+      as={RouterLink}
+      to={`/games/${game.id}`}
       {...rest}
     >
       <CardBody display='flex' flexDirection={{ base: 'column', sm: 'row' }}>

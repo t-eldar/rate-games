@@ -1,21 +1,23 @@
 import { range } from '@/utils/collections';
-import { Box, BoxProps, Icon } from '@chakra-ui/react';
+import { Box, BoxProps, Icon, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 
-type RatingBlockProps = BoxProps & {
+type AddRatingProps = BoxProps & {
   onSelectRating: (value: number) => void;
   count?: number;
 };
-export const RatingBlock = ({
+export const AddRating = ({
   onSelectRating,
   count = 5,
   ...rest
-}: RatingBlockProps) => {
+}: AddRatingProps) => {
   const [clicked, setClicked] = useState<number>();
   const [areIconsFilled, setAreIconsFilled] = useState<boolean[]>(
     range(0, count).map((_) => false)
   );
+
+  const color = useColorModeValue('minor.600', 'minor.400');
   return (
     <Box {...rest}>
       {range(1, count).map((value, index) => (
@@ -23,7 +25,7 @@ export const RatingBlock = ({
           key={index}
           boxSize={9}
           cursor='pointer'
-          color='minor.500'
+          color={color}
           aria-label='add rating'
           onClick={() => {
             if (clicked === index) {

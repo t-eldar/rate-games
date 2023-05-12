@@ -1,10 +1,11 @@
 import { ThemeSwitcher } from '@/components/buttons/theme-switcher';
+import { SignInForm } from '@/components/forms/sign-in';
+import { SignUpForm } from '@/components/forms/sign-up-form';
 import { useAuth } from '@/hooks/use-auth';
 import { User } from '@/types/authentication';
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   FlexProps,
   HStack,
@@ -16,20 +17,17 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalOverlay,
   Text,
   ThemingProps,
   VStack,
   useBoolean,
   useColorModeValue,
-  useDisclosure,
+  useDisclosure
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { ReactNode, useEffect, useState } from 'react';
 import { FiChevronRight, FiLogIn, FiMenu } from 'react-icons/fi';
-import { SignInForm } from '@/components/forms/sign-in';
-import { SignUpForm } from '@/components/forms/sign-up-form';
 
 type HeaderProps = FlexProps & {
   menuItems: ReactNode[];

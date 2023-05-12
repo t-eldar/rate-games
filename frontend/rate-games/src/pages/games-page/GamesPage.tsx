@@ -1,7 +1,7 @@
 import { GameCard } from '@/components/game-card';
 import { useFetch } from '@/hooks/use-fetch';
-import { getLatestGames, getMockedGames } from '@/services/game-service';
-import { Flex } from '@chakra-ui/react';
+import { getLatestGames } from '@/services/game-service';
+import { Flex, Spinner } from '@chakra-ui/react';
 
 export const GamesPage = () => {
   const {
@@ -10,20 +10,24 @@ export const GamesPage = () => {
     error,
   } = useFetch(async () => await getLatestGames());
   return (
-    <>
-      {!games || error ? (
-        <>
-          {error && typeof error === 'object' && 'message' in error
-            ? error.message
-            : '[z'}
-        </>
+    <Flex flexWrap='wrap' justifyContent='space-evenly' p='6'>
+      {isLoading ? (
+        <Spinner size='xl' color='minor.500' />
+      ) : error || !games ? (
+        <></>
       ) : (
-        <Flex flexWrap='wrap' justifyContent='space-evenly' p='6'>
-          {games.map((g) => (
-            <GameCard my='3' key={g.id} game={g} />
-          ))}
-        </Flex>
+        games.map((g) => (
+          <GameCard
+            flexGrow='1'
+            maxH='lg'
+            maxW='xl'
+            minW='3xs'
+            my='3'
+            key={g.id}
+            game={g}
+          />
+        ))
       )}
-    </>
+    </Flex>
   );
 };

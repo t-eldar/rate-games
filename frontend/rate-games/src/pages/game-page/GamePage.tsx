@@ -1,9 +1,11 @@
 import { ReviewForm } from '@/components/forms/review-form';
 import { GenreList } from '@/components/lists/genre-list';
 import { PlatformList } from '@/components/lists/platform-list';
+import { ReviewList } from '@/components/lists/review-list';
 import { NukaCarousel } from '@/components/nuka-carousel';
 import { useFetch } from '@/hooks/use-fetch';
 import { getGameById } from '@/services/game-service';
+import { getReviewsByGame } from '@/services/review-service';
 import {
   Box,
   Flex,
@@ -22,23 +24,24 @@ export const GamePage = () => {
   const { data: game } = useFetch(async () => {
     return await getGameById(id);
   });
+  const reviews = getReviewsByGame(id);
 
   if (!game) {
     return <></>;
   }
+
+  const color = useColorModeValue('major.200', 'major.800');
   return (
     <Stack>
       <Flex
         p='10'
         w='100%'
-        direction={{ base: 'column', md: 'row' }}
+        direction={{ base: 'column-reverse', md: 'row' }}
         justifyContent='space-between'
       >
         <Box w='2xl'>
-          <Heading>{game.name}</Heading>
-          {!game.screenshots ? (
-            <Text>No screenshots</Text>
-          ) : (
+          <Heading mb='5'>{game.name}</Heading>
+          {!game.screenshots ? null : (
             <NukaCarousel mb='4'>
               {game.screenshots.map((s) => (
                 <Box
@@ -65,12 +68,8 @@ export const GamePage = () => {
           >
             <Text>{game.summary}</Text>
           </Box>
-          <ReviewForm
-            gameId={game.id}
-            p='4'
-            rounded='xl'
-            bg={useColorModeValue('major.200', 'major.800')}
-          />
+          <ReviewForm mt='4' gameId={game.id} p='4' rounded='xl' bg={color} />
+          <ReviewList reviews={reviews} />
         </Box>
         <Box
           display='flex'

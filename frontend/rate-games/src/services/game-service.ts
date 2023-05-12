@@ -3,7 +3,7 @@ import {
   isMaxNormalizableGame,
   isMinNormalizableGames,
 } from '@/utils/assertion';
-import { normalizeMaxGame, normalizeGames } from '@/utils/entities';
+import { normalizeMaxGame, normalizeGames } from '@/utils/normalizers';
 import { combineURLs } from '@/utils/url';
 
 const baseURL = 'https://localhost:7082/games';

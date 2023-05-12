@@ -1,6 +1,15 @@
-import { RatingBlock } from '@/components/rating-block';
+import { AddRating } from '@/components/add-rating';
 import { createReview } from '@/services/review-service';
-import { Box, BoxProps, Button, Flex, Input, Textarea } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  Button,
+  Center,
+  Flex,
+  Input,
+  Text,
+  Textarea,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 
 type ReviewFormProps = BoxProps & {
@@ -32,23 +41,28 @@ export const ReviewForm = ({ gameId, ...rest }: ReviewFormProps) => {
     });
   };
   return (
-    <Box {...rest}>
+    <Box {...rest} p='6'>
       <Flex>
-        <RatingBlock onSelectRating={setRating} />
+        <Text mr='4'>Rate game:</Text>
+        <AddRating onSelectRating={setRating} />
       </Flex>
       <Input
         value={title}
         onChange={handleTitleChange}
         placeholder='Add title...'
+        mb='2'
       />
       <Textarea
         value={description}
         onChange={handleDescriptionChange}
         placeholder='Add review...'
+        mb='2'
       />
-      <Button variant='secondary' onClick={handleSave}>
-        Save
-      </Button>
+      <Center>
+        <Button w='3xs' variant='secondary' onClick={handleSave}>
+          Save
+        </Button>
+      </Center>
     </Box>
   );
 };

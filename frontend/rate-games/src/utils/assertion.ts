@@ -3,7 +3,7 @@ import { MaxNormalizableGame, MinNormalizableGame } from '@/types/entities';
 export const isMaxNormalizableGame = (
   data: unknown
 ): data is MaxNormalizableGame => {
-  if (data && typeof data === 'object' && isDataCorrect(data)) {
+  if (data && typeof data === 'object' && isGameDataCorrect(data)) {
     return true;
   }
   return false;
@@ -13,19 +13,19 @@ export const isMinNormalizableGames = (
   data: unknown
 ): data is MinNormalizableGame[] => {
   console.log(data);
-  
+
   if (!Array.isArray(data)) {
     return false;
   }
   for (const item of data) {
-    if (!isDataCorrect(item)) {
-      return false;
+    if (isGameDataCorrect(item)) {
+      return true;
     }
   }
-  return true;
+  return false;
 };
 
-const isDataCorrect = (data: unknown): boolean =>
+export const isGameDataCorrect = (data: unknown): boolean =>
   data &&
   typeof data === 'object' &&
   'id' in data &&
