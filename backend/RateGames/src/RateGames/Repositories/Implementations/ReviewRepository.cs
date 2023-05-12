@@ -15,6 +15,7 @@ namespace RateGames.Repositories.Implementations;
 public class ReviewRepository : IReviewRepository
 {
 	private readonly IApplicationContext _applicationContext;
+	private readonly IRatingRepository _ratingRepository;
 	private readonly IDateTimeProvider _dateTimeProvider;
 	private readonly IValidator<CreateReviewRequest> _createRequestValidator;
 	private readonly IValidator<UpdateReviewRequest> _updateRequestValidator;
@@ -23,13 +24,15 @@ public class ReviewRepository : IReviewRepository
 		IApplicationContext applicationContext,
 		IDateTimeProvider dateTimeProvider,
 		IValidator<CreateReviewRequest> createRequestValidator,
-		IValidator<UpdateReviewRequest> updateRequestValidator
+		IValidator<UpdateReviewRequest> updateRequestValidator,
+		IRatingRepository ratingRepository
 	)
 	{
 		_applicationContext = applicationContext;
 		_createRequestValidator = createRequestValidator;
 		_dateTimeProvider = dateTimeProvider;
 		_updateRequestValidator = updateRequestValidator;
+		_ratingRepository = ratingRepository;
 	}
 
 	public async Task<Review> CreateAsync(CreateReviewRequest request)
@@ -63,7 +66,11 @@ public class ReviewRepository : IReviewRepository
 			.FirstOrDefaultAsync(r => r.Id == request.Id)
 			?? throw new EntityNotFoundException();
 
-		request.UpdateReview(review);
+		var rating = request.RatingValue is null
+			? null 
+			: await _ratingRepository.GetByValueAsync(request.RatingValue.Value);
+
+		request.UpdateReview(review, rating?.Id);
 		await _applicationContext.SaveChangesAsync();
 	}
 
