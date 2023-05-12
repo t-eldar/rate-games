@@ -8,7 +8,7 @@ public class Game : IEntity
     public int Id { get; set; }
     public string? Name { get; set; }
     public string? Summary { get; set; }
-    public int? FirstReleaseDate { get; set; }
+    public long? FirstReleaseDate { get; set; }
     public double? AggregatedRating { get; set; }
     public double? Rating { get; set; }
     public GameCategory? Category { get; set; }

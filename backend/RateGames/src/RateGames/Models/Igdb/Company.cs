@@ -12,7 +12,7 @@ public class Company : IEntity
     /// ISO 3166-1 country code
     /// </summary>
     public int? Country { get; set; }
-    public int? StartDate { get; set; }
+    public long? StartDate { get; set; }
     public IdOr<Image>? Logo { get; set; }
     public IEnumerable<IdOr<Game>>? Published { get; set; }
     public IEnumerable<IdOr<Game>>? Developed { get; set; }
