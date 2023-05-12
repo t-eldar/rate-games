@@ -25,5 +25,5 @@ public interface IDateTimeProvider
     /// <summary>
     /// Number of seconds that have been elapsed since 1970-01-01T00:00:00Z
     /// </summary>
-    long CurrentDateTimeOffset { get; }
+    long CurrentUnixTimestamp { get; }
 }

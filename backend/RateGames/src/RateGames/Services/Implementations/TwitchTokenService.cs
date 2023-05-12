@@ -60,7 +60,7 @@ public class TwitchTokenService : ITwitchTokenService
         tokenDto = new TwitchTokenDto
         {
             Value = twitchToken,
-            CreatedAt = _dateTimeProvider.CurrentDateTimeOffset,
+            CreatedAt = _dateTimeProvider.CurrentUnixTimestamp,
         };
 
         _tokenStorage.SetToken(TokenKey, tokenDto);

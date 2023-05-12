@@ -7,5 +7,5 @@ public class DateTimeProvider : IDateTimeProvider
 {
 	public DateTime Current => DateTime.Now;
 	public DateTime CurrentUtc => DateTime.UtcNow;
-	public long CurrentDateTimeOffset => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+	public long CurrentUnixTimestamp => DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 }

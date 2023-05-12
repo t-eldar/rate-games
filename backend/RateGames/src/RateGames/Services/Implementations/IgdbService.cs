@@ -44,6 +44,8 @@ public class IgdbService : IIgdbService
 		var response = await _httpClient.SendAsync(requestMessage);
 		response.EnsureSuccessStatusCode();
 
+		//var text = await response.Content.ReadAsStringAsync();
+		//var result = JsonSerializer.Deserialize<T>(text, new JsonSerializerOptions()
 		var result = await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions()
 		{
 			PropertyNamingPolicy = new SnakeCaseNamingPolicy(),

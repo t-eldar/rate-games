@@ -15,14 +15,17 @@ public class GameService : IGameService
 
 	private readonly IIgdbService _igdbService;
 	private readonly IQueryBuilderCreator _queryBuilderCreator;
+	private readonly IDateTimeProvider _dateTimeProvider;
 
 	public GameService(
 		IIgdbService igdbService,
-		IQueryBuilderCreator queryBuilderCreator
+		IQueryBuilderCreator queryBuilderCreator,
+		IDateTimeProvider dateTimeProvider
 	)
 	{
 		_igdbService = igdbService;
 		_queryBuilderCreator = queryBuilderCreator;
+		_dateTimeProvider = dateTimeProvider;
 	}
 	public async Task<Game?> GetByIdAsync(int id)
 	{
@@ -147,6 +150,7 @@ public class GameService : IGameService
 
 	public async Task<IEnumerable<Game>?> GetLatestAsync(int limit, int offset)
 	{
+		var currentDate = _dateTimeProvider.CurrentUnixTimestamp;
 		var query = _queryBuilderCreator.CreateFor<Game>()
 			.Select()
 			.Include(g => new
@@ -157,11 +161,16 @@ public class GameService : IGameService
 				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
 				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
 			})
-			.Where(g => g.Category == (int)GameCategory.MainGame)
+			.Where(
+				g => g.Category == (int)GameCategory.MainGame && 
+				g.FirstReleaseDate > 0 && 
+				g.FirstReleaseDate < currentDate
+			)
 			.OrderByDescending(g => g.FirstReleaseDate)
 			.Skip(offset)
 			.Take(limit)
 			.Build();
+
 		var response = await _igdbService.GetAsync<IEnumerable<Game>>(query, Endpoint);
 
 		return response;
