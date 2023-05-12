@@ -32,6 +32,7 @@ public class UnaryExpressionParser : IUnaryExpressionParser
 		{
 			ConstantExpression constant => _constantExpressionParser.Parse(constant),
 			MemberExpression member => _memberExpressionParser.Parse(member),
+			UnaryExpression unary => Parse(unary),
 			_ => throw new NotImplementedException(),
 		};
 	}
@@ -46,6 +47,7 @@ public class UnaryExpressionParser : IUnaryExpressionParser
 		{
 			ConstantExpression constant => _constantExpressionParser.Parse(constant, stringBuilder),
 			MemberExpression member => _memberExpressionParser.Parse(member, stringBuilder),
+			UnaryExpression unary => Parse(unary, stringBuilder),
 			_ => throw new NotImplementedException(),
 		};
 	}
