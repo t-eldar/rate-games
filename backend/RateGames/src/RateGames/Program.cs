@@ -91,6 +91,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, SameAuthorAuthorizationHand
 
 // Repositories.
 builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
+builder.Services.AddTransient<IRatingRepository, RatingRepository>();
 
 // Other.
 builder.Services.AddTransient<IUserInfoResolver, UserInfoResolver>();

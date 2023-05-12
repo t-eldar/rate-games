@@ -16,14 +16,17 @@ public class ReviewController : ControllerBase
 	private const int Limit = 100;
 	private readonly IReviewRepository _reviewRepository;
 	private readonly IAuthorizationService _authorizationService;
+	private readonly IRatingRepository _ratingRepository;
 
 	public ReviewController(
 		IReviewRepository reviewRepository,
-		IAuthorizationService authorizationService
+		IAuthorizationService authorizationService,
+		IRatingRepository ratingRepository
 	)
 	{
 		_reviewRepository = reviewRepository;
 		_authorizationService = authorizationService;
+		_ratingRepository = ratingRepository;
 	}
 
 	[HttpGet]
@@ -79,7 +82,13 @@ public class ReviewController : ControllerBase
 			return Unauthorized();
 		}
 
-		var serviceRequest = request.ToCreateReviewRequest(idClaim.Value);
+		var rating = await _ratingRepository.GetByValueAsync(request.Rating);
+
+		if (rating is null)
+		{
+			return BadRequest();
+		}
+		var serviceRequest = request.ToCreateReviewRequest(idClaim.Value, rating.Id);
 
 		var review = await _reviewRepository.CreateAsync(serviceRequest);
 
