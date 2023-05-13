@@ -10,18 +10,26 @@ import Carousel, { ControlProps } from 'nuka-carousel';
 import { FaCircle, FaRegCircle } from 'react-icons/fa';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
-type NukaCarouselProps = BoxProps & {
-  children: JSX.Element[] | JSX.Element;
-};
+type CarouselProps = Omit<
+  React.ComponentProps<typeof Carousel>,
+  keyof React.RefAttributes<HTMLDivElement>
+>;
 
-export const NukaCarousel = ({ children, ...rest }: NukaCarouselProps) => {
+type NukaCarouselProps = BoxProps & {
+  carouselProps: CarouselProps;
+};
+export const NukaCarousel = ({
+  children,
+  carouselProps,
+  ...rest
+}: NukaCarouselProps) => {
   return (
     <Box {...rest}>
       <Carousel
-        wrapAround
         renderCenterLeftControls={PrevSlideButton}
         renderCenterRightControls={NextSlideButton}
         renderBottomCenterControls={PagingDots}
+        {...carouselProps}
       >
         {children}
       </Carousel>

@@ -13,8 +13,8 @@ export type Review = {
   dateCreated: Date;
   gameId: number;
   userId: string;
-  user: User;
-  ratingId: number;
+  userInfo: User;
+  rating: number;
 };
 
 export type MaxNormalizableGame = Pick<

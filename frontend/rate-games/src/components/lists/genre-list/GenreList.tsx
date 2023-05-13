@@ -12,6 +12,7 @@ type GenreListProps = FlexProps & {
 };
 
 export const GenreList = ({ genres, ...rest }: GenreListProps) => {
+  const color = useColorModeValue('major.300', 'major.700');
   return (
     <Flex {...rest}>
       {genres.map((g) => (
@@ -20,7 +21,7 @@ export const GenreList = ({ genres, ...rest }: GenreListProps) => {
           display='flex'
           justifyContent='center'
           alignItems='center'
-          bg={useColorModeValue('major.300', 'major.700')}
+          bg={color}
           key={g.id}
           rounded='md'
           m='1'

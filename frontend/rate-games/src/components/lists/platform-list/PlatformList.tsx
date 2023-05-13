@@ -12,6 +12,7 @@ type PlatformListProps = FlexProps & {
 };
 
 export const PlatformList = ({ platforms, ...rest }: PlatformListProps) => {
+  const color = useColorModeValue('major.300', 'major.700');
   return (
     <Flex {...rest}>
       {platforms.map((p) => (
@@ -19,7 +20,7 @@ export const PlatformList = ({ platforms, ...rest }: PlatformListProps) => {
           display='flex'
           justifyContent='center'
           alignItems='center'
-          bg={useColorModeValue('major.300', 'major.700')}
+          bg={color}
           key={p.id}
           rounded='md'
           m='1'

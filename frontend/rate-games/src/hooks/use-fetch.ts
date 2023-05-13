@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAwait } from './use-await';
 
 export const useFetch = <
@@ -9,17 +9,26 @@ export const useFetch = <
   data: Awaited<ReturnType<typeof fetch>> | undefined;
   isLoading: boolean;
   error: unknown;
+  refetch: () => Promise<Awaited<ReturnType<TFetch>> | undefined>;
 } => {
   const [data, setData] = useState<Awaited<ReturnType<typeof fetch>>>();
   const { promise, isLoading, error } = useAwait<TFetch>(fetch);
 
-  useEffect(() => {
-    const func = async () => {
-      const result = await promise(...([] as Parameters<TFetch>));
-
-      setData(result);
-    };
-    func();
+  const fetcher = useCallback(async (): Promise<
+    Awaited<ReturnType<TFetch>> | undefined
+  > => {
+    const result = await promise(...([] as Parameters<TFetch>));
+    setData(result);
+    return result;
   }, []);
-  return { data, isLoading, error };
+
+  useEffect(() => {
+    fetcher();
+  }, []);
+  return {
+    data,
+    isLoading,
+    error,
+    refetch: fetcher,
+  };
 };

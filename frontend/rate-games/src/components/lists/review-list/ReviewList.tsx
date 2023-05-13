@@ -1,58 +1,37 @@
-import { Rating } from '@/components/rating';
+import { ReviewItem } from '@/components/review-item';
 import { Review } from '@/types/entities';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  CardProps,
-  Center,
-  Flex,
-  Stack,
-  Text,
-  useColorModeValue
-} from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 
-type ReviewListProps = {
+type ReviewListProps = BoxProps & {
+  removeUserReviews?: boolean;
   reviews: Review[];
+  userId: string;
+  onClickEdit: (review: Review) => void;
+  onClickDelete: (id: number) => void;
 };
-export const ReviewList = ({ reviews, ...rest }: ReviewListProps) => {
+export const ReviewList = ({
+  reviews,
+  userId,
+  removeUserReviews = false,
+  onClickEdit,
+  onClickDelete,
+  ...rest
+}: ReviewListProps) => {
   return (
     <Box {...rest}>
-      {reviews.map((r) => (
-        <ReviewItem key={r.id} review={r} mt="4" />
+      {(removeUserReviews
+        ? reviews.filter((r) => r.userId != userId)
+        : reviews
+      ).map((r) => (
+        <ReviewItem
+          key={r.id}
+          review={r}
+          mt='4'
+          userId={userId}
+          onClickEdit={onClickEdit}
+          onClickDelete={onClickDelete}
+        />
       ))}
     </Box>
-  );
-};
-
-type ReviewItemProps = CardProps & {
-  review: Review;
-};
-const ReviewItem = ({ review, ...rest }: ReviewItemProps) => {
-  const bgColor = useColorModeValue('major.200', 'major.800');
-  const fontColor = useColorModeValue('major.700', 'major.200');
-
-  return (
-    <Card rounded='xl' bg={bgColor} {...rest}>
-      <CardHeader pb='0'>
-        <Flex>
-          <Avatar src={review.user.avatarUrl} size='lg' />
-          <Stack ml='5'>
-            <Text fontSize='xl'>{review.user.userName}</Text>
-            <Text fontSize='md' color={fontColor}>
-              {review.dateCreated.toDateString()}
-            </Text>
-          </Stack>
-          <Center ml='4'>
-            <Rating value={review.ratingId} />
-          </Center>
-        </Flex>
-      </CardHeader>
-      <CardBody pt='2' p='6' display='flex' justifyContent='space-between'>
-        {review.description}
-      </CardBody>
-    </Card>
   );
 };

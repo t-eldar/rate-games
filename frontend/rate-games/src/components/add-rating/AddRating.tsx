@@ -6,15 +6,25 @@ import { FaRegStar, FaStar } from 'react-icons/fa';
 type AddRatingProps = BoxProps & {
   onSelectRating: (value: number) => void;
   count?: number;
+  initial?: number;
 };
 export const AddRating = ({
   onSelectRating,
   count = 5,
+  initial,
   ...rest
 }: AddRatingProps) => {
-  const [clicked, setClicked] = useState<number>();
-  const [areIconsFilled, setAreIconsFilled] = useState<boolean[]>(
-    range(0, count).map((_) => false)
+  const [clicked, setClicked] = useState<number | undefined>(
+    typeof initial !== 'undefined' ? initial - 1 : initial
+  );
+  const [areIconsFilled, setAreIconsFilled] = useState<boolean[]>(() =>
+    range(0, count).map((_, i) => {
+      if (!initial) {
+        return false;
+      }
+
+      return initial > i;
+    })
   );
 
   const color = useColorModeValue('minor.600', 'minor.400');
@@ -49,8 +59,6 @@ export const AddRating = ({
               setAreIconsFilled([...range(0, count).map((_) => false)]);
             } else {
               const filledIcons = range(0, clicked + 1).map((_) => true);
-              console.log(filledIcons);
-
               const emptyIcons = range(0, count - clicked - 1).map(
                 (_) => false
               );
