@@ -23,9 +23,9 @@ public class UpdateReviewRequestValidator : AbstractValidator<UpdateReviewReques
 			.MinimumLength(3)
 			.When(review => review.Title is not null);
 
-		RuleFor(review => review.RatingId)
+		RuleFor(review => review.RatingValue)
 			.NotEmpty()
 			.GreaterThan(0)
-			.When(review => review.RatingId is not null);
+			.When(review => review.RatingValue is not null);
 	}
 }

@@ -11,6 +11,7 @@ public interface IReviewRepository
 	Task<IEnumerable<Review>?> GetAllAsync(int limit, int offset);
 	Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit, int offset);
 	Task<IEnumerable<Review>?> GetByGameAsync(int gameId, int limit, int offset);
+	Task<Review?> GetByUserAndGameAsync(string userId, int gameId);
 	Task<Review?> GetByIdAsync(int id);
 
 	Task<Review> CreateAsync(CreateReviewRequest request);

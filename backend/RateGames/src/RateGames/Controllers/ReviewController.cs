@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using RateGames.Authorization;
+using RateGames.Models.Entities;
+using RateGames.Models.Igdb;
 using RateGames.Models.Requests;
+using RateGames.Models.Responses;
 using RateGames.Repositories.Interfaces;
 
 namespace RateGames.Controllers;
@@ -32,8 +35,13 @@ public class ReviewController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetAllAsync(int limit = Limit, int offset = 0)
 	{
-		var result = await _reviewRepository.GetAllAsync(limit, offset);
+		var reviews = await _reviewRepository.GetAllAsync(limit, offset);
 
+		if (reviews is null)
+		{
+			return NotFound();
+		}
+		var result = reviews.Select(r => ReviewResponse.GetFromReview(r));
 		return result is null
 			? NotFound()
 			: Ok(result);
@@ -43,8 +51,13 @@ public class ReviewController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetByUserAsync(string userId, int limit = Limit, int offset = 0)
 	{
-		var result = await _reviewRepository.GetByUserAsync(userId, limit, offset);
+		var reviews = await _reviewRepository.GetByUserAsync(userId, limit, offset);
 
+		if (reviews is null)
+		{
+			return NotFound();
+		}
+		var result = reviews.Select(r => ReviewResponse.GetFromReview(r));
 		return result is null
 			? NotFound()
 			: Ok(result);
@@ -54,8 +67,13 @@ public class ReviewController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetByGameAsync(int gameId, int limit = Limit, int offset = 0)
 	{
-		var result = await _reviewRepository.GetByGameAsync(gameId, limit, offset);
+		var reviews = await _reviewRepository.GetByGameAsync(gameId, limit, offset);
 
+		if (reviews is null)
+		{
+			return NotFound();
+		}
+		var result = reviews.Select(r => ReviewResponse.GetFromReview(r));
 		return result is null
 			? NotFound()
 			: Ok(result);
@@ -65,11 +83,27 @@ public class ReviewController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetByIdAsync(int id)
 	{
-		var result = await _reviewRepository.GetByIdAsync(id);
+		var review = await _reviewRepository.GetByIdAsync(id);
 
-		return result is null
+		return review is null
 			? NotFound()
-			: Ok(result);
+			: Ok(ReviewResponse.GetFromReview(review));
+	}
+	[Route("by-user-and-game")]
+	[HttpGet]
+	public async Task<IActionResult> GetByUserAndGameAsync(int gameId)
+	{
+		var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+		if (idClaim is null)
+		{
+			return Unauthorized();
+		}
+
+		var review = await _reviewRepository.GetByUserAndGameAsync(idClaim.Value, gameId);
+
+		return review is null
+			? NotFound()
+			: Ok(ReviewResponse.GetFromReview(review));
 	}
 
 	[HttpPost]
@@ -102,7 +136,7 @@ public class ReviewController : ControllerBase
 	[Authorize]
 	public async Task<IActionResult> UpdateAsync(int id, UpdateReviewRequest request)
 	{
-		if (HttpContext.User.Identity?.IsAuthenticated ?? true)
+		if (!HttpContext.User.Identity?.IsAuthenticated ?? true)
 		{
 			return Challenge();
 		}
@@ -138,7 +172,7 @@ public class ReviewController : ControllerBase
 	[Authorize]
 	public async Task<IActionResult> DeleteAsync(int id)
 	{
-		if (HttpContext.User.Identity?.IsAuthenticated ?? true)
+		if (!HttpContext.User.Identity?.IsAuthenticated ?? true)
 		{
 			return Challenge();
 		}

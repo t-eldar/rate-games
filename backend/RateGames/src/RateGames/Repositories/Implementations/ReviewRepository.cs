@@ -66,9 +66,7 @@ public class ReviewRepository : IReviewRepository
 			.FirstOrDefaultAsync(r => r.Id == request.Id)
 			?? throw new EntityNotFoundException();
 
-		var rating = request.RatingValue is null
-			? null 
-			: await _ratingRepository.GetByValueAsync(request.RatingValue.Value);
+		var rating = await _ratingRepository.GetByValueAsync(request.RatingValue ?? -1);
 
 		request.UpdateReview(review, rating?.Id);
 		await _applicationContext.SaveChangesAsync();
@@ -85,28 +83,42 @@ public class ReviewRepository : IReviewRepository
 		await _applicationContext.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<Review>?> GetAllAsync(int limit, int offset) => 
+	public async Task<IEnumerable<Review>?> GetAllAsync(int limit, int offset) =>
 		await _applicationContext.Reviews
 			.Skip(offset)
+			.Include(r => r.User)
+			.Include(r => r.Rating)
 			.Take(limit)
 			.ToListAsync();
 
-	public async Task<IEnumerable<Review>?> GetByGameAsync(int gameId,int limit,int offset) => 
+	public async Task<IEnumerable<Review>?> GetByGameAsync(int gameId, int limit, int offset) =>
 		await _applicationContext.Reviews
 			.Where(r => r.GameId == gameId)
+			.Include(r => r.User)
+			.Include(r => r.Rating)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
 
-	public async Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit, int offset) => 
+	public async Task<IEnumerable<Review>?> GetByUserAsync(string userId, int limit, int offset) =>
 		await _applicationContext.Reviews
 			.Where(r => r.UserId == userId)
+			.Include(r => r.User)
+			.Include(r => r.Rating)
 			.Skip(offset)
 			.Take(limit)
 			.ToListAsync();
 
 
-	public async Task<Review?> GetByIdAsync(int id) => 
-		await _applicationContext.Reviews.FirstOrDefaultAsync(r => r.Id == id);
+	public async Task<Review?> GetByIdAsync(int id) =>
+		await _applicationContext.Reviews
+			.Include(r => r.User)
+			.Include(r => r.Rating)
+			.FirstOrDefaultAsync(r => r.Id == id);
+	public async Task<Review?> GetByUserAndGameAsync(string userId, int gameId) => 
+		await _applicationContext.Reviews
+			.Include(r => r.User)
+			.Include(r => r.Rating)
+			.FirstOrDefaultAsync(r => r.UserId == userId && r.GameId == gameId);
 }
