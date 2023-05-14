@@ -13,6 +13,7 @@ export const useAwait = <
     ...args: Parameters<TFunction>
   ): Promise<Awaited<ReturnType<TFunction>> | undefined> => {
     try {
+      setError(undefined);
       setIsLoading(true);
       return await callback(...args);
     } catch (e) {

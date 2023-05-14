@@ -20,7 +20,7 @@ export const useFetch = <
     const result = await promise(...([] as Parameters<TFetch>));
     setData(result);
     return result;
-  }, []);
+  }, [promise]);
 
   useEffect(() => {
     fetcher();

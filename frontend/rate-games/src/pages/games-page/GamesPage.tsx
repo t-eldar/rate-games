@@ -1,7 +1,10 @@
-import { GameCard } from '@/components/game-card';
+import { GameList } from '@/components/lists/game-list';
+import { Loader } from '@/components/loader';
+import { ErrorResult } from '@/components/results/error-result';
+import { NotFoundResult } from '@/components/results/not-found-result';
 import { useFetch } from '@/hooks/use-fetch';
 import { getLatestGames } from '@/services/game-service';
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Center } from '@chakra-ui/react';
 
 export const GamesPage = () => {
   const {
@@ -10,24 +13,23 @@ export const GamesPage = () => {
     error,
   } = useFetch(async () => await getLatestGames());
   return (
-    <Flex flexWrap='wrap' justifyContent='space-evenly' p='6'>
+    <Center flexWrap='wrap' justifyContent='space-evenly' p='6'>
       {isLoading ? (
-        <Spinner size='xl' color='minor.500' />
-      ) : error || !games ? (
-        <></>
+        <Center h='80vh'>
+          <Loader />
+        </Center>
+      ) : error ? (
+        <ErrorResult />
+      ) : !games ? (
+        <NotFoundResult />
       ) : (
-        games.map((g) => (
-          <GameCard
-            flexGrow='1'
-            maxH='lg'
-            maxW='xl'
-            minW='3xs'
-            my='3'
-            key={g.id}
-            game={g}
-          />
-        ))
+        <GameList
+          games={games}
+          flexWrap='wrap'
+          justifyContent='space-evenly'
+          p='6'
+        />
       )}
-    </Flex>
+    </Center>
   );
 };

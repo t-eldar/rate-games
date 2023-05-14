@@ -1,4 +1,4 @@
-import { MinGameInfo } from '@/types/entities';
+import { MaxGameInfo, MinGameInfo } from '@/types/entities';
 import {
   isMaxNormalizableGame,
   isMinNormalizableGames,
@@ -8,7 +8,7 @@ import { combineURLs } from '@/utils/url';
 
 const baseURL = 'https://localhost:7082/games';
 
-export const getGameById = async (id: number) => {
+export const getGameById = async (id: number): Promise<MaxGameInfo> => {
   const url = new URL(combineURLs(baseURL, `/${id}`));
   const response = await fetch(url, {
     method: 'GET',
@@ -23,14 +23,14 @@ export const getGameById = async (id: number) => {
   return game;
 };
 
-export const getLatestGames = async () => {
+export const getLatestGames = async (): Promise<MinGameInfo[]> => {
   const url = new URL(combineURLs(baseURL, 'latest'));
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
   });
   const result = await response.json();
-  
+
   if (!isMinNormalizableGames(result)) {
     throw new Error('Data is incorrect');
   }
@@ -38,6 +38,26 @@ export const getLatestGames = async () => {
 
   return games;
 };
+
+export const getGamesBySearch = async (
+  search: string
+): Promise<MinGameInfo[]> => {
+  const url = new URL(combineURLs(baseURL, 'by-search'));
+  url.searchParams.append('search', search);
+  const response = await fetch(url, {
+    method: 'GET',
+    credentials: 'include',
+  });
+  const result = await response.json();
+
+  if (!isMinNormalizableGames(result)) {
+    throw new Error('Data is incorrect');
+  }
+  const games = normalizeGames(result);
+
+  return games;
+};
+
 
 export const getMockedGame = () => {
   return {

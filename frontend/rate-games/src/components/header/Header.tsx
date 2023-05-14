@@ -1,4 +1,5 @@
 import { ThemeSwitcher } from '@/components/buttons/theme-switcher';
+import { Logo } from '@/components/logo';
 import { SignInForm } from '@/components/forms/sign-in';
 import { SignUpForm } from '@/components/forms/sign-up-form';
 import { useAuth } from '@/hooks/use-auth';
@@ -23,7 +24,7 @@ import {
   VStack,
   useBoolean,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { ReactNode, useEffect, useState } from 'react';
@@ -53,35 +54,30 @@ export const Header = ({ onOpen, menuItems, ...rest }: HeaderProps) => {
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
       {...rest}
     >
-      <IconButton
-        display={{ base: 'flex', md: 'none' }}
-        onClick={onOpen}
-        variant='outline'
-        aria-label='open menu'
-        icon={<FiMenu />}
-      />
-
-      <Text
-        display={{ base: 'flex', md: 'none' }}
-        fontSize='2xl'
-        fontFamily='monospace'
-        fontWeight='bold'
-      >
-        Logo
-      </Text>
+      <Flex gap='4'>
+        <IconButton
+          display={{ base: 'flex', md: 'none' }}
+          onClick={onOpen}
+          variant='outline'
+          aria-label='open menu'
+          icon={<FiMenu />}
+        />
+        <Box display={{ base: 'flex', md: 'none' }}>
+          <Logo width='50px' height='50px' />
+        </Box>
+      </Flex>
       <HStack spacing={{ base: '0', md: '6' }}>
         <ThemeSwitcher />
-        <Flex alignItems={'center'}></Flex>
+        {!user ? (
+          <IconButton
+            onClick={onModalOpen}
+            aria-label='open sign in modal'
+            icon={<FiLogIn />}
+          />
+        ) : (
+          <HeaderMenu user={user} menuItems={menuItems} />
+        )}
       </HStack>
-      {!user ? (
-        <IconButton
-          onClick={onModalOpen}
-          aria-label='open sign in modal'
-          icon={<FiLogIn />}
-        />
-      ) : (
-        <HeaderMenu user={user} menuItems={menuItems} />
-      )}
       <AuthModal isOpen={isModalOpen} onClose={onModalClose} />
     </Flex>
   );

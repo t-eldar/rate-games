@@ -17,8 +17,13 @@ export const isMaxNormalizableGame = (
 export const isMinNormalizableGames = (
   data: unknown
 ): data is MinNormalizableGame[] => {
+  console.log(Array.isArray(data));
+
   if (!Array.isArray(data)) {
     return false;
+  }
+  if (data.length === 0) {
+    return true;
   }
 
   for (const item of data) {
