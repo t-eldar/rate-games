@@ -66,7 +66,15 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Find(searchQuery)
 			.Skip(offset)
 			.Take(limit)
@@ -84,7 +92,15 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(game => game.Platforms!.ContainsAll(platformIds))
 			.Skip(offset)
 			.Take(limit)
@@ -101,7 +117,15 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(g => g.GameModes!.ContainsAny(gamemodeIds))
 			.Skip(offset)
 			.Take(limit)
@@ -119,7 +143,15 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(g => g.Genres!.ContainsAny(genreIds))
 			.Skip(offset)
 			.Take(limit)
@@ -137,7 +169,15 @@ public class GameService : IGameService
 	)
 	{
 		var query = _queryBuilderCreator.CreateFor<Game>()
-			.Select(g => new { g.Screenshots, g.SimilarGames, }, SelectionMode.Exclude)
+			.Select()
+			.Include(g => new
+			{
+				PlatformNames = g.Platforms!.IncludeProperty(p => p.Value!.Name),
+				Cover = g.Cover!.IncludeProperty(c => c.Value!.Url),
+				GameModes = g.GameModes!.IncludeProperty(gm => gm.Value!.Name),
+				Genres = g.Genres!.IncludeProperty(gn => gn.Value!.Name),
+				GameEngineNames = g.GameEngines!.IncludeProperty(ge => ge.Value!.Name),
+			})
 			.Where(g => g.Id.ContainsAny<Game>(ids))
 			.Skip(offset)
 			.Take(limit)
