@@ -2,9 +2,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { useAwait } from './use-await';
 
 export const useFetch = <
-  TFetch extends (abortSignal: AbortSignal) => Promise<any> // eslint-disable-line
+  TFetch extends (abortSignal: AbortSignal) => Promise<unknown>
 >(
-  fetch: TFetch
+  fetch: TFetch,
+  dependencies: unknown[] = []
 ): {
   data: Awaited<ReturnType<typeof fetch>> | undefined;
   isLoading: boolean;
@@ -13,7 +14,10 @@ export const useFetch = <
 } => {
   const [data, setData] = useState<Awaited<ReturnType<typeof fetch>>>();
   const [isCleaned, setIsCleaned] = useState(false);
-  const { promise, isLoading, error } = useAwait<TFetch>(fetch, [isCleaned]);
+  const { promise, isLoading, error } = useAwait<TFetch>(fetch, [
+    isCleaned,
+    ...dependencies,
+  ]);
 
   const abortController = new AbortController();
 

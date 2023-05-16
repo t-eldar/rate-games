@@ -62,7 +62,8 @@ export const getGamesBySearch = async (
   url.searchParams.append('search', search);
   url.searchParams.append('limit', limit.toString());
   url.searchParams.append('offset', offset.toString());
-
+  console.log(search);
+  
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',

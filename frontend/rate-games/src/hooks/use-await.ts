@@ -8,7 +8,7 @@ export const useAwait = <
   dependencies: unknown[] = []
 ) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<unknown>();  
+  const [error, setError] = useState<unknown>();
 
   const promise = useCallback(
     async (
@@ -24,7 +24,7 @@ export const useAwait = <
         setIsLoading(false);
       }
     },
-    dependencies
+    [...dependencies]
   );
   return { promise, isLoading, error };
 };

@@ -1,25 +1,43 @@
 import { GameList } from '@/components/lists/game-list';
 import { Loader } from '@/components/loader';
 import { ErrorResult } from '@/components/results/error-result';
-import { NotFoundResult } from '@/components/results/not-found-result';
-import { useFetch } from '@/hooks/use-fetch';
+import { usePagedFetch } from '@/hooks/use-paged-fetch';
 import { getGamesBySearch } from '@/services/game-service';
-import { Button, Center, Flex, Input } from '@chakra-ui/react';
+import {
+  Button,
+  Center,
+  Flex,
+  Input,
+  Text,
+  useBoolean,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
+const limit = 20;
 export const SearchPage = () => {
   const defaultSearch = 'Witcher';
   const [search, setSearch] = useState('');
-
+  const [searchClicked, { toggle }] = useBoolean();
+  const [page, setPage] = useState(0);
   const {
     data: games,
-    isLoading: gamesLoading,
-    error: gamesError,
-    refetch: fetchGames,
-  } = useFetch(async () => {
-    return await getGamesBySearch(search.length === 0 ? defaultSearch : search);
-  });
+    hasMore,
+    isLoading,
+    error,
+  } = usePagedFetch(
+    async (limit, offset, signal) => {
+      return await getGamesBySearch(
+        search.length === 0 ? defaultSearch : search,
+        signal,
+        limit,
+        offset
+      );
+    },
+    page,
+    limit,
+    [searchClicked]
+  );
 
   const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -31,7 +49,7 @@ export const SearchPage = () => {
     e
   ) => {
     e.preventDefault();
-    await fetchGames();
+    toggle();
   };
   return (
     <>
@@ -56,24 +74,29 @@ export const SearchPage = () => {
           </Button>
         </Flex>
       </Center>
-      {gamesLoading ? (
-        <Center h='80vh'>
-          <Loader />
-        </Center>
-      ) : gamesError ? (
-        <ErrorResult />
-      ) : !games || games.length === 0 ? (
-        <NotFoundResult />
-      ) : (
-        <Center flexDirection='column'>
+      <Center flexWrap='wrap' flexDirection='column'>
+        {!games ? null : (
           <GameList
-            justifyContent='center'
-            gap='4'
             flexWrap='wrap'
             games={games}
+            justifyContent='space-evenly'
+            p='6'
           />
+        )}
+        <Center flexDirection='column' mb='10'>
+          {isLoading ? (
+            <Center h={!games ? '50vh' : '10vh'}>
+              <Loader />
+            </Center>
+          ) : !games && error ? (
+            <ErrorResult />
+          ) : hasMore ? (
+            <Button onClick={(_) => setPage((p) => p + 1)}>Load more...</Button>
+          ) : (
+            <Text fontSize='2xl'>That&apos;s all</Text>
+          )}
         </Center>
-      )}
+      </Center>
     </>
   );
 };

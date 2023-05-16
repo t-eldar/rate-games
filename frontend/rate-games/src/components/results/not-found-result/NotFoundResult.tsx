@@ -14,10 +14,10 @@ export const NotFoundResult = () => {
         404
       </Heading>
       <Text fontSize='2rem' mt={3} mb={2}>
-        Page Not Found
+        Data Not Found
       </Text>
       <Text mb={6}>
-        The page you&apos;re looking for does not seem to exist
+        The data you&apos;re looking for does not seem to exist
       </Text>
 
       <Button

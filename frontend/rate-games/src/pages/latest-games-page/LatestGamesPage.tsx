@@ -1,37 +1,50 @@
 import { GameList } from '@/components/lists/game-list';
 import { Loader } from '@/components/loader';
 import { ErrorResult } from '@/components/results/error-result';
-import { NotFoundResult } from '@/components/results/not-found-result';
-import { useFetch } from '@/hooks/use-fetch';
+import { usePagedFetch } from '@/hooks/use-paged-fetch';
 import { getLatestGames } from '@/services/game-service';
-import { Center } from '@chakra-ui/react';
+import { Button, Center, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
+const limit = 20;
 export const LatestGamesPage = () => {
+  const [page, setPage] = useState(0);
   const {
     data: games,
+    hasMore,
     isLoading,
     error,
-  } = useFetch(
-    async (abortSignal: AbortSignal) => await getLatestGames(abortSignal)
+  } = usePagedFetch(
+    async (limit, offset, signal) => {
+      return await getLatestGames(signal, limit, offset);
+    },
+    page,
+    limit
   );
+
   return (
-    <Center flexWrap='wrap' justifyContent='space-evenly' p='6'>
-      {isLoading ? (
-        <Center h='80vh'>
-          <Loader />
-        </Center>
-      ) : error ? (
-        <ErrorResult />
-      ) : !games ? (
-        <NotFoundResult />
-      ) : (
-        <GameList 
-          games={games}
+    <Center flexWrap='wrap' flexDirection='column'>
+      {!games ? null : (
+        <GameList
           flexWrap='wrap'
+          games={games}
           justifyContent='space-evenly'
           p='6'
         />
-      )} 
+      )}
+      <Center flexDirection='column' mb='10'>
+        {isLoading ? (
+          <Center h={!games ? '80vh' : '10vh'}>
+            <Loader />
+          </Center>
+        ) : !games && error ? (
+          <ErrorResult />
+        ) : hasMore ? (
+          <Button onClick={(_) => setPage((p) => p + 1)}>Load more...</Button>
+        ) : (
+          <Text fontSize='2xl'>That&apos;s all</Text>
+        )}
+      </Center>
     </Center>
   );
 };
