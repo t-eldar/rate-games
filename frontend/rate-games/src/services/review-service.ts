@@ -4,7 +4,8 @@ import { dateReviver } from '@/utils/serialization';
 import { combineURLs } from '@/utils/url';
 
 const baseURL = 'https://localhost:7082/reviews';
-
+const LIMIT = 50;
+const OFFSET = 0;
 export type CreateReviewRequest = {
   title: string;
   description: string;
@@ -69,9 +70,14 @@ export const updateReview = async (
 
 export const getReviewsByGame = async (
   gameId: number,
-  abortSignal?: AbortSignal
+  abortSignal?: AbortSignal,
+  limit = LIMIT,
+  offset = OFFSET
 ): Promise<Review[]> => {
   const url = new URL(combineURLs(baseURL, `by-game/${gameId}`));
+  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append('offset', offset.toString());
+  
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
@@ -88,9 +94,14 @@ export const getReviewsByGame = async (
 
 export const getReviewsByUser = async (
   userId: string,
-  abortSignal?: AbortSignal
+  abortSignal?: AbortSignal,
+  limit = LIMIT,
+  offset = OFFSET
 ): Promise<Review[]> => {
   const url = new URL(combineURLs(baseURL, `by-user/${userId}`));
+  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append('offset', offset.toString());
+
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',

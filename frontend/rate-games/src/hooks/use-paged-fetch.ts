@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAwait } from './use-await';
 
 export const usePagedFetch = <
@@ -17,7 +17,7 @@ export const usePagedFetch = <
   const [hasMore, setHasMore] = useState(false);
   const [isCleaned, setIsCleaned] = useState(false);
 
-  const { promise, isLoading, error } = useAwait(
+  const fetcher = useCallback(
     async (abortSignal: AbortSignal, page: number) => {
       const result = await fetch(limit, page * limit, abortSignal);
       setData((prevData) => {
@@ -25,14 +25,18 @@ export const usePagedFetch = <
           return [...new Set([...prevData, ...result])] as Awaited<
             ReturnType<TFetch>
           >;
-        } else {
-          return [...result] as Awaited<ReturnType<TFetch>>;
         }
+        return [...result] as Awaited<ReturnType<TFetch>>;
       });
       setHasMore(result.length > 0);
     },
-    [isCleaned, ...dependencies]
+    [fetch]
   );
+
+  const { promise, isLoading, error } = useAwait(fetcher, [
+    isCleaned,
+    ...dependencies,
+  ]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -44,5 +48,17 @@ export const usePagedFetch = <
     };
   }, [pageNumber, promise]);
 
-  return { isLoading, error, data, hasMore };
+  return {
+    isLoading,
+    error,
+    data,
+    hasMore,
+    refresh: () => {
+      setData([] as Awaited<ReturnType<TFetch>>);
+    },
+    refetch: async () => {
+      const abortController = new AbortController();
+      return await fetcher(abortController.signal, pageNumber);
+    },
+  };
 };

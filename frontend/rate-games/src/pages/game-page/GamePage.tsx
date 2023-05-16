@@ -10,6 +10,7 @@ import { ReviewItem } from '@/components/review-item';
 import { useAuth } from '@/hooks/use-auth';
 import { useAwait } from '@/hooks/use-await';
 import { useFetch } from '@/hooks/use-fetch';
+import { usePagedFetch } from '@/hooks/use-paged-fetch';
 import { getGameById } from '@/services/game-service';
 import {
   deleteReview,
@@ -43,6 +44,8 @@ export const GamePage = () => {
   const params = useParams();
   const id = Number(params.gameId);
 
+  const [reviewsPage, setReviewsPage] = useState(0);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isDelete, { on: onIsDelete, off: offIsDelete }] = useBoolean();
 
@@ -58,6 +61,7 @@ export const GamePage = () => {
   } = useFetch(async () => {
     return await getGameById(id);
   });
+
   const {
     data: userReview,
     isLoading: isUserReviewLoading,
@@ -66,9 +70,17 @@ export const GamePage = () => {
     return await getReviewByUserAndGame(id);
   });
 
-  const { data: reviews } = useFetch(async () => {
-    return await getReviewsByGame(id);
-  });
+  // const { data: reviews } = useFetch(async () => {
+  //   return await getReviewsByGame(id);
+  // });
+  const {
+    data: reviews,
+    isLoading: isReviewsLoading,
+    error: reviewsError,
+    hasMore,
+  } = usePagedFetch(async (limit, offset, signal) => {
+    return await getReviewsByGame(id, signal, limit, offset);
+  }, reviewsPage);
   const {
     promise: callDelete,
     isLoading: isDeleteLoading,
@@ -231,6 +243,19 @@ export const GamePage = () => {
               onClickEdit={handleClickEdit}
               onClickDelete={handleClickDelete}
             />
+          )}
+          {isReviewsLoading ? (
+            <Center>
+              <Loader />
+            </Center>
+          ) : !reviews && reviewsError ? (
+            <ErrorResult />
+          ) : hasMore ? (
+            <Button onClick={() => setReviewsPage((p) => p + 1)}>
+              Load more...
+            </Button>
+          ) : (
+            <Text fontSize='2xl'>That&apos;s all</Text>
           )}
         </Box>
         <Box

@@ -25,6 +25,8 @@ export const SearchPage = () => {
     hasMore,
     isLoading,
     error,
+    refetch,
+    refresh,
   } = usePagedFetch(
     async (limit, offset, signal) => {
       return await getGamesBySearch(
@@ -49,7 +51,10 @@ export const SearchPage = () => {
     e
   ) => {
     e.preventDefault();
+    setPage(0);
     toggle();
+    refresh();
+    await refetch();
   };
   return (
     <>
@@ -78,7 +83,7 @@ export const SearchPage = () => {
         {!games ? null : (
           <GameList
             flexWrap='wrap'
-            games={games}
+            games={[...new Map(games.map((item) => [item.id, item])).values()]}
             justifyContent='space-evenly'
             p='6'
           />

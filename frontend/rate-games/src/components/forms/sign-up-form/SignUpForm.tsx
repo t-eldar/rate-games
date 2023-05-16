@@ -64,6 +64,8 @@ export const SignUpForm = ({
   const handleSignUp: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     const pasValid = isPasswordValid(password);
+    console.log(pasValid);
+    
     const nameValid = isUsernameValid(username);
     if (!pasValid) {
       setIsPasswordInvalid(true);
@@ -71,6 +73,8 @@ export const SignUpForm = ({
     if (!nameValid) {
       setIsUsernameInvalid(true);
     }
+    console.log(register);
+    
     if (!register) {
       return;
     }
@@ -81,6 +85,8 @@ export const SignUpForm = ({
         password,
         avatarUrl,
       });
+      console.log(status);
+      
       if (status === 'success' && onSuccess) {
         onSuccess();
       }
