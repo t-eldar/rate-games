@@ -16,7 +16,7 @@ type CarouselProps = Omit<
 >;
 
 type NukaCarouselProps = BoxProps & {
-  carouselProps: CarouselProps;
+  carouselProps?: CarouselProps;
 };
 export const NukaCarousel = ({
   children,

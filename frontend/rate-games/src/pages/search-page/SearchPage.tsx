@@ -10,7 +10,7 @@ import { FiSearch } from 'react-icons/fi';
 
 export const SearchPage = () => {
   const defaultSearch = 'Witcher';
-  const [search, setSearch] = useState(defaultSearch);
+  const [search, setSearch] = useState('');
 
   const {
     data: games,
@@ -18,7 +18,7 @@ export const SearchPage = () => {
     error: gamesError,
     refetch: fetchGames,
   } = useFetch(async () => {
-    return await getGamesBySearch(search);
+    return await getGamesBySearch(search.length === 0 ? defaultSearch : search);
   });
 
   const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -31,7 +31,6 @@ export const SearchPage = () => {
     e
   ) => {
     e.preventDefault();
-
     await fetchGames();
   };
   return (
@@ -48,7 +47,7 @@ export const SearchPage = () => {
           <Input
             p='4'
             size='lg'
-            placeholder={'Search...'}
+            placeholder={defaultSearch}
             value={search}
             onChange={handleSearchChange}
           />
@@ -66,7 +65,7 @@ export const SearchPage = () => {
       ) : !games || games.length === 0 ? (
         <NotFoundResult />
       ) : (
-        <Center>
+        <Center flexDirection='column'>
           <GameList
             justifyContent='center'
             gap='4'

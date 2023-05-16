@@ -1,7 +1,8 @@
 import { Layout } from '@/components/layout';
 import { UserContext } from '@/context/user-context';
 import { GamePage } from '@/pages/game-page';
-import { GamesPage } from '@/pages/games-page';
+import HomePage from '@/pages/home-page';
+import { LatestGamesPage } from '@/pages/latest-games-page';
 import SearchPage from '@/pages/search-page';
 import { theme } from '@/themes';
 import { User } from '@/types/authentication';
@@ -20,9 +21,10 @@ export const App = () => {
     createRoutesFromElements(
       <>
         <Route path='/' element={<Layout />}>
-          <Route path='/games' element={<GamesPage />} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/latest' element={<LatestGamesPage />} />
           <Route path='/games/:gameId' element={<GamePage />} />
-          <Route path='/games/search' element={<SearchPage />} />
+          <Route path='/search' element={<SearchPage />} />
         </Route>
       </>
     )

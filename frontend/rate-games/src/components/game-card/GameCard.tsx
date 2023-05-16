@@ -49,7 +49,15 @@ export const GameCard = ({ game, ...rest }: GameCardProps) => {
         >
           <RatingMark value={game.aggregatedRating} />
         </SlideFade>
-        <Image h='2xs' src={game.cover.url} alt={game.name} borderRadius='lg' />
+        <Box h='2xs' borderRadius='lg'>
+          <Image
+            h='2xs'
+            src={game.cover.url}
+            alt={game.name}
+            objectFit='cover'
+            borderRadius='lg'
+          />
+        </Box>
         <Stack
           maxW={{ base: '3xs', lg: 'xs' }}
           mt='3'

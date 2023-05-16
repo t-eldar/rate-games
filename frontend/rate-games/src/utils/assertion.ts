@@ -17,8 +17,6 @@ export const isMaxNormalizableGame = (
 export const isMinNormalizableGames = (
   data: unknown
 ): data is MinNormalizableGame[] => {
-  console.log(Array.isArray(data));
-
   if (!Array.isArray(data)) {
     return false;
   }
@@ -42,8 +40,6 @@ export const isGameDataCorrect = (data: unknown): boolean =>
   typeof data.id === 'number' &&
   'name' in data &&
   typeof data.name === 'string' &&
-  'summary' in data &&
-  typeof 'summary' === 'string' &&
   'cover' in data &&
   typeof data.cover === 'object'
     ? true

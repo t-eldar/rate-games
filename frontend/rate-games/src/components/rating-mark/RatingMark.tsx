@@ -12,7 +12,7 @@ export const RatingMark = ({ value, ...rest }: RatingMarkProps) => {
     value > 75 ? 'green.500' : value > 50 ? 'yellow.500' : 'red.500';
   return (
     <Box rounded='md' p='2' bg={color} h='fit-content' {...rest}>
-      {value}
+      {value.toFixed(0)}
     </Box>
   );
 };

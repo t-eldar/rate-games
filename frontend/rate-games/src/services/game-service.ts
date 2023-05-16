@@ -7,12 +7,18 @@ import { normalizeMaxGame, normalizeGames } from '@/utils/normalizers';
 import { combineURLs } from '@/utils/url';
 
 const baseURL = 'https://localhost:7082/games';
+const LIMIT = 20;
+const OFFSET = 0;
 
-export const getGameById = async (id: number): Promise<MaxGameInfo> => {
+export const getGameById = async (
+  id: number,
+  abortSignal?: AbortSignal
+): Promise<MaxGameInfo> => {
   const url = new URL(combineURLs(baseURL, `/${id}`));
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const result = await response.json();
   if (!isMaxNormalizableGame(result)) {
@@ -23,14 +29,21 @@ export const getGameById = async (id: number): Promise<MaxGameInfo> => {
   return game;
 };
 
-export const getLatestGames = async (): Promise<MinGameInfo[]> => {
+export const getLatestGames = async (
+  abortSignal?: AbortSignal,
+  limit = LIMIT,
+  offset = OFFSET
+): Promise<MinGameInfo[]> => {
   const url = new URL(combineURLs(baseURL, 'latest'));
+  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append('offset', offset.toString());
+
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const result = await response.json();
-
   if (!isMinNormalizableGames(result)) {
     throw new Error('Data is incorrect');
   }
@@ -40,13 +53,20 @@ export const getLatestGames = async (): Promise<MinGameInfo[]> => {
 };
 
 export const getGamesBySearch = async (
-  search: string
+  search: string,
+  abortSignal?: AbortSignal,
+  limit = LIMIT,
+  offset = OFFSET
 ): Promise<MinGameInfo[]> => {
   const url = new URL(combineURLs(baseURL, 'by-search'));
   url.searchParams.append('search', search);
+  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append('offset', offset.toString());
+
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const result = await response.json();
 
@@ -57,7 +77,6 @@ export const getGamesBySearch = async (
 
   return games;
 };
-
 
 export const getMockedGame = () => {
   return {

@@ -1,0 +1,1 @@
+export { LatestGamesPage } from './LatestGamesPage';

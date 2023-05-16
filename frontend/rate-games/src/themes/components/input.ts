@@ -11,7 +11,7 @@ const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(
 
 const defaultColors = (props: StyleFunctionProps) => ({
   colorScheme: 'major',
-  bg: mode('major.100', 'major.700')(props),
+  bg: mode('major.200', 'major.800')(props),
 });
 
 const variants = {
@@ -39,6 +39,9 @@ const variants = {
         border: '2px solid',
         borderColor: mode('red.400', 'red.800')(props),
       },
+      _placeholder: {
+        color: mode('major.400', 'major.600')
+      }
     },
   }),
 };

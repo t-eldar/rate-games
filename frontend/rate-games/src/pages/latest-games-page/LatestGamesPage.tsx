@@ -6,12 +6,14 @@ import { useFetch } from '@/hooks/use-fetch';
 import { getLatestGames } from '@/services/game-service';
 import { Center } from '@chakra-ui/react';
 
-export const GamesPage = () => {
+export const LatestGamesPage = () => {
   const {
     data: games,
     isLoading,
     error,
-  } = useFetch(async () => await getLatestGames());
+  } = useFetch(
+    async (abortSignal: AbortSignal) => await getLatestGames(abortSignal)
+  );
   return (
     <Center flexWrap='wrap' justifyContent='space-evenly' p='6'>
       {isLoading ? (
@@ -23,13 +25,13 @@ export const GamesPage = () => {
       ) : !games ? (
         <NotFoundResult />
       ) : (
-        <GameList
+        <GameList 
           games={games}
           flexWrap='wrap'
           justifyContent='space-evenly'
           p='6'
         />
-      )}
+      )} 
     </Center>
   );
 };

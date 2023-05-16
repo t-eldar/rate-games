@@ -12,7 +12,8 @@ export type CreateReviewRequest = {
   gameId: number;
 };
 export const createReview = async (
-  request: CreateReviewRequest
+  request: CreateReviewRequest,
+  abortSignal?: AbortSignal
 ): Promise<Response> => {
   const response = await fetch(baseURL, {
     method: 'POST',
@@ -21,16 +22,21 @@ export const createReview = async (
     },
     credentials: 'include',
     body: JSON.stringify({ ...request }),
+    signal: abortSignal,
   });
 
   return response;
 };
 
-export const deleteReview = async (id: number): Promise<Response> => {
+export const deleteReview = async (
+  id: number,
+  abortSignal?: AbortSignal
+): Promise<Response> => {
   const url = new URL(combineURLs(baseURL, `/${id}`));
   const response = await fetch(url, {
     method: 'DELETE',
     credentials: 'include',
+    signal: abortSignal,
   });
 
   return response;
@@ -43,7 +49,8 @@ export type UpdateReviewRequest = {
   ratingValue: number;
 };
 export const updateReview = async (
-  request: UpdateReviewRequest
+  request: UpdateReviewRequest,
+  abortSignal?: AbortSignal
 ): Promise<Response> => {
   const url = new URL(combineURLs(baseURL, `/${request.id}`));
 
@@ -54,16 +61,21 @@ export const updateReview = async (
     },
     credentials: 'include',
     body: JSON.stringify({ ...request }),
+    signal: abortSignal,
   });
 
   return response;
 };
 
-export const getReviewsByGame = async (gameId: number): Promise<Review[]> => {
+export const getReviewsByGame = async (
+  gameId: number,
+  abortSignal?: AbortSignal
+): Promise<Review[]> => {
   const url = new URL(combineURLs(baseURL, `by-game/${gameId}`));
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const text = await response.text();
   const result = JSON.parse(text, dateReviver);
@@ -74,11 +86,15 @@ export const getReviewsByGame = async (gameId: number): Promise<Review[]> => {
   return result;
 };
 
-export const getReviewsByUser = async (userId: string): Promise<Review[]> => {
+export const getReviewsByUser = async (
+  userId: string,
+  abortSignal?: AbortSignal
+): Promise<Review[]> => {
   const url = new URL(combineURLs(baseURL, `by-user/${userId}`));
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const text = await response.text();
   const result = JSON.parse(text, dateReviver);
@@ -90,7 +106,8 @@ export const getReviewsByUser = async (userId: string): Promise<Review[]> => {
 };
 
 export const getReviewByUserAndGame = async (
-  gameId: number
+  gameId: number,
+  abortSignal?: AbortSignal
 ): Promise<Review> => {
   const url = new URL(combineURLs(baseURL, `by-user-and-game`));
   url.searchParams.append('gameId', gameId.toString());
@@ -98,6 +115,7 @@ export const getReviewByUserAndGame = async (
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const text = await response.text();
   const result = JSON.parse(text, dateReviver);

@@ -8,7 +8,10 @@ export type SignInRequest = {
   rememberMe: boolean;
 };
 
-export const signIn = async (request: SignInRequest) =>
+export const signIn = async (
+  request: SignInRequest,
+  abortSignal?: AbortSignal
+) =>
   await fetch(`${baseURL}/sign-in`, {
     method: 'POST',
     headers: {
@@ -16,6 +19,7 @@ export const signIn = async (request: SignInRequest) =>
     },
     credentials: 'include',
     body: JSON.stringify(request),
+    signal: abortSignal,
   });
 
 export type SignUpRequest = {
@@ -24,7 +28,10 @@ export type SignUpRequest = {
   password: string;
   avatarUrl: string;
 };
-export const signUp = async (request: SignUpRequest) =>
+export const signUp = async (
+  request: SignUpRequest,
+  abortSignal?: AbortSignal
+) =>
   await fetch(`${baseURL}/sign-up`, {
     method: 'POST',
     headers: {
@@ -32,18 +39,21 @@ export const signUp = async (request: SignUpRequest) =>
     },
     credentials: 'include',
     body: JSON.stringify(request),
+    signal: abortSignal,
   });
 
-export const signOut = async () =>
+export const signOut = async (abortSignal?: AbortSignal) =>
   await fetch(`${baseURL}/sign-out`, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
 
-export const getUserInfo = async () => {
+export const getUserInfo = async (abortSignal?: AbortSignal) => {
   const response = await fetch(`${baseURL}/user-info`, {
     method: 'GET',
     credentials: 'include',
+    signal: abortSignal,
   });
   const data = await response.json();
   if (!isUser(data)) {
