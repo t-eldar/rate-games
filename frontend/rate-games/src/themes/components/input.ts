@@ -11,7 +11,7 @@ const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(
 
 const defaultColors = (props: StyleFunctionProps) => ({
   colorScheme: 'major',
-  bg: mode('major.200', 'major.800')(props),
+  bg: mode('major.100', 'major.900')(props),
 });
 
 const variants = {
