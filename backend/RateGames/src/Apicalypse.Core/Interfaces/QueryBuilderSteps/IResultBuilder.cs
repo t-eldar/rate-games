@@ -1,4 +1,4 @@
-﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
+﻿namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 
 /// <summary>
 /// Result builder, returns query as <see cref="String?"/>.

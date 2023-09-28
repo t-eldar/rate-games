@@ -1,4 +1,4 @@
-﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
+﻿namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 
 /// <summary>
 /// Offset builder, returns <see cref="ILimitBuilder{TEntity}"/> stage.

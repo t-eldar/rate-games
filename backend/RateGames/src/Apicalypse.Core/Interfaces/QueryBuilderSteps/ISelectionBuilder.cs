@@ -1,10 +1,8 @@
-﻿using System.Linq.Expressions;
+﻿using Apicalypse.Core.Enums;
 
-using Apicalypse.Core.Enums;
+namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 
-namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
-
-public interface ISelectionBuilder<TEntity> : IIncludingBuilder<TEntity>
+public interface ISelectionBuilder<TEntity>
 {
 	/// <summary>
 	/// Selects all properties of model if <paramref name="includeType"/> EveryFromModel.

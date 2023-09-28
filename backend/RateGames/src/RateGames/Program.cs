@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using Apicalypse.Core.Extensions;
@@ -15,8 +14,6 @@ using RateGames.DatabaseContext;
 using RateGames.Extensions;
 using RateGames.Models.Entities;
 using RateGames.Options;
-using RateGames.Repositories.Implementations;
-using RateGames.Repositories.Interfaces;
 using RateGames.Services.Implementations;
 using RateGames.Services.Interfaces;
 using RateGames.Storages.Implementations;
@@ -47,7 +44,6 @@ builder.Services.AddDbContext<IApplicationContext, ApplicationContext>(options =
 	options.UseSqlServer(dbConnection);
 });
 
-// Identity.
 builder.Services
 	.AddIdentity<User, IdentityRole>(options =>
 	{
@@ -78,7 +74,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 	};
 });
 
-// Authorization.
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy(AuthorizationPolicies.SameAuthor, policy =>
@@ -89,11 +84,8 @@ builder.Services.AddAuthorization(options =>
 });
 builder.Services.AddSingleton<IAuthorizationHandler, SameAuthorAuthorizationHandler>();
 
-// Repositories.
-builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
-builder.Services.AddTransient<IRatingRepository, RatingRepository>();
+builder.Services.AddRepositories();
 
-// Other.
 builder.Services.AddTransient<IUserInfoResolver, UserInfoResolver>();
 builder.Services.AddValidatorsFromAssemblyContaining<IValidatorMark>();
 

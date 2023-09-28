@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Apicalypse.Core.Interfaces;
+﻿namespace Apicalypse.Core.Interfaces;
 
 /// <summary>
 /// Parser of <see cref="Expression"/> into Apicalypse queries.

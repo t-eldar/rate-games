@@ -1,55 +1,29 @@
-﻿using System.Linq.Expressions;
-using System.Text;
-
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations.Parsers;
-internal class NewArrayExpressionParser : INewArrayExpressionParser
+
+
+/// <inheritdoc cref="IExpressionParser{NewArrayExpression}"/>
+internal class NewArrayExpressionParser : IExpressionParser<NewArrayExpression>
 {
-	private readonly IConstantExpressionParser _constantParser;
-	private readonly IMemberExpressionParser _memberParser;
+	private readonly IExpressionParser<ConstantExpression> _constantParser;
+	private readonly IExpressionParser<MemberExpression> _memberParser;
+
 	public NewArrayExpressionParser(
-		IConstantExpressionParser constantParser, 
-		IMemberExpressionParser memberParser
+		IExpressionParser<ConstantExpression> constantParser,
+		IExpressionParser<MemberExpression> memberParser
 	)
 	{
 		_constantParser = constantParser;
 		_memberParser = memberParser;
 	}
 
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException">Throws if array initialized wrong</exception>
 	public string Parse(NewArrayExpression expression)
 	{
-		if (expression.NodeType == ExpressionType.NewArrayBounds)
-		{
-			throw new ArgumentException("Array should be initialized in the expression");
-		}
-		var result = string.Empty;
-
-		foreach (var exp in expression.Expressions)
-		{
-			if (exp is ConstantExpression constantExpression)
-			{
-				result += _constantParser.Parse(constantExpression);
-				result += QueryChars.ValueSeparatorChar;
-				continue;
-			}
-			else if (exp is MemberExpression memberExpression)
-			{
-				result += _memberParser.Parse(memberExpression);
-				result += QueryChars.ValueSeparatorChar;
-				continue;
-			}
-			throw new ArgumentException("Array should be initializd by not null constants");
-		}
-
-		return result[..^1];
-	}
-
-	public string Parse(NewArrayExpression expression, StringBuilder stringBuilder)
-	{
-		stringBuilder.Clear();
-		var innerStringBuilder = new StringBuilder();
+		var stringBuilder = new StringBuilder();
 		if (expression.NodeType == ExpressionType.NewArrayBounds)
 		{
 			throw new ArgumentException("Array should be initialized in the expression");
@@ -59,21 +33,19 @@ internal class NewArrayExpressionParser : INewArrayExpressionParser
 		{
 			if (exp is ConstantExpression constantExpression)
 			{
-				stringBuilder.Append(_constantParser.Parse(constantExpression, innerStringBuilder));
+				stringBuilder.Append(_constantParser.Parse(constantExpression));
 				stringBuilder.Append(QueryChars.ValueSeparatorChar);
 				continue;
 			}
 			else if (exp is MemberExpression memberExpression)
 			{
-				stringBuilder.Append(_memberParser.Parse(memberExpression, innerStringBuilder));
+				stringBuilder.Append(_memberParser.Parse(memberExpression));
 				stringBuilder.Append(QueryChars.ValueSeparatorChar);
 				continue;
 			}
 			throw new ArgumentException("Array should be initializd by not null constants");
 		}
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
 
-		return result[..^1];
+		return stringBuilder.ToString()[..^1];
 	}
 }

@@ -21,16 +21,16 @@ public class ApplicationContext : IdentityDbContext<User>, IApplicationContext
 		base.OnModelCreating(builder);
 
 		builder
-			.Entity<Rating>()
+		.Entity<Rating>()
 			.HasData(
-				new Rating[]
-				{
+				  new Rating[]
+				  {
 					new Rating { Id = 1, Value = 1 },
 					new Rating { Id = 2, Value = 2 },
 					new Rating { Id = 3, Value = 3 },
 					new Rating { Id = 4, Value = 4 },
 					new Rating { Id = 5, Value = 5 },
-				}
-			);
+				  }
+			  );
 	}
 }

@@ -1,16 +1,16 @@
-﻿using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 using RateGames.Common.Extensions;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
-/// <inheritdoc cref="IMethodCallExpressionParser}"/>
-internal class MethodCallExpressionParser : IMethodCallExpressionParser
+/// <inheritdoc cref="IExpressionParser{MethodCallExpression}"/>
+internal class MethodCallExpressionParser : IExpressionParser<MethodCallExpression>
 {
-	private readonly IMemberExpressionParser _memberParser;
-	private readonly IConstantExpressionParser _constantParser;
-	private readonly INewArrayExpressionParser _newArrayParser;
+	private readonly IExpressionParser<MemberExpression> _memberParser;
+	private readonly IExpressionParser<ConstantExpression> _constantParser;
+	private readonly IExpressionParser<NewArrayExpression> _newArrayParser;
 
 	private readonly string[] _stringMethods = new[]
 	{
@@ -30,9 +30,9 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 	};
 
 	public MethodCallExpressionParser(
-		IMemberExpressionParser memberParser,
-		IConstantExpressionParser constantParser,
-		INewArrayExpressionParser newArrayParser
+		IExpressionParser<MemberExpression> memberParser,
+		IExpressionParser<ConstantExpression> constantParser, 
+		IExpressionParser<NewArrayExpression> newArrayParser
 	)
 	{
 		_memberParser = memberParser;
@@ -40,35 +40,40 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 		_newArrayParser = newArrayParser;
 	}
 
-	public string Parse(MethodCallExpression expression) => Parse(expression, new StringBuilder());
-	public string Parse(MethodCallExpression expression, StringBuilder stringBuilder)
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException">Throws by inner methods</exception>
+	/// <exception cref="NotImplementedException"></exception>
+	public string Parse(MethodCallExpression expression)
 	{
 		var methodName = expression.Method.Name;
 		if (_stringMethods.Contains(methodName))
 		{
-			return ParseStringMethod(expression, stringBuilder);
+			return ParseStringMethod(expression);
 		}
 		if (_enumerableMethods.Contains(methodName))
 		{
-			return ParseEnumerableMethod(expression, stringBuilder);
+			return ParseEnumerableMethod(expression);
 		}
 		if (_includeMethods.Contains(methodName))
 		{
-			return ParseIncludeMethod(expression, stringBuilder);
+			return ParseIncludeMethod(expression);
 		}
 
-		throw new ArgumentException($"Cannot parse method {methodName}");
+		throw new NotImplementedException($"Cannot parse method {methodName}");
 	}
 
-	private string ParseIncludeMethod(MethodCallExpression expression, StringBuilder stringBuilder) => expression.Method.Name switch
+	private string ParseIncludeMethod(MethodCallExpression expression) => expression.Method.Name switch
 	{
-		nameof(EntityMarkerExtensions.IncludeAllProperties) => ParseIncludeAllProperties(expression, stringBuilder),
-		nameof(EntityMarkerExtensions.IncludeProperty) => ParseIncludeOneProperty(expression, stringBuilder),
+		nameof(EntityMarkerExtensions.IncludeAllProperties) => ParseIncludeAllProperties(expression),
+		nameof(EntityMarkerExtensions.IncludeProperty) => ParseIncludeOneProperty(expression),
 		_ => throw new ArgumentException($"Method named {expression.Method.Name} is not available to perform"),
 	};
-	private string ParseEnumerableMethod(MethodCallExpression expression, StringBuilder stringBuilder)
+
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException">Throws by inner methods</exception>
+	private string ParseEnumerableMethod(MethodCallExpression expression)
 	{
-		stringBuilder.Clear();
+		var stringBuilder = new StringBuilder();
 		var methodName = expression.Method.Name;
 		var (leftBound, rightBound) = methodName switch
 		{
@@ -79,21 +84,21 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 		};
 
 		var caller = ParsePart(expression.Arguments[0]);
-		var array = ParsePart(expression.Arguments[1], stringBuilder);
+		var array = ParsePart(expression.Arguments[1]);
 		stringBuilder.Append(caller);
 		stringBuilder.Append(QueryChars.EqualSpaced);
 		stringBuilder.Append(leftBound);
 		stringBuilder.Append(array);
 		stringBuilder.Append(rightBound);
 
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
-
-		return result;
+		return stringBuilder.ToString();
 	}
-	private string ParseStringMethod(MethodCallExpression expression, StringBuilder stringBuilder)
+
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException"></exception>
+	private string ParseStringMethod(MethodCallExpression expression)
 	{
-		stringBuilder.Clear();
+		var stringBuilder = new StringBuilder();
 		var methodName = expression.Method.Name;
 		var (startChar, endChar) = methodName switch
 		{
@@ -103,7 +108,7 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 			_ => throw new NotImplementedException(),
 		};
 
-		var caller = ParsePart(expression.Object!, stringBuilder);
+		var caller = ParsePart(expression.Object!);
 		var comparisonChar = string.Empty;
 
 		var firstArgExpression = expression.Arguments[0];
@@ -125,42 +130,45 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 			comparisonChar = GetComparisonCharFromThreeArguments(expression);
 		}
 
-		var stringValue = ParsePart(constantExpression, stringBuilder);
+		var stringValue = ParsePart(constantExpression);
 
 		stringBuilder.Append(caller);
 		stringBuilder.Append(comparisonChar);
 		stringBuilder.Append(startChar);
 		stringBuilder.Append(stringValue);
 		stringBuilder.Append(endChar);
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
 
-		return result;
+		return stringBuilder.ToString();
 	}
-	private string ParseIncludeOneProperty(MethodCallExpression expression, StringBuilder stringBuilder)
+
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException">Throws by inner methods</exception>
+	private string ParseIncludeOneProperty(MethodCallExpression expression)
 	{
-		var caller = ParsePart(expression.Arguments[0], stringBuilder);
-		var including = ParsePart(expression.Arguments[1], stringBuilder);
+		var stringBuilder = new StringBuilder();
+		var caller = ParsePart(expression.Arguments[0]);
+		var including = ParsePart(expression.Arguments[1]);
 		stringBuilder.Append(caller);
 		stringBuilder.Append(QueryChars.AccessSeparatorChar);
 		stringBuilder.Append(including);
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
-
-		return result;
+		
+		return stringBuilder.ToString();
 	}
-	private string ParseIncludeAllProperties(MethodCallExpression expression, StringBuilder stringBuilder)
+
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <exception cref="ArgumentException">Throws by inner method</exception>
+	private string ParseIncludeAllProperties(MethodCallExpression expression)
 	{
-		stringBuilder.Clear();
+		var stringBuilder = new StringBuilder();
 		var caller = ParsePart(expression.Arguments[0]);
 		stringBuilder.Append(caller);
 		stringBuilder.Append(QueryChars.AccessSeparatorChar);
 		stringBuilder.Append(QueryChars.AllProperiesChar);
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
-
-		return result;
+		
+		return stringBuilder.ToString();
 	}
+
+	/// <exception cref="ArgumentException"></exception>
 	private static string GetComparisonCharFromTwoArguments(MethodCallExpression expression)
 	{
 		var stringComparisonBoxed = (expression.Arguments[1] as ConstantExpression)?.Value
@@ -188,6 +196,8 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 
 		return comparisonChar;
 	}
+
+	/// <exception cref="ArgumentException"></exception>
 	private static string GetComparisonCharFromThreeArguments(MethodCallExpression expression)
 	{
 		string comparisonChar;
@@ -206,15 +216,18 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 		return comparisonChar;
 	}
 
-	private string ParsePart(Expression expression, StringBuilder stringBuilder) => expression switch
+	/// <exception cref="ArgumentException"></exception>
+	private string ParsePart(Expression expression) => expression switch
 	{
-		MemberExpression member => _memberParser.Parse(member, stringBuilder),
-		MethodCallExpression methodCall => Parse(methodCall, stringBuilder),
-		ConstantExpression constant => _constantParser.Parse(constant, stringBuilder),
-		NewArrayExpression newArray => _newArrayParser.Parse(newArray, stringBuilder),
+		MemberExpression member => _memberParser.Parse(member),
+		MethodCallExpression methodCall => Parse(methodCall),
+		ConstantExpression constant => _constantParser.Parse(constant),
+		NewArrayExpression newArray => _newArrayParser.Parse(newArray),
 		UnaryExpression unary => ParseQuoteUnary(unary),
 		_ => throw new ArgumentException($"Expression {expression} with {expression.NodeType} cannot be part of new object")
 	};
+
+	/// <exception cref="ArgumentException"></exception>
 	private string ParseQuoteUnary(UnaryExpression expression)
 	{
 		if (expression.NodeType != ExpressionType.Quote)
@@ -222,16 +235,8 @@ internal class MethodCallExpressionParser : IMethodCallExpressionParser
 			throw new ArgumentException("Unary expression may only be with node type Quote");
 		}
 		var lambda = expression.Operand as LambdaExpression
-			?? throw new ArgumentException("Only lambda expression could be passed");
+			?? throw new ArgumentException("Only lambda expression can be parsed");
 
 		return ParsePart(lambda.Body);
 	}
-	private string ParsePart(Expression expression) => expression switch
-	{
-		MemberExpression member => _memberParser.Parse(member),
-		MethodCallExpression methodCall => Parse(methodCall),
-		ConstantExpression constant => _constantParser.Parse(constant),
-		NewArrayExpression newArray => _newArrayParser.Parse(newArray),
-		_ => throw new ArgumentException($"Expression {expression} cannot be part of new object")
-	};
 }

@@ -1,26 +1,28 @@
 ﻿using Apicalypse.Core.Enums;
 using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.Interfaces.QueryBuilderStages;
+using Apicalypse.Core.Interfaces.QueryBuilderSteps;
 using Apicalypse.Core.StringEnums;
 
 using RateGames.Common.Extensions;
 
 namespace Apicalypse.Core.Implementations;
 
-/// <inheritdoc cref="IQueryBuilder{TEntity}" />
-internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
+/// <inheritdoc cref="IFirstStageQueryBuilder{TEntity}" />
+internal class QueryBuilder<TEntity> : IFirstStageQueryBuilder<TEntity>, ISecondStageQueryBuilder<TEntity>
 {
 	private readonly IQueryParser _parser;
 	private readonly IMemberInfoStorage _memberInfoStorage;
-	private readonly StringBuilder _stringBuilder = new();
+	private readonly StringBuilder _stringBuilder;
 
 	public QueryBuilder(IQueryParser parser, IMemberInfoStorage memberInfoStorage)
 	{
 		_parser = parser;
 		_memberInfoStorage = memberInfoStorage;
+		_stringBuilder = new();
 	}
 
-	public IIncludingBuilder<TEntity> Select(IncludeType includeType)
+	IIncludingBuilder<TEntity> ISelectionBuilder<TEntity>.Select(IncludeType includeType)
 	{
 		switch (includeType)
 		{
@@ -49,9 +51,9 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			}
 		}
 	}
-	public IIncludingBuilder<TEntity> Select<TProp>(
+	IIncludingBuilder<TEntity> ISelectionBuilder<TEntity>.Select<TProp>(
 		Expression<Func<TEntity, TProp>> selector,
-		SelectionMode selectionMode = SelectionMode.Include
+		SelectionMode selectionMode
 	)
 	{
 		var parsed = _parser.Parse(selector);
@@ -83,7 +85,7 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 			}
 		}
 	}
-	public IFilterBuilder<TEntity> Include<TProp>(Expression<Func<TEntity, TProp>> selector)
+	IFilterBuilder<TEntity> IIncludingBuilder<TEntity>.Include<TProp>(Expression<Func<TEntity, TProp>> selector)
 	{
 		var parsed = _parser.Parse(selector);
 		if (IsSelectionValid(parsed))
@@ -119,42 +121,42 @@ internal class QueryBuilder<TEntity> : IQueryBuilder<TEntity>
 		return this;
 	}
 
-	public ISortBuilder<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+	ISortBuilder<TEntity> IFilterBuilder<TEntity>.Where(Expression<Func<TEntity, bool>> predicate)
 	{
 		var parsed = _parser.Parse(predicate);
 		GenerateLine(QueryKeywords.Where, parsed);
 		return this;
 	}
-	public ISearchBuilder<TEntity> OrderBy<TProp>(
+	ISearchBuilder<TEntity> ISortBuilder<TEntity>.OrderBy<TProp>(
 		Expression<Func<TEntity, TProp>> propSelector)
 	{
 		var parsed = _parser.Parse(propSelector);
 		GenerateSortLine(parsed, QueryKeywords.Ascendging);
 		return this;
 	}
-	public ISearchBuilder<TEntity> OrderByDescending<TProp>(
+	ISearchBuilder<TEntity> ISortBuilder<TEntity>.OrderByDescending<TProp>(
 		Expression<Func<TEntity, TProp>> propSelector)
 	{
 		var parsed = _parser.Parse(propSelector);
 		GenerateSortLine(parsed, QueryKeywords.Descending);
 		return this;
 	}
-	public ILimitBuilder<TEntity> Skip(int count)
-	{
-		GenerateLine(QueryKeywords.Offset, count);
-		return this;
-	}
-	public IResultBuilder<TEntity> Take(int count)
-	{
-		GenerateLine(QueryKeywords.Limit, count);
-		return this;
-	}
-	public IOffsetBuilder<TEntity> Find(string searchString)
+	IOffsetBuilder<TEntity> ISearchBuilder<TEntity>.Find(string searchString)
 	{
 		GenerateSearchLine(searchString);
 		return this;
 	}
-	public string Build()
+	ILimitBuilder<TEntity> IOffsetBuilder<TEntity>.Skip(int count)
+	{
+		GenerateLine(QueryKeywords.Offset, count);
+		return this;
+	}
+	IResultBuilder<TEntity> ILimitBuilder<TEntity>.Take(int count)
+	{
+		GenerateLine(QueryKeywords.Limit, count);
+		return this;
+	}
+	string IResultBuilder<TEntity>.Build()
 	{
 		var result = _stringBuilder.ToString();
 		_stringBuilder.Clear();

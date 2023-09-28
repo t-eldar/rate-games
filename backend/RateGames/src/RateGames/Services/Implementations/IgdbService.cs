@@ -31,7 +31,7 @@ public class IgdbService : IIgdbService
 
 	public async Task<T?> GetAsync<T>(string query, string endpoint)
 	{
-		_logger.LogInformation($"Apicalypse query \n {query}");
+		_logger.LogInformation("Apicalypse query \n {Query}", query);
 
 		var token = await _twitchTokenService.GetTokenAsync();
 
@@ -44,8 +44,6 @@ public class IgdbService : IIgdbService
 		var response = await _httpClient.SendAsync(requestMessage);
 		response.EnsureSuccessStatusCode();
 
-		//var text = await response.Content.ReadAsStringAsync();
-		//var result = JsonSerializer.Deserialize<T>(text, new JsonSerializerOptions()
 		var result = await response.Content.ReadFromJsonAsync<T>(new JsonSerializerOptions()
 		{
 			PropertyNamingPolicy = new SnakeCaseNamingPolicy(),

@@ -1,4 +1,4 @@
-﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
+﻿namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 
 /// <summary>
 /// Limit builder, returns <see cref="IResultBuilder{TEntity}"/> stage.

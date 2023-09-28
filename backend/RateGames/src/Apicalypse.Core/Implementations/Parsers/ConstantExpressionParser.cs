@@ -1,66 +1,24 @@
 ﻿using System.Globalization;
 
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
-/// <inheritdoc cref="IConstantExpressionParser"/>
-internal class ConstantExpressionParser : IConstantExpressionParser
+/// <inheritdoc cref="IExpressionParser{ConstantExpression}"/>
+internal class ConstantExpressionParser : IExpressionParser<ConstantExpression>
 {
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
 	public string Parse(ConstantExpression expression)
 	{
-		if (expression.Value is string stringValue)
-		{
-			var length = stringValue.Length + 2;
-			return string.Create(length, stringValue, (span, state) =>
-			{
-				var index = 0;
-				span[index++] = QueryChars.QuoteChar;
-
-				for (var i = 0; i < state.Length; i++)
-				{
-					span[index++] = state[i];
-				}
-				span[index] = QueryChars.QuoteChar;
-			});
-		}
-		else if (expression.Value is char charValue)
-		{
-			return string.Create(3, charValue, (span, state) =>
-			{
-				var index = 0;
-				span[index++] = QueryChars.QuoteChar;
-				span[index++] = charValue;
-				span[index] = QueryChars.QuoteChar;
-			});
-		}
-		else if (expression.Value is double doubleValue)
-		{
-			return doubleValue.ToString("G", CultureInfo.InvariantCulture);
-		}
-		else if (expression.Value is decimal decimalValue)
-		{
-			return decimalValue.ToString("G", CultureInfo.InvariantCulture);
-		}
-		else if (expression.Value is float floatValue)
-		{
-			return floatValue.ToString("G", CultureInfo.InvariantCulture);
-		}
-		return expression.Value?.ToString() ?? QueryKeywords.Null;
-	}
-	public string Parse(ConstantExpression expression, StringBuilder stringBuilder)
-	{
-		stringBuilder.Clear();
+		var stringBuilder = new StringBuilder();
 		if (expression.Value is string or char)
 		{
 			stringBuilder.Append(QueryChars.QuoteChar);
 			stringBuilder.Append(expression.Value);
 			stringBuilder.Append(QueryChars.QuoteChar);
 
-			var result = stringBuilder.ToString();
-			stringBuilder.Clear();
-			return result;
+			return stringBuilder.ToString();
 		}
 		else if (expression.Value is double doubleValue)
 		{

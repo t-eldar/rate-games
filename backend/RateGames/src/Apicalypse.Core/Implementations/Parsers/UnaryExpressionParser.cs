@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces;
 
 namespace Apicalypse.Core.Implementations.Parsers;
-public class UnaryExpressionParser : IUnaryExpressionParser
+public class UnaryExpressionParser : IExpressionParser<UnaryExpression>
 {
-	private readonly IConstantExpressionParser _constantExpressionParser;
-	private readonly IMemberExpressionParser _memberExpressionParser;
+	private readonly IExpressionParser<ConstantExpression> _constantExpressionParser;
+	private readonly IExpressionParser<MemberExpression> _memberExpressionParser;
 
 	public UnaryExpressionParser(
-		IConstantExpressionParser constantExpressionParser, 
-		IMemberExpressionParser memberExpressionParser
+		IExpressionParser<ConstantExpression> constantExpressionParser,
+		IExpressionParser<MemberExpression> memberExpressionParser
 	)
 	{
 		_constantExpressionParser = constantExpressionParser;
 		_memberExpressionParser = memberExpressionParser;
 	}
 
+	/// <exception cref="NotImplementedException"></exception>
 	public string Parse(UnaryExpression expression)
 	{
 		if (expression.NodeType != ExpressionType.Convert)
@@ -33,21 +28,6 @@ public class UnaryExpressionParser : IUnaryExpressionParser
 			ConstantExpression constant => _constantExpressionParser.Parse(constant),
 			MemberExpression member => _memberExpressionParser.Parse(member),
 			UnaryExpression unary => Parse(unary),
-			_ => throw new NotImplementedException(),
-		};
-	}
-	public string Parse(UnaryExpression expression, StringBuilder stringBuilder)
-	{
-		if (expression.NodeType != ExpressionType.Convert)
-		{
-			throw new NotImplementedException();
-		}
-
-		return expression.Operand switch
-		{
-			ConstantExpression constant => _constantExpressionParser.Parse(constant, stringBuilder),
-			MemberExpression member => _memberExpressionParser.Parse(member, stringBuilder),
-			UnaryExpression unary => Parse(unary, stringBuilder),
 			_ => throw new NotImplementedException(),
 		};
 	}

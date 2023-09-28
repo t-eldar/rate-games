@@ -1,56 +1,28 @@
-﻿using System.Text;
-
-using Apicalypse.Core.Interfaces;
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
-/// <inheritdoc cref="INewExpressionParser"/>
-internal class NewExpressionParser : INewExpressionParser
+/// <inheritdoc cref="IExpressionParser{NewExpression}"/>
+internal class NewExpressionParser : IExpressionParser<NewExpression>
 {
-	private readonly IMemberExpressionParser _memberParser;
-	private readonly IMethodCallExpressionParser _methodCallParser;
-	private readonly StringBuilder _stringBuilder;
+	private readonly IExpressionParser<MemberExpression> _memberParser;
+	private readonly IExpressionParser<MethodCallExpression> _methodCallParser;
 
 	public NewExpressionParser(
-		IMemberExpressionParser memberParser,
-		IMethodCallExpressionParser methodCallParser
+		IExpressionParser<MemberExpression> memberParser, 
+		IExpressionParser<MethodCallExpression> methodCallParser
 	)
 	{
 		_memberParser = memberParser;
 		_methodCallParser = methodCallParser;
-		_stringBuilder = new();
 	}
 
-	public string Parse(NewExpression newExpression)
+	/// <exception cref="ArgumentException">Throws if object initialized wrong</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	public string Parse(NewExpression expression)
 	{
-		var arguments = newExpression.Arguments;
-		var result = string.Empty;
-		foreach (var argument in arguments)
-		{
-			switch (argument)
-			{
-				case MemberExpression:
-				case MethodCallExpression:
-				{
-					var parsed = ParsePart(argument);
-					result += parsed;
-					result += QueryChars.ValueSeparatorChar;
-					break;
-				}
-				default:
-				{
-					throw new ArgumentException("New object should contain only member access expressions.");
-				}
-			}
-		}
-
-		return result[..^1];
-	}
-	public string Parse(NewExpression expression, StringBuilder stringBuilder)
-	{
-		stringBuilder.Clear();
+		var stringBuilder = new StringBuilder();
 		var arguments = expression.Arguments;
 		foreach (var argument in arguments)
 		{
@@ -70,16 +42,16 @@ internal class NewExpressionParser : INewExpressionParser
 				}
 			}
 		}
-		var result = stringBuilder.ToString().AsSpan();
-		stringBuilder.Clear();
 
-		return result[..^1].ToString();
+		return stringBuilder.ToString()[..^1];
 	}
 
+
+	/// <exception cref="ArgumentException"></exception>
 	private string ParsePart(Expression expression) => expression switch
 	{
-		MemberExpression member => _memberParser.Parse(member, _stringBuilder),
-		MethodCallExpression methodCall => _methodCallParser.Parse(methodCall, _stringBuilder),
+		MemberExpression member => _memberParser.Parse(member),
+		MethodCallExpression methodCall => _methodCallParser.Parse(methodCall),
 		_ => throw new ArgumentException($"Expression {expression} with {expression.NodeType} cannot be part of new object")
 	};
 }

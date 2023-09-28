@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Reflection;
 
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 using RateGames.Common.Contracts;
@@ -9,43 +9,22 @@ using RateGames.Common.Utils;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
-/// <inheritdoc cref="IMemberExpressionParser"/>
-internal class MemberExpressionParser : IMemberExpressionParser
+/// <inheritdoc cref="IExpressionParser{MemberExpression}"/>
+internal class MemberExpressionParser : IExpressionParser<MemberExpression>
 {
+	/// <exception cref="ArgumentException">Throws is <see cref="MemberExpression"/> chain contains not member access expressions</exception>
+	/// <exception cref="InvalidOperationException">Throws by inner methods</exception>
+	/// <exception cref="NotSupportedException">Throws by inner methods</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
 	public string Parse(MemberExpression expression)
 	{
-		var callerExpression = expression as Expression;
-		var result = string.Empty;
-		while (callerExpression is MemberExpression memberExpression)
-		{
-			var prop = memberExpression.Member as PropertyInfo
-				?? throw new ArgumentException("Expression should contain only property member access!");
-			if (
-				prop.DeclaringType!.IsGenericType
-				&& prop.DeclaringType.GetGenericTypeDefinition() == typeof(IdOr<>)
-				&& prop.Name != nameof(IEntity.Id)
-			)
-			{
-				callerExpression = memberExpression.Expression;
-				continue;
-			}
-			result = result.Insert(0, prop.Name);
-			result = result.Insert(0, QueryChars.AccessSeparator);
-			callerExpression = memberExpression.Expression;
-		}
-
-		return result[1..];
-	}
-	public string Parse(MemberExpression expression, StringBuilder stringBuilder)
-	{
-		stringBuilder.Clear();
-		var callerExpression = expression as Expression;
-
 		if (expression.Expression?.NodeType == ExpressionType.Constant)
 		{
-			return ParseConstantMemberAccess(expression, stringBuilder);
+			return ParseConstantMemberAccess(expression);
 		}
 
+		var callerExpression = expression as Expression;
+		var stringBuilder = new StringBuilder();
 		while (callerExpression is MemberExpression memberExpression)
 		{
 			var prop = memberExpression.Member as PropertyInfo
@@ -62,13 +41,17 @@ internal class MemberExpressionParser : IMemberExpressionParser
 
 			callerExpression = memberExpression.Expression;
 		}
-		var result = stringBuilder.ToString().AsSpan();
-		stringBuilder.Clear();
 
-		return result[1..].ToString();
+		return stringBuilder.ToString()[1..];
 	}
 
-	private string ParseConstantMemberAccess(MemberExpression expression, StringBuilder stringBuilder)
+	/// <summary>
+	/// Parses constant member access.
+	/// </summary>
+	/// <param name="expression">Expression for parsing</param>
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner <see cref="StringBuilder"/></exception>
+	/// <returns></returns>
+	private static string ParseConstantMemberAccess(MemberExpression expression)
 	{
 		var objectMember = Expression.Convert(expression, typeof(object));
 		var constant = Expression.Lambda<Func<object>>(objectMember).Compile().Invoke();
@@ -78,14 +61,13 @@ internal class MemberExpressionParser : IMemberExpressionParser
 			return constant?.ToString() ?? QueryKeywords.Null;
 		}
 
+		var stringBuilder = new StringBuilder();
 		foreach (var item in enumerable)
 		{
 			stringBuilder.Append(item.ToString());
 			stringBuilder.Append(QueryChars.ValueSeparatorChar);
 		}
-		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
 
-		return result[..^1];
+		return stringBuilder.ToString()[..^1];
 	}
 }

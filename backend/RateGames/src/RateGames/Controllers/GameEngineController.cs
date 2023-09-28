@@ -8,7 +8,7 @@ namespace RateGames.Controllers;
 /// Controller for getting game engines from <see href="igdb.com"/>
 /// </summary>
 [Route("game-engines")]
-[ApiController]
+[ApiController]	
 public class GameEngineController : ControllerBase
 {
 	private readonly IGameEngineService _gameEngineService;

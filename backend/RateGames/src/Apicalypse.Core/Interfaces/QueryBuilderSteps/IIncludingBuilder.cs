@@ -1,4 +1,4 @@
-﻿namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
+﻿namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 /// <summary>
 /// Including builder, returns <see cref="IFilterBuilder{TEntity}"/>
 /// </summary>

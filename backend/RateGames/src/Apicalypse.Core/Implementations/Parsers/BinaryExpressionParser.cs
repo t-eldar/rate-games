@@ -1,23 +1,22 @@
-﻿using System.Text;
-
-using Apicalypse.Core.Interfaces.ExpressionParsers;
+﻿using Apicalypse.Core.Interfaces;
 using Apicalypse.Core.StringEnums;
 
 namespace Apicalypse.Core.Implementations.Parsers;
 
-/// <inheritdoc cref="IBinaryExpressionParser"/>
-internal class BinaryExpressionParser : IBinaryExpressionParser
+/// <inheritdoc cref="IExpressionParser{BinaryExpression}"/>
+internal class BinaryExpressionParser : IExpressionParser<BinaryExpression>
 {
-	private readonly IMemberExpressionParser _memberParser;
-	private readonly IConstantExpressionParser _constantParser;
-	private readonly IMethodCallExpressionParser _methodCallParser;
-	private readonly IUnaryExpressionParser _unaryParser;
+	private readonly IExpressionParser<MemberExpression> _memberParser;
+	private readonly IExpressionParser<ConstantExpression> _constantParser;
+	private readonly IExpressionParser<MethodCallExpression> _methodCallParser;
+	private readonly IExpressionParser<UnaryExpression> _unaryParser;
 
 	public BinaryExpressionParser(
-		IMemberExpressionParser memberParser,
-		IConstantExpressionParser constantParser,
-		IMethodCallExpressionParser methodCallParser,
-		IUnaryExpressionParser unaryParser)
+		IExpressionParser<MemberExpression> memberParser,
+		IExpressionParser<ConstantExpression> constantParser, 
+		IExpressionParser<MethodCallExpression> methodCallParser,
+		IExpressionParser<UnaryExpression> unaryParser
+	)
 	{
 		_memberParser = memberParser;
 		_constantParser = constantParser;
@@ -25,21 +24,15 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		_unaryParser = unaryParser;
 	}
 
+	/// <exception cref="ArgumentException">Throws by inner methods</exception>"
+	/// <exception cref="ArgumentOutOfRangeException">Throws by inner methods</exception>"
 	public string Parse(BinaryExpression expression)
 	{
+		var stringBuilder = new StringBuilder();
+		
 		var binary = expression;
 		var left = ParsePart(binary.Left);
 		var right = ParsePart(binary.Right);
-		var sign = GetSign(expression.NodeType);
-
-		return $"{left}{sign}{right}";
-	}
-	public string Parse(BinaryExpression expression, StringBuilder stringBuilder)
-	{
-		stringBuilder.Clear();
-		var binary = expression;
-		var left = ParsePart(binary.Left, stringBuilder);
-		var right = ParsePart(binary.Right, stringBuilder);
 		var sign = GetSign(expression.NodeType);
 
 		stringBuilder.Insert(0, left);
@@ -47,20 +40,11 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		stringBuilder.Append(right);
 
 		var result = stringBuilder.ToString();
-		stringBuilder.Clear();
 
 		return result;
 	}
 
-	private string ParsePart(Expression expression, StringBuilder stringBuilder) => expression switch
-	{
-		MemberExpression member => _memberParser.Parse(member, stringBuilder),
-		ConstantExpression constant => _constantParser.Parse(constant, stringBuilder),
-		MethodCallExpression methodCall => _methodCallParser.Parse(methodCall, stringBuilder),
-		UnaryExpression unary => _unaryParser.Parse(unary, stringBuilder),
-		BinaryExpression binary => Parse(binary, stringBuilder),
-		_ => throw new ArgumentException($"Expression {expression} cannot be part of binary")
-	};
+	/// <exception cref="ArgumentException">If expression cannot be parsed as part of binary expression</exception>"
 	private string ParsePart(Expression expression) => expression switch
 	{
 		MemberExpression member => _memberParser.Parse(member),
@@ -71,7 +55,8 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		_ => throw new ArgumentException($"Expression {expression} cannot be part of binary")
 	};
 
-	private string GetSign(ExpressionType expressionType) => expressionType switch
+	/// <exception cref="ArgumentException">If cannot get sign from expression</exception>"
+	private static string GetSign(ExpressionType expressionType) => expressionType switch
 	{
 		ExpressionType.AndAlso => QueryChars.AndSpaced,
 		ExpressionType.OrElse => QueryChars.OrSpaced,
@@ -81,6 +66,6 @@ internal class BinaryExpressionParser : IBinaryExpressionParser
 		ExpressionType.GreaterThanOrEqual => QueryChars.GreaterThanOrEqualSpaced,
 		ExpressionType.LessThan => QueryChars.LessThanSpaced,
 		ExpressionType.LessThanOrEqual => QueryChars.LessThanOrEqualSpaced,
-		_ => throw new Exception("ExpressionType should be logical, except denial ('!')!"),
+		_ => throw new ArgumentException("Expression type should be logical except denial ('!')"),
 	};
 }

@@ -1,4 +1,5 @@
 ﻿using Apicalypse.Core.Interfaces;
+using Apicalypse.Core.Interfaces.QueryBuilderStages;
 
 namespace Apicalypse.Core.Implementations;
 
@@ -13,6 +14,6 @@ public class QueryBuilderCreator : IQueryBuilderCreator
 		_memberInfoStorage = memberInfoStorage;
 	}
 
-	public IQueryBuilder<TEntity> CreateFor<TEntity>() => 
+	public IFirstStageQueryBuilder<TEntity> CreateFor<TEntity>() => 
 		new QueryBuilder<TEntity>(_parser, _memberInfoStorage);
 }

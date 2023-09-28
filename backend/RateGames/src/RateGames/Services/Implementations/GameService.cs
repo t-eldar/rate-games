@@ -1,5 +1,4 @@
-﻿using Apicalypse.Core.Enums;
-using Apicalypse.Core.Interfaces;
+﻿using Apicalypse.Core.Interfaces;
 
 using RateGames.Common.Extensions;
 using RateGames.Models.Igdb;
@@ -28,7 +27,7 @@ public class GameService : IGameService
 		_dateTimeProvider = dateTimeProvider;
 	}
 	public async Task<Game?> GetByIdAsync(int id)
-	{
+	{		
 		var query = _queryBuilderCreator.CreateFor<Game>()
 			.Select()
 			.Include(g => new

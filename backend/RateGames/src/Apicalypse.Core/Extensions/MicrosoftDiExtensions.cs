@@ -17,13 +17,13 @@ public static class MicrosoftDiExtensions
 	public static IServiceCollection AddApicalypseQueryBuilderCreator(this IServiceCollection services)
 	{
 		services.AddSingleton<IMemberInfoStorage, MemberInfoStorage>();
-		services.AddTransient<IMemberExpressionParser, MemberExpressionParser>();
-		services.AddTransient<IConstantExpressionParser, ConstantExpressionParser>();
-		services.AddTransient<IUnaryExpressionParser, UnaryExpressionParser>();
-		services.AddTransient<INewArrayExpressionParser, NewArrayExpressionParser>();
-		services.AddTransient<INewExpressionParser, NewExpressionParser>();
-		services.AddTransient<IBinaryExpressionParser, BinaryExpressionParser>();
-		services.AddTransient<IMethodCallExpressionParser, MethodCallExpressionParser>();
+		services.AddTransient<IExpressionParser<MemberExpression>, MemberExpressionParser>();
+		services.AddTransient<IExpressionParser<ConstantExpression>, ConstantExpressionParser>();
+		services.AddTransient<IExpressionParser<UnaryExpression>, UnaryExpressionParser>();
+		services.AddTransient<IExpressionParser<NewArrayExpression>, NewArrayExpressionParser>();
+		services.AddTransient<IExpressionParser<NewExpression>, NewExpressionParser>();
+		services.AddTransient<IExpressionParser<BinaryExpression>, BinaryExpressionParser>();
+		services.AddTransient<IExpressionParser<MethodCallExpression>, MethodCallExpressionParser>();
 		services.AddTransient<IQueryParser, QueryParser>();
 		services.AddTransient<IQueryBuilderCreator, QueryBuilderCreator>();
 

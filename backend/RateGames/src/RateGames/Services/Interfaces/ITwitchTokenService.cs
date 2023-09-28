@@ -5,8 +5,8 @@
 /// </summary>
 public interface ITwitchTokenService
 {
-    /// <summary>
-    /// Returns token from twitch.
-    /// </summary>
-    Task<string> GetTokenAsync();
+	/// <summary>
+	/// Returns token from twitch.
+	/// </summary>
+	Task<string> GetTokenAsync();
 }

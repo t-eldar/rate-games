@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Apicalypse.Core.Interfaces.QueryBuilderStages;
+﻿namespace Apicalypse.Core.Interfaces.QueryBuilderSteps;
 
 /// <summary>
 /// Filter builder, returns <see cref="ISortBuilder{TEntity}"/> stage.

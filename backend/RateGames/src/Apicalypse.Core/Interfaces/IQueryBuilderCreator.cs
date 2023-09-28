@@ -1,14 +1,16 @@
-﻿namespace Apicalypse.Core.Interfaces;
+﻿using Apicalypse.Core.Interfaces.QueryBuilderStages;
+
+namespace Apicalypse.Core.Interfaces;
 
 /// <summary>
-/// Creator of <see cref="IQueryBuilder{TEntity}"/> for different entities.
+/// Creator of <see cref="IFirstStageQueryBuilder{TEntity}"/> for different entities.
 /// </summary>
 public interface IQueryBuilderCreator
 {
 	/// <summary>
-	/// Creates <see cref="IQueryBuilder{TEntity}"/> for model <typeparamref name="TEntity"/>.
+	/// Creates <see cref="IFirstStageQueryBuilder{TEntity}"/> for model <typeparamref name="TEntity"/>.
 	/// </summary>
 	/// <typeparam name="TEntity"></typeparam>
 	/// <returns></returns>
-	IQueryBuilder<TEntity> CreateFor<TEntity>();
+	IFirstStageQueryBuilder<TEntity> CreateFor<TEntity>();
 }

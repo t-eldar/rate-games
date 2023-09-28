@@ -1,4 +1,6 @@
-﻿using RateGames.Services.Implementations;
+﻿using RateGames.Repositories.Implementations;
+using RateGames.Repositories.Interfaces;
+using RateGames.Services.Implementations;
 using RateGames.Services.Interfaces;
 
 namespace RateGames.Extensions;
@@ -16,6 +18,13 @@ public static class ServiceCollectionExtensions
 		services.AddTransient<IPlatformService, PlatformService>();
 		services.AddTransient<IGameEngineService, GameEngineService>();
 		services.AddTransient<ICompanyService, CompanyService>();
+
+		return services;
+	}
+	public static IServiceCollection AddRepositories(this IServiceCollection services)
+	{
+		services.AddTransient<IReviewRepository, ReviewRepository>();
+		services.AddTransient<IRatingRepository, RatingRepository>();
 
 		return services;
 	}
