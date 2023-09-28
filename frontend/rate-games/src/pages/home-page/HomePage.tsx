@@ -1,6 +1,6 @@
 import { HeroBlock } from '@/components/hero-block';
 import { NukaCarousel } from '@/components/nuka-carousel';
-import { Box, Center, Heading, Image } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 
 export const HomePage = () => {
   return (
